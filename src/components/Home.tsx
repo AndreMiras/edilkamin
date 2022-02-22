@@ -1,5 +1,5 @@
 const Home = (): JSX.Element => {
-  return <>Home</>
+  return <>Home</>;
 };
 
 export default Home;

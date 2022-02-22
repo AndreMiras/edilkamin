@@ -6,10 +6,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const App = (): JSX.Element => {
   return (
     <div className="App">
-        <Header />
-        <Container className="mt-3">
-          <Home />
-        </Container>
+      <Header />
+      <Container className="mt-3">
+        <Home />
+      </Container>
     </div>
   );
 };
