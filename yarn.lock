@@ -5820,10 +5820,10 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-edilkamin@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-0.0.3.tgz#ce9de13138b4aa6f9cd5804d558ca0e1ac7702fb"
-  integrity sha512-z4RLu31HjvlbUGlR8DJxekTH8VulAzQTz36qhKCuXcFWp8onZj2sTxaZ+dhX695lbTHBTjoO2Arg3joVE8spzA==
+edilkamin@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-0.0.4.tgz#ab0995ea7e98f9dbe5c2ecc724d515106aa09d6b"
+  integrity sha512-i/aKT/6RCqr2eW+FL8/PjkKYDhLiagl4wAsrjc8N2+hGdbt+F4qanX0y7p4NZzz+oQZGN8c0t5lTAGQVi35/zw==
   dependencies:
     "@aws-amplify/core" "^4.3.14"
     aws-amplify "^4.3.14"

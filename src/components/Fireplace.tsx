@@ -1,27 +1,46 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Accordion, Button, ButtonGroup } from "react-bootstrap";
-import { deviceInfo, setPowerOff, setPowerOn } from "edilkamin";
+import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
+import { DeviceInfoType, deviceInfo, setPower } from "edilkamin";
 
 const Fireplace = (): JSX.Element => {
   const { mac } = useParams<"mac">();
-  // TODO: export type
-  const [info, setInfo] = useState<any | null>(null);
+  const [info, setInfo] = useState<DeviceInfoType | null>(null);
+  const [powerState, setPowerState] = useState(false);
 
   useEffect(() => {
+    if (!mac) return;
     const fetch = async () => {
-      mac && setInfo(await deviceInfo(mac));
+      const data = (await deviceInfo(mac)).data;
+      setInfo(data);
+      setPowerState(Boolean(data.status.commands.power));
     };
     fetch();
   }, [mac]);
 
+  const onPowerChange = (value: number) => {
+    setPower(mac!, value);
+  };
+  const togglePowerProps = [
+    { value: 1, label: "On" },
+    { value: 0, label: "Off" },
+  ];
+
   return (
     <>
       <h2>Fireplace: {mac}</h2>
-      <ButtonGroup>
-        <Button onClick={() => setPowerOn(mac!)}>On</Button>
-        <Button onClick={() => setPowerOff(mac!)}>Off</Button>
-      </ButtonGroup>
+      <ToggleButtonGroup
+        type="radio"
+        name="power"
+        defaultValue={Number(powerState)}
+        onChange={onPowerChange}
+      >
+        {togglePowerProps.map(({ value, label }) => (
+          <ToggleButton id={`set-power-${value}`} key={value} value={value}>
+            {label}
+          </ToggleButton>
+        ))}
+      </ToggleButtonGroup>
       <Accordion defaultActiveKey="0" className="mt-2">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Debug</Accordion.Header>
