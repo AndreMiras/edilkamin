@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -31,6 +31,12 @@ const Home = (): JSX.Element => {
 
   const onAdd = () => setFireplaces([...fireplacesState, fireplace]);
 
+  const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "Enter") {
+      onAdd();
+    }
+  };
+
   const onRemove = (index: number) =>
     setFireplaces(fireplacesState.filter((item, i) => i !== index));
 
@@ -62,6 +68,7 @@ const Home = (): JSX.Element => {
               className="me-2"
               placeholder="aabbccddeeff"
               onChange={(e) => setFireplace(e.target.value)}
+              onKeyPress={onKeyPress}
             />
             <Button onClick={onAdd}>
               <FontAwesomeIcon icon={["fas", "plus"]} />
