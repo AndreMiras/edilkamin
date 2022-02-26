@@ -15,13 +15,14 @@ const Fireplace = (): JSX.Element => {
     const fetch = async () => {
       const data = (await deviceInfo(mac)).data;
       setInfo(data);
-      setPowerState(Boolean(data.status.commands.power));
+      setPowerState(data.status.commands.power);
     };
     fetch();
   }, [mac]);
 
   const onPowerChange = (value: number) => {
     setPower(mac!, value);
+    setPowerState(Boolean(value));
   };
   const togglePowerProps = [
     { value: 1, label: "On", icon: "sun" },
@@ -36,7 +37,7 @@ const Fireplace = (): JSX.Element => {
           <ToggleButtonGroup
             type="radio"
             name="power"
-            defaultValue={Number(powerState)}
+            value={Number(powerState)}
             onChange={onPowerChange}
           >
             {togglePowerProps.map(({ value, label, icon }) => (
