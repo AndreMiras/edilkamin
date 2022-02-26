@@ -5,7 +5,7 @@ const Header = (): JSX.Element => (
   <Navbar bg="dark" variant="dark" expand="sm">
     <Container>
       <Navbar.Brand href={process.env.PUBLIC_URL}>
-        <FontAwesomeIcon icon={["fas", "fire"]} /> Edilkamin
+        <FontAwesomeIcon icon={["fas", "fire-flame-curved"]} /> Edilkamin
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>
