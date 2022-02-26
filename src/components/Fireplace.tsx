@@ -9,6 +9,7 @@ const Fireplace = (): JSX.Element => {
   const { mac } = useParams<"mac">();
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!mac) return;
@@ -16,6 +17,7 @@ const Fireplace = (): JSX.Element => {
       const data = (await deviceInfo(mac)).data;
       setInfo(data);
       setPowerState(data.status.commands.power);
+      setLoading(false);
     };
     fetch();
   }, [mac]);
@@ -41,7 +43,12 @@ const Fireplace = (): JSX.Element => {
             onChange={onPowerChange}
           >
             {togglePowerProps.map(({ value, label, icon }) => (
-              <ToggleButton id={`set-power-${value}`} key={value} value={value}>
+              <ToggleButton
+                id={`set-power-${value}`}
+                key={value}
+                value={value}
+                disabled={loading}
+              >
                 <FontAwesomeIcon icon={icon as IconProp} /> {label}
               </ToggleButton>
             ))}
