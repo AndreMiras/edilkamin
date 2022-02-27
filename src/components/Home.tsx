@@ -1,7 +1,8 @@
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { isValidFireplace } from "../utils/helpers";
 
 // I suspect there's no API for fetching fireplaces.
 // Instead bluetooth is used to fetch the MAC addresses on the Android app
@@ -20,6 +21,17 @@ const Home = (): JSX.Element => {
     getFireplacesLocalStorage()
   );
   const [fireplace, setFireplace] = useState("");
+  const [fireplaceFeedback, setFireplaceFeedback] = useState("");
+
+  useEffect(() => {
+    if (fireplace !== "" && !isValidFireplace(fireplace)) {
+      setFireplaceFeedback("Invalid MAC address.");
+    } else if (fireplacesState.includes(fireplace.toLowerCase())) {
+      setFireplaceFeedback("Device already added.");
+    } else {
+      setFireplaceFeedback("");
+    }
+  }, [fireplace, fireplacesState]);
 
   /**
    * Sets `newFireplaces` to both state and local storage.
@@ -39,6 +51,8 @@ const Home = (): JSX.Element => {
 
   const onRemove = (index: number) =>
     setFireplaces(fireplacesState.filter((item, i) => i !== index));
+
+  const addDisabled = fireplace === "" || fireplaceFeedback !== "";
 
   return (
     <Card>
@@ -63,14 +77,23 @@ const Home = (): JSX.Element => {
               <span>No registered fireplaces saved, add one below</span>
             )}
           </ListGroup.Item>
-          <ListGroup.Item className="d-flex justify-content-between" as="div">
-            <Form.Control
-              className="me-2"
-              placeholder="aabbccddeeff"
-              onChange={(e) => setFireplace(e.target.value)}
-              onKeyPress={onKeyPress}
-            />
-            <Button onClick={onAdd}>
+          <ListGroup.Item
+            className="d-flex justify-content-between align-items-start"
+            as="div"
+          >
+            <Form.Group>
+              <Form.Control
+                className="me-2"
+                placeholder="aabbccddeeff"
+                onChange={(e) => setFireplace(e.target.value)}
+                onKeyPress={onKeyPress}
+                isInvalid={fireplaceFeedback !== ""}
+              />
+              <Form.Control.Feedback type="invalid">
+                {fireplaceFeedback}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button onClick={onAdd} disabled={addDisabled}>
               <FontAwesomeIcon icon={["fas", "plus"]} />
             </Button>
           </ListGroup.Item>
