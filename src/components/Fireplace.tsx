@@ -1,31 +1,52 @@
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { DeviceInfoType, deviceInfo, setPower } from "edilkamin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { ErrorContext, ErrorType } from "../context/error";
 
 const Fireplace = (): JSX.Element => {
   const { mac } = useParams<"mac">();
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { addError } = useContext(ErrorContext);
+
+  const addErrorCallback = useCallback(
+    (error: ErrorType) => addError(error),
+    // eslint-disable-next-line
+    []
+  );
 
   useEffect(() => {
     if (!mac) return;
     const fetch = async () => {
-      const data = (await deviceInfo(mac)).data;
-      setInfo(data);
-      setPowerState(data.status.commands.power);
-      setLoading(false);
+      try {
+        const data = (await deviceInfo(mac)).data;
+        setInfo(data);
+        setPowerState(data.status.commands.power);
+        setLoading(false);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error?.response?.status === 404) {
+          addErrorCallback({
+            title: "Device not found",
+            body: `The address provided ("${mac}") is invalid or the device is not registered.`,
+          });
+        } else {
+          addErrorCallback({ body: "Couldn't fetch device info." });
+        }
+      }
     };
     fetch();
-  }, [mac]);
+  }, [addErrorCallback, mac]);
 
   const onPowerChange = (value: number) => {
     setPower(mac!, value);
     setPowerState(Boolean(value));
   };
+
   const togglePowerProps = [
     { value: 1, label: "On", icon: "sun" },
     { value: 0, label: "Off", icon: "power-off" },
