@@ -4,6 +4,6 @@ import App from "./App";
 
 test("renders home", () => {
   render(<App />);
-  const linkElement = screen.getByText(/Edilkamin/);
+  const linkElement = screen.getByText(/Open Edilkamin/);
   expect(linkElement).toBeInTheDocument();
 });
