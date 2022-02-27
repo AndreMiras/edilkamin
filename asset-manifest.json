@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/edilkamin/static/css/main.56e6221f.css",
-    "main.js": "/edilkamin/static/js/main.f07f8708.js",
+    "main.js": "/edilkamin/static/js/main.acbf3b49.js",
     "static/js/787.f1260729.chunk.js": "/edilkamin/static/js/787.f1260729.chunk.js",
     "index.html": "/edilkamin/index.html",
     "main.56e6221f.css.map": "/edilkamin/static/css/main.56e6221f.css.map",
-    "main.f07f8708.js.map": "/edilkamin/static/js/main.f07f8708.js.map",
+    "main.acbf3b49.js.map": "/edilkamin/static/js/main.acbf3b49.js.map",
     "787.f1260729.chunk.js.map": "/edilkamin/static/js/787.f1260729.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.56e6221f.css",
-    "static/js/main.f07f8708.js"
+    "static/js/main.acbf3b49.js"
   ]
 }
