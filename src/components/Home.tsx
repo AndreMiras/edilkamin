@@ -41,7 +41,10 @@ const Home = (): JSX.Element => {
     setFireplacesLocalStorage(newFireplaces);
   };
 
-  const onAdd = () => setFireplaces([...fireplacesState, fireplace]);
+  const onAdd = () => {
+    setFireplaces([...fireplacesState, fireplace]);
+    setFireplace("");
+  };
 
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "Enter") {
@@ -85,6 +88,7 @@ const Home = (): JSX.Element => {
               <Form.Control
                 className="me-2"
                 placeholder="aabbccddeeff"
+                value={fireplace}
                 onChange={(e) => setFireplace(e.target.value)}
                 onKeyPress={onKeyPress}
                 isInvalid={fireplaceFeedback !== ""}
