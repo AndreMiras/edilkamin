@@ -11,6 +11,9 @@ used for controlling pellet heating systems wirelessly.
 
 This is built on top of the [edilkamin.js](https://github.com/AndreMiras/edilkamin.js) library.
 
+October 2022 update: this no longer works as the API has changed.
+I'll work on it when I get a chance.
+
 ## Run
 
 ```sh
