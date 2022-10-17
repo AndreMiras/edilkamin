@@ -5,6 +5,7 @@ import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { DeviceInfoType, deviceInfo, setPower } from "edilkamin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { TokenContext } from "../context/token";
 import { ErrorContext, ErrorType } from "../context/error";
 
 const Fireplace = (): JSX.Element => {
@@ -12,6 +13,7 @@ const Fireplace = (): JSX.Element => {
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
 
   const addErrorCallback = useCallback(
@@ -21,10 +23,10 @@ const Fireplace = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (!mac) return;
+    if (!mac || !token) return;
     const fetch = async () => {
       try {
-        const data = (await deviceInfo(mac)).data;
+        const data = (await deviceInfo(token, mac)).data;
         setInfo(data);
         setPowerState(data.status.commands.power);
         setLoading(false);
@@ -40,10 +42,10 @@ const Fireplace = (): JSX.Element => {
       }
     };
     fetch();
-  }, [addErrorCallback, mac]);
+  }, [addErrorCallback, mac, token]);
 
   const onPowerChange = (value: number) => {
-    setPower(mac!, value);
+    setPower(token!, mac!, value);
     setPowerState(Boolean(value));
   };
 

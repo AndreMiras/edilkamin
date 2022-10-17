@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { useIsLoggedIn } from "../utils/hooks";
+import Login from "./Login";
+import Logout from "./Logout";
 
 const Header = (): JSX.Element => (
   <Navbar bg="dark" variant="dark" expand="sm">
@@ -15,6 +18,13 @@ const Header = (): JSX.Element => (
           </Nav.Link>
         </Nav>
       </Navbar.Collapse>
+      {useIsLoggedIn() === true ? (
+        <div className="ms-auto">
+          <Logout />
+        </div>
+      ) : (
+        <Login />
+      )}
     </Container>
   </Navbar>
 );
