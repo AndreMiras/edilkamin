@@ -22,4 +22,4 @@ jobs:
           git config user.email github-pages-deploy-action@@users.noreply.github.com
           git remote set-url origin https://${{github.actor}}:${{github.token}}@github.com/${{github.repository}}.git
       - run: yarn install
-      - run: REACT_APP_GIT_DESCRIBE=$(git describe --always) yarn deploy
+      - run: REACT_APP_GIT_DESCRIBE=$(git describe --always --tags) yarn deploy
