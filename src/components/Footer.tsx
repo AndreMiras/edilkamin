@@ -6,7 +6,7 @@ const Footer: FunctionComponent = () => (
     <Container className="text-center">
       <span>
         Copyleft &#x1f12f; Andre Miras 2022 - Open Edilkamin v
-        {process.env.REACT_APP_GIT_DESCRIBE || "dev"}
+        {process.env.NEXT_PUBLIC_GIT_DESCRIBE || "dev"}
       </span>
     </Container>
   </footer>

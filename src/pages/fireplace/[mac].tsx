@@ -1,15 +1,17 @@
+import { NextPage } from "next";
 import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { DeviceInfoType, deviceInfo, setPower } from "edilkamin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { TokenContext } from "../context/token";
-import { ErrorContext, ErrorType } from "../context/error";
+import { TokenContext } from "../../context/token";
+import { ErrorContext, ErrorType } from "../../context/error";
 
-const Fireplace = (): JSX.Element => {
-  const { mac } = useParams<"mac">();
+const Fireplace: NextPage<{}> = () => {
+  const router = useRouter();
+  const mac = router.query.mac as string;
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
   const [loading, setLoading] = useState(true);
