@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { isValidFireplace } from "../utils/helpers";
@@ -17,11 +17,11 @@ const Home = (): JSX.Element => {
   const setFireplacesLocalStorage = (newFireplaces: string[]) =>
     localStorage.setItem(localStorageKey, JSON.stringify(newFireplaces));
 
-  const [fireplacesState, setFireplacesState] = useState<string[]>(
-    getFireplacesLocalStorage()
-  );
+  const [fireplacesState, setFireplacesState] = useState<string[]>([]);
   const [fireplace, setFireplace] = useState("");
   const [fireplaceFeedback, setFireplaceFeedback] = useState("");
+
+  useEffect(() => setFireplacesState(getFireplacesLocalStorage()), []);
 
   useEffect(() => {
     if (fireplace !== "" && !isValidFireplace(fireplace)) {
@@ -69,7 +69,7 @@ const Home = (): JSX.Element => {
               as="div"
               action
             >
-              <Link to={`/fireplaces/${mac}`}>{mac}</Link>
+              <Link href={`/fireplace/${mac}`}>{mac}</Link>
               <Button onClick={() => onRemove(index)}>
                 <FontAwesomeIcon icon={["fas", "minus"]} />
               </Button>

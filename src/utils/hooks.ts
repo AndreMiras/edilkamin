@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { removeTokenLocalStorage } from "./helpers";
 import { TokenContext } from "../context/token";
 
@@ -19,11 +19,11 @@ const useIsLoggedIn = (): boolean | undefined => {
 
 const useLogout = (): (() => void) => {
   const { setToken } = useContext(TokenContext);
-  const navigate = useNavigate();
+  const router = useRouter();
   return () => {
     removeTokenLocalStorage();
     setToken(null);
-    navigate("/");
+    router.push("/");
   };
 };
 

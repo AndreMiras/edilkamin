@@ -1,9 +1,8 @@
 # Open Edilkamin
 
 [![Tests](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml/badge.svg)](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml)
-[![Deploy](https://github.com/AndreMiras/edilkamin/workflows/Deploy/badge.svg)](https://github.com/AndreMiras/edilkamin/actions?query=workflow%3ADeploy)
 
-<https://andremiras.github.io/edilkamin/>
+<https://gitpop2.vercel.app/>
 
 This is an open alternative to the
 [Edilkamin The Mind](https://play.google.com/store/apps/details?id=com.edilkamin.stufe) application
@@ -14,7 +13,7 @@ This is built on top of the [edilkamin.js](https://github.com/AndreMiras/edilkam
 ## Run
 
 ```sh
-yarn start
+yarn dev
 ```
 
 ## Test

@@ -1,4 +1,4 @@
-import { FunctionComponent, createContext, useState } from "react";
+import { FunctionComponent, ReactNode, createContext, useState } from "react";
 
 interface ErrorType {
   title?: string;
@@ -19,7 +19,9 @@ const errorsContextDefault = {
 
 const ErrorContext = createContext<ErrorContextType>(errorsContextDefault);
 
-const ErrorContextProvider: FunctionComponent = ({ children }) => {
+const ErrorContextProvider: FunctionComponent<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [errors, setErrors] = useState<ErrorType[]>(defaultErrors);
   const addError = (error: ErrorType) => setErrors([...errors, error]);
   return (
