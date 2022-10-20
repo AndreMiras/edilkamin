@@ -40,6 +40,19 @@ const Fireplace: NextPage<{}> = () => {
             title: "Device not found",
             body: `The address provided ("${mac}") is invalid or the device is not registered.`,
           });
+        } else if (
+          axios.isAxiosError(error) &&
+          error?.response?.data?.message !== undefined
+        ) {
+          addErrorCallback({
+            title: "Couldn't fetch device info.",
+            body: error.response.data.message,
+          });
+        } else if (error instanceof Error) {
+          addErrorCallback({
+            title: "Couldn't fetch device info.",
+            body: error.message,
+          });
         } else {
           addErrorCallback({ body: "Couldn't fetch device info." });
         }
