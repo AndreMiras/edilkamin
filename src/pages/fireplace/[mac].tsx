@@ -3,7 +3,7 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-import { DeviceInfoType, deviceInfo, setPower } from "edilkamin";
+import { DeviceInfoType, configure } from "edilkamin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { TokenContext } from "../../context/token";
@@ -17,6 +17,8 @@ const Fireplace: NextPage<{}> = () => {
   const [loading, setLoading] = useState(true);
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
+  const baseUrl = "/api/proxy/";
+  const { deviceInfo, setPower } = configure(baseUrl);
 
   const addErrorCallback = useCallback(
     (error: ErrorType) => addError(error),
