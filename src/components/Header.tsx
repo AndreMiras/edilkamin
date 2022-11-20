@@ -7,7 +7,7 @@ import Logout from "./Logout";
 const Header = (): JSX.Element => (
   <Navbar bg="dark" variant="dark" expand="sm">
     <Container>
-      <Navbar.Brand href={process.env.PUBLIC_URL}>
+      <Navbar.Brand href="/">
         <FontAwesomeIcon icon={["fas", "fire-flame-curved"]} /> Edilkamin
       </Navbar.Brand>
       <Navbar.Toggle />

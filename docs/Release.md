@@ -2,7 +2,7 @@
 
 This is documenting the release process.
 
-We're also using [calendar versioning](https://calver.org/) where `YYYY.MM.DD` should be set accordingly.
+We're using [calendar versioning](https://calver.org/) where `YYYY.MM.DD` should be set accordingly.
 
 ```sh
 VERSION=YYYY.MM.DD
