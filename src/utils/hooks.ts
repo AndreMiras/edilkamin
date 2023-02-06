@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { useRouter } from "next/router";
-import { removeTokenLocalStorage } from "./helpers";
-import { TokenContext } from "../context/token";
+import {useContext} from "react";
+import {useRouter} from "next/router";
+import {removeTokenLocalStorage} from "./helpers";
+import {TokenContext} from "../context/token";
 
 /**
  * Returns:
@@ -13,8 +13,7 @@ const useIsLoggedIn = (): boolean | undefined => {
   const { token } = useContext(TokenContext);
   // application is still loading
   if (token === undefined) return undefined;
-  const tokenValid = typeof token === "string" ? token.length > 0 : false;
-  return tokenValid;
+  return typeof token === "string" ? token.length > 0 : false;
 };
 
 const useLogout = (): (() => void) => {
