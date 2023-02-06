@@ -1,4 +1,4 @@
-const fireplaceRegex = /[0-9A-Fa-f]{12}/g;
+const fireplaceRegex = /[0-9a-f]{12}/g;
 
 const isValidFireplace = (fireplace: string) => fireplaceRegex.test(fireplace);
 
