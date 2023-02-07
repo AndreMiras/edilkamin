@@ -12,6 +12,7 @@
     "login": "Login",
     "logout": "Logout",
     "device_not_found": "Device not found",
+    "device_not_found_message": "The address provided \"({{mac}})\" is invalid or the device is not registered.",
     "unable_fetch_device_info": "Couldn't fetch device info.",
     "on": "On",
     "off": "Off",

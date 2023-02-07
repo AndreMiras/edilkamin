@@ -1,20 +1,21 @@
 import {GetStaticProps, NextPage} from "next";
 import dynamic from "next/dynamic";
+import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import axios from "axios";
 import React, {useCallback, useContext, useEffect, useState} from "react";
-import loadable from '@loadable/component';
 import {useRouter} from "next/router";
-import {Accordion, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {Accordion, Container, Card, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
 import {configure, DeviceInfoType} from "edilkamin";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 import {TokenContext} from "../../context/token";
 import {ErrorContext, ErrorType} from "../../context/error";
 
-const DynamicReactJson = dynamic(import('react-json-view'), { ssr: false });
+const DynamicReactJson = dynamic(import('react-json-view'), {ssr: false});
 
 const Fireplace: NextPage<{}> = () => {
+    const [t] = useTranslation('common');
     const router = useRouter();
     const mac = router.query.mac as string;
     const [info, setInfo] = useState<DeviceInfoType | null>(null);
@@ -42,24 +43,25 @@ const Fireplace: NextPage<{}> = () => {
             } catch (error: unknown) {
                 if (axios.isAxiosError(error) && error?.response?.status === 404) {
                     addErrorCallback({
-                        title: "Device not found",
-                        body: `The address provided ("${mac}") is invalid or the device is not registered.`,
+                        title: t('device_not_found'),
+                        // todo
+                        body: t('device_not_found_message', {mac}),
                     });
                 } else if (
                     axios.isAxiosError(error) &&
                     error?.response?.data?.message !== undefined
                 ) {
                     addErrorCallback({
-                        title: "Couldn't fetch device info.",
+                        title: t('unable_fetch_device_info'),
                         body: error.response.data.message,
                     });
                 } else if (error instanceof Error) {
                     addErrorCallback({
-                        title: "Couldn't fetch device info.",
+                        title: t('unable_fetch_device_info'),
                         body: error.message,
                     });
                 } else {
-                    addErrorCallback({body: "Couldn't fetch device info."});
+                    addErrorCallback({body: t('unable_fetch_device_info')});
                 }
             }
         };
@@ -73,14 +75,14 @@ const Fireplace: NextPage<{}> = () => {
     };
 
     const togglePowerProps = [
-        {value: 1, label: "On", icon: "sun"},
-        {value: 0, label: "Off", icon: "power-off"},
+        {value: 1, label: t('on'), icon: "sun"},
+        {value: 0, label: t('off'), icon: "power-off"},
     ];
 
     return (
-        <>
-            <div>
-                <div>Fireplace: {mac}</div>
+        <Container>
+            <div className="mb-2">
+                <div className="mb-2">{t('stove')} : {mac}</div>
                 <ToggleButtonGroup
                     type="radio"
                     name="power"
@@ -99,35 +101,35 @@ const Fireplace: NextPage<{}> = () => {
                     ))}
                 </ToggleButtonGroup>
             </div>
-            <div>
-                <div>Advanced</div>
-                {info && (
-                    <ul>
-                        <li>
-                            board: {info.status.temperatures.board}
-                            &deg;
-                        </li>
-                        <li>enviroment: {info.status.temperatures.enviroment}&deg;</li>
-                        <li>
-                            enviroment_1_temperature:{" "}
-                            {info.nvm.user_parameters.enviroment_1_temperature}&deg;
-                        </li>
-                        <li>
-                            enviroment_2_temperature:{" "}
-                            {info.nvm.user_parameters.enviroment_2_temperature}&deg;
-                        </li>
-                        <li>
-                            enviroment_3_temperature:{" "}
-                            {info.nvm.user_parameters.enviroment_3_temperature}&deg;
-                        </li>
-                        <li>is_auto: {String(info.nvm.user_parameters.is_auto)}</li>
-                        <li>
-                            is_sound_active:{" "}
-                            {String(info.nvm.user_parameters.is_sound_active)}
-                        </li>
-                    </ul>
-                )}
-            </div>
+            <Card>
+                <Card.Header>
+                    {t('advanced')}
+                </Card.Header>
+                <Card.Body>
+                    {info && (
+                        <ul>
+                            <li>
+                                {t('board_temperature')} {info.status.temperatures.board}
+                                &deg;
+                            </li>
+                            <li>{t('environment_temperature')} {info.status.temperatures.enviroment}&deg;</li>
+                            <li>
+                                {t('environment_1_temperature')} {info.nvm.user_parameters.enviroment_1_temperature}&deg;
+                            </li>
+                            <li>
+                                {t('environment_2_temperature')} {info.nvm.user_parameters.enviroment_2_temperature}&deg;
+                            </li>
+                            <li>
+                                {t('environment_3_temperature')} {info.nvm.user_parameters.enviroment_3_temperature}&deg;
+                            </li>
+                            <li>{t('is_auto')} {t(String(info.nvm.user_parameters.is_auto))}</li>
+                            <li>
+                                {t('is_sound_active')} {t(String(info.nvm.user_parameters.is_sound_active))}
+                            </li>
+                        </ul>
+                    )}
+                </Card.Body>
+            </Card>
             <Accordion defaultActiveKey="0" className="mt-2">
                 <Accordion.Item eventKey="2">
                     <Accordion.Header>Debug</Accordion.Header>
@@ -136,17 +138,16 @@ const Fireplace: NextPage<{}> = () => {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-        </>
+        </Container>
     );
 };
 
 export const getServerSideProps: GetStaticProps = async ({
-    locale,
-}) => ({
+     locale,
+ }) => ({
     props: {
         ...(await serverSideTranslations(locale ?? 'en', [
             'common',
-            // 'footer',
         ])),
     },
 })

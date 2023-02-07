@@ -12,6 +12,7 @@
     "login": "Se connecter",
     "logout": "Se déconnecter",
     "device_not_found": "Appareil non trouvé",
+    "device_not_found_message": "L'adresse fournie \"({{mac}})\" est invalide ou le poêle n'est pas enregistré.",
     "unable_fetch_device_info": "Impossible de récupérer les informations sur l'appareil.",
     "on": "On",
     "off": "Off",
