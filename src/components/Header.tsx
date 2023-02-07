@@ -12,8 +12,8 @@ const Header = (): JSX.Element => {
     const [t] = useTranslation('common');
 
     const onToggleLanguageClick = (newLocale: string) => {
-        const { pathname, asPath, query } = router
-        router.push({ pathname, query }, asPath, { locale: newLocale })
+        const {pathname, asPath, query} = router
+        router.push({pathname, query}, asPath, {locale: newLocale})
     }
 
     return (
@@ -32,10 +32,8 @@ const Header = (): JSX.Element => {
                         </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
-                <div>
-                    <Button onClick={() => onToggleLanguageClick('en')}>en</Button>
-                    <Button onClick={() => onToggleLanguageClick('fr')}>fr</Button>
-                </div>
+                <Button className="me-1" onClick={() => onToggleLanguageClick('en')}>en</Button>
+                <Button className="me-1" onClick={() => onToggleLanguageClick('fr')}>fr</Button>
                 {useIsLoggedIn() === true ? (
                     <div className="ms-auto">
                         <Logout/>

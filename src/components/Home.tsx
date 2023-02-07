@@ -2,6 +2,7 @@ import {KeyboardEvent, useEffect, useState} from "react";
 import Link from "next/link";
 import {Button, Card, Form, ListGroup} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useTranslation} from "next-i18next";
 import {isValidFireplace} from "../utils/helpers";
 
 // I suspect there's no API for fetching fireplaces.
@@ -11,6 +12,8 @@ import {isValidFireplace} from "../utils/helpers";
 const localStorageKey = "fireplaces";
 
 const Home = (): JSX.Element => {
+    const [t] = useTranslation('common');
+
     const getFireplacesLocalStorage = (): string[] =>
         JSON.parse(localStorage.getItem(localStorageKey) || "[]");
 
@@ -25,9 +28,9 @@ const Home = (): JSX.Element => {
 
     useEffect(() => {
         if (fireplace !== "" && !isValidFireplace(fireplace)) {
-            setFireplaceFeedback("Invalid MAC address.");
+            setFireplaceFeedback(t('invalid_mac_address'));
         } else if (fireplacesState.includes(fireplace.toLowerCase())) {
-            setFireplaceFeedback("Device already added.");
+            setFireplaceFeedback(t('device_already_added'));
         } else {
             setFireplaceFeedback("");
         }
@@ -59,7 +62,7 @@ const Home = (): JSX.Element => {
 
     return (
         <Card>
-            <Card.Header>Fireplaces</Card.Header>
+            <Card.Header>{t('stove')}</Card.Header>
             <Card.Body>
                 <ListGroup>
                     {fireplacesState.map((mac, index) => (
@@ -77,7 +80,7 @@ const Home = (): JSX.Element => {
                     ))}
                     <ListGroup.Item>
                         {fireplacesState.length === 0 && (
-                            <span>No registered fireplaces saved, add one below</span>
+                            <span>{t('no_stove')}</span>
                         )}
                     </ListGroup.Item>
                     <ListGroup.Item
