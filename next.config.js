@@ -9,8 +9,7 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     i18n,
-    // basePath: ''
-    basePath: '/local/poele-pellet',
+    // basePath: '/local-path',
     typescript: {
         tsconfigPath,
     },
