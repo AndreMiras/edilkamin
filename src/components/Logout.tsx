@@ -1,16 +1,19 @@
-import { Button } from "react-bootstrap";
-import { useLogout } from "../utils/hooks";
+import {Button} from "react-bootstrap";
+import {useLogout} from "../utils/hooks";
+import {useTranslation} from "next-i18next";
 
 const Logout = (): JSX.Element => {
-  // TODO: ideally hit the backend to invalidate the token too
-  const logout = useLogout();
-  const onLogoutClick = (e: React.MouseEvent<HTMLElement>): void => logout();
+    const [t] = useTranslation('common');
 
-  return (
-    <Button type="submit" onClick={onLogoutClick}>
-      Logout
-    </Button>
-  );
+    // TODO: ideally hit the backend to invalidate the token too
+    const logout = useLogout();
+    const onLogoutClick = (e: React.MouseEvent<HTMLElement>): void => logout();
+
+    return (
+        <Button type="submit" onClick={onLogoutClick}>
+            {t('logout')}
+        </Button>
+    );
 };
 
 export default Logout;
