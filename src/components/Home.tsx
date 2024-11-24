@@ -1,110 +1,114 @@
-import { KeyboardEvent, useEffect, useState } from "react";
-import Link from "next/link";
-import { Button, Card, Form, ListGroup } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isValidFireplace } from "../utils/helpers";
+import {KeyboardEvent, ReactElement, useEffect, useState} from 'react';
+import Link from 'next/link';
+import {Button, Card, Form, ListGroup} from 'react-bootstrap';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faMinus, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {useTranslation} from 'next-i18next';
+import {isValidFireplace} from '../utils/helpers';
 
 // I suspect there's no API for fetching fireplaces.
 // Instead bluetooth is used to fetch the MAC addresses on the Android app
 // then it gets stored to a local database.
 // In our case fireplaces are added by the user and stored to the localStorage.
-const localStorageKey = "fireplaces";
+const localStorageKey = 'fireplaces';
 
-const Home = (): JSX.Element => {
-  const getFireplacesLocalStorage = (): string[] =>
-    JSON.parse(localStorage.getItem(localStorageKey) || "[]");
+const Home = (): ReactElement => {
+    const [t] = useTranslation('common');
 
-  const setFireplacesLocalStorage = (newFireplaces: string[]) =>
-    localStorage.setItem(localStorageKey, JSON.stringify(newFireplaces));
+    const getFireplacesLocalStorage = (): string[] =>
+        JSON.parse(localStorage.getItem(localStorageKey) ?? '[]');
 
-  const [fireplacesState, setFireplacesState] = useState<string[]>([]);
-  const [fireplace, setFireplace] = useState("");
-  const [fireplaceFeedback, setFireplaceFeedback] = useState("");
+    const setFireplacesLocalStorage = (newFireplaces: string[]) =>
+        localStorage.setItem(localStorageKey, JSON.stringify(newFireplaces));
 
-  useEffect(() => setFireplacesState(getFireplacesLocalStorage()), []);
+    const [fireplacesState, setFireplacesState] = useState<string[]>([]);
+    const [fireplace, setFireplace] = useState('');
+    const [fireplaceFeedback, setFireplaceFeedback] = useState('');
 
-  useEffect(() => {
-    if (fireplace !== "" && !isValidFireplace(fireplace)) {
-      setFireplaceFeedback("Invalid MAC address.");
-    } else if (fireplacesState.includes(fireplace.toLowerCase())) {
-      setFireplaceFeedback("Device already added.");
-    } else {
-      setFireplaceFeedback("");
-    }
-  }, [fireplace, fireplacesState]);
+    useEffect(() => setFireplacesState(getFireplacesLocalStorage()), []);
 
-  /**
-   * Sets `newFireplaces` to both state and local storage.
-   */
-  const setFireplaces = (newFireplaces: string[]) => {
-    setFireplacesState(newFireplaces);
-    setFireplacesLocalStorage(newFireplaces);
-  };
+    useEffect(() => {
+        if (fireplace !== '' && !isValidFireplace(fireplace)) {
+            setFireplaceFeedback(t('invalid_mac_address'));
+        } else if (fireplacesState.includes(fireplace.toLowerCase())) {
+            setFireplaceFeedback(t('device_already_added'));
+        } else {
+            setFireplaceFeedback('');
+        }
+    }, [fireplace, fireplacesState]);
 
-  const onAdd = () => {
-    setFireplaces([...fireplacesState, fireplace]);
-    setFireplace("");
-  };
+    /**
+     * Sets `newFireplaces` to both state and local storage.
+     */
+    const setFireplaces = (newFireplaces: string[]) => {
+        setFireplacesState(newFireplaces);
+        setFireplacesLocalStorage(newFireplaces);
+    };
 
-  const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === "Enter") {
-      onAdd();
-    }
-  };
+    const onAdd = () => {
+        setFireplaces([...fireplacesState, fireplace]);
+        setFireplace('');
+    };
 
-  const onRemove = (index: number) =>
-    setFireplaces(fireplacesState.filter((item, i) => i !== index));
+    const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.code === 'Enter') {
+            onAdd();
+        }
+    };
 
-  const addDisabled = fireplace === "" || fireplaceFeedback !== "";
+    const onRemove = (index: number) =>
+        setFireplaces(fireplacesState.filter((item, i) => i !== index));
 
-  return (
-    <Card>
-      <Card.Header>Fireplaces</Card.Header>
-      <Card.Body>
-        <ListGroup>
-          {fireplacesState.map((mac, index) => (
-            <ListGroup.Item
-              key={mac}
-              className="d-flex justify-content-between align-items-center"
-              as="div"
-              action
-            >
-              <Link href={`/fireplace/${mac}`}>{mac}</Link>
-              <Button onClick={() => onRemove(index)}>
-                <FontAwesomeIcon icon={["fas", "minus"]} />
-              </Button>
-            </ListGroup.Item>
-          ))}
-          <ListGroup.Item>
-            {fireplacesState.length === 0 && (
-              <span>No registered fireplaces saved, add one below</span>
-            )}
-          </ListGroup.Item>
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-start"
-            as="div"
-          >
-            <Form.Group>
-              <Form.Control
-                className="me-2"
-                placeholder="aabbccddeeff"
-                value={fireplace}
-                onChange={(e) => setFireplace(e.target.value)}
-                onKeyPress={onKeyPress}
-                isInvalid={fireplaceFeedback !== ""}
-              />
-              <Form.Control.Feedback type="invalid">
-                {fireplaceFeedback}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Button onClick={onAdd} disabled={addDisabled}>
-              <FontAwesomeIcon icon={["fas", "plus"]} />
-            </Button>
-          </ListGroup.Item>
-        </ListGroup>
-      </Card.Body>
-    </Card>
-  );
+    const addDisabled = fireplace === '' || fireplaceFeedback !== '';
+
+    return (
+        <Card>
+            <Card.Header>{t('stove')}</Card.Header>
+            <Card.Body>
+                <ListGroup>
+                    {fireplacesState.map((mac, index) => (
+                        <ListGroup.Item
+                            key={mac}
+                            className="d-flex justify-content-between align-items-center"
+                            as="div"
+                            action
+                        >
+                            <Link href={`/fireplace/${mac}`}>{mac}</Link>
+                            <Button onClick={() => onRemove(index)}>
+                                <FontAwesomeIcon icon={faMinus}/>
+                            </Button>
+                        </ListGroup.Item>
+                    ))}
+                    <ListGroup.Item>
+                        {fireplacesState.length === 0 && (
+                            <span>{t('no_stove')}</span>
+                        )}
+                    </ListGroup.Item>
+                    <ListGroup.Item
+                        className="d-flex justify-content-between align-items-start"
+                        as="div"
+                    >
+                        <Form.Group>
+                            <Form.Control
+                                className="me-2"
+                                placeholder="AA:BB:CC:DD:EE:FF"
+                                value={fireplace}
+                                onChange={(e) => setFireplace(e.target.value)}
+                                onKeyDown={onKeyDown}
+                                isInvalid={fireplaceFeedback !== ''}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                {fireplaceFeedback}
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Button onClick={onAdd} disabled={addDisabled}>
+                            <FontAwesomeIcon icon={faPlus}/>
+                        </Button>
+                    </ListGroup.Item>
+                </ListGroup>
+            </Card.Body>
+        </Card>
+    );
 };
 
 export default Home;
