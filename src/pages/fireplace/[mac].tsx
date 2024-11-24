@@ -1,18 +1,19 @@
-import {GetStaticProps, NextPage} from "next";
-import dynamic from "next/dynamic";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import axios from "axios";
-import React, {useCallback, useContext, useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import {Accordion, Container, Card, ToggleButton, ToggleButtonGroup} from "react-bootstrap";
-import {configure, DeviceInfoType} from "edilkamin";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
-import {TokenContext} from "../../context/token";
-import {ErrorContext, ErrorType} from "../../context/error";
-
-const DynamicReactJson = dynamic(import('react-json-view'), {ssr: false});
+import {GetStaticProps, NextPage} from 'next';
+import Link from 'next/link';
+import {useTranslation} from 'next-i18next';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
+import axios from 'axios';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
+import {useRouter} from 'next/router';
+import {Container, ToggleButton, ToggleButtonGroup, Tabs, Tab} from 'react-bootstrap';
+import {configure, DeviceInfoType} from 'edilkamin';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import {TokenContext} from '../../context/token';
+import {ErrorContext, ErrorType} from '../../context/error';
+import {useSetDeviceInfosContext} from '../../context/device-infos';
+import EnvironmentInfos from '../../components/EnvironmentInfos';
+import SoftwareInfos from '../../components/SoftwareInfos';
 
 const Fireplace: NextPage<{}> = () => {
     const [t] = useTranslation('common');
@@ -23,6 +24,7 @@ const Fireplace: NextPage<{}> = () => {
     const [loading, setLoading] = useState(true);
     const {token} = useContext(TokenContext);
     const {addError} = useContext(ErrorContext);
+    const setDeviceInfos = useSetDeviceInfosContext();
     const baseUrl = `${router.basePath}/api/proxy/`;
     const {deviceInfo, setPower} = configure(baseUrl);
 
@@ -38,6 +40,7 @@ const Fireplace: NextPage<{}> = () => {
             try {
                 const data = (await deviceInfo(token, mac)).data;
                 setInfo(data);
+                setDeviceInfos(data);
                 setPowerState(data.status.commands.power);
                 setLoading(false);
             } catch (error: unknown) {
@@ -82,7 +85,9 @@ const Fireplace: NextPage<{}> = () => {
     return (
         <Container>
             <div className="mb-2">
-                <div className="mb-2">{t('stove')} : {mac}</div>
+                <div className="mb-2">{t('stove')} : {mac}
+                    <Link href={`/fireplace/${mac}/debug`}>Debug</Link>
+                </div>
                 <ToggleButtonGroup
                     type="radio"
                     name="power"
@@ -101,43 +106,18 @@ const Fireplace: NextPage<{}> = () => {
                     ))}
                 </ToggleButtonGroup>
             </div>
-            <Card>
-                <Card.Header>
-                    {t('advanced')}
-                </Card.Header>
-                <Card.Body>
-                    {info && (
-                        <ul>
-                            <li>
-                                {t('board_temperature')} {info.status.temperatures.board}
-                                &deg;
-                            </li>
-                            <li>{t('environment_temperature')} {info.status.temperatures.enviroment}&deg;</li>
-                            <li>
-                                {t('environment_1_temperature')} {info.nvm.user_parameters.enviroment_1_temperature}&deg;
-                            </li>
-                            <li>
-                                {t('environment_2_temperature')} {info.nvm.user_parameters.enviroment_2_temperature}&deg;
-                            </li>
-                            <li>
-                                {t('environment_3_temperature')} {info.nvm.user_parameters.enviroment_3_temperature}&deg;
-                            </li>
-                            <li>{t('is_auto')} {t(String(info.nvm.user_parameters.is_auto))}</li>
-                            <li>
-                                {t('is_sound_active')} {t(String(info.nvm.user_parameters.is_sound_active))}
-                            </li>
-                        </ul>
-                    )}
-                </Card.Body>
-            </Card>
-            <Accordion defaultActiveKey="0" className="mt-2">
-                <Accordion.Item eventKey="2">
-                    <Accordion.Header>Debug</Accordion.Header>
-                    <Accordion.Body>
-                        <DynamicReactJson src={JSON.parse(JSON.stringify(info ? info : {}))}/>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
+            <Tabs
+                defaultActiveKey="environment-infos"
+                id="tab"
+                className="mb-3"
+            >
+                <Tab eventKey="environment-infos" title={t('enviroment_infos')}>
+                    <EnvironmentInfos />
+                </Tab>
+                <Tab eventKey="software-infos" title={t('software_infos')}>
+                    <SoftwareInfos />
+                </Tab>
+            </Tabs>
         </Container>
     );
 };

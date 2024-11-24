@@ -7,7 +7,6 @@ const tsconfigPath = process.env.NEXTJS_TSCONFIG_PATH
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
-    swcMinify: true,
     i18n,
     // basePath: '/local-path',
     typescript: {

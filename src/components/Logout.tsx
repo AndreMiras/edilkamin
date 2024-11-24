@@ -1,8 +1,9 @@
-import {Button} from "react-bootstrap";
-import {useLogout} from "../utils/hooks";
-import {useTranslation} from "next-i18next";
+import {Button} from 'react-bootstrap';
+import {useLogout} from '../utils/hooks';
+import {useTranslation} from 'next-i18next';
+import {ReactElement} from "react";
 
-const Logout = (): JSX.Element => {
+const Logout = (): ReactElement => {
     const [t] = useTranslation('common');
 
     // TODO: ideally hit the backend to invalidate the token too

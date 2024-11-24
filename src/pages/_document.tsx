@@ -1,7 +1,7 @@
-import Document, {Head, Html, Main, NextScript} from "next/document";
 import type {DocumentProps} from 'next/document'
+import Document, {Head, Html, Main, NextScript} from 'next/document';
 import i18nextConfig from '../../next-i18next.config'
-import config from "../../next.config";
+import config from '../../next.config';
 
 class MyDocument extends Document<DocumentProps> {
     render() {
@@ -29,8 +29,8 @@ class MyDocument extends Document<DocumentProps> {
                           href={config.basePath ? `${config.basePath}/manifest.json` : '/manifest.json'}/>
                 </Head>
                 <body>
-                    <Main/>
-                    <NextScript/>
+                    <Main />
+                    <NextScript />
                 </body>
             </Html>
         );

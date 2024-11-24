@@ -1,13 +1,15 @@
-import {useRouter} from "next/router";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Button, Container, Nav, Navbar} from "react-bootstrap";
-import {useTranslation, withTranslation} from "next-i18next";
-import {useIsLoggedIn} from "../utils/hooks";
-import Login from "./Login";
-import Logout from "./Logout";
-import Link from "next/link";
+import React, {ReactElement} from 'react';
+import {useRouter} from 'next/router';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faFireFlameCurved} from '@fortawesome/free-solid-svg-icons'
+import {faGithubAlt} from '@fortawesome/free-brands-svg-icons'
+import {Button, Container, Nav, Navbar, NavbarBrand, NavLink} from 'react-bootstrap';
+import {useTranslation, withTranslation} from 'next-i18next';
+import {useIsLoggedIn} from '../utils/hooks';
+import Login from './Login';
+import Logout from './Logout';
 
-const Header = (): JSX.Element => {
+const Header = ({locale, prefixPath}: {locale: string, prefixPath: boolean}): ReactElement => {
     const router = useRouter()
     const [t] = useTranslation('common');
 
@@ -19,17 +21,15 @@ const Header = (): JSX.Element => {
     return (
         <Navbar bg="dark" variant="dark" expand="sm">
             <Container>
-                <Link href="/">
-                    <Navbar.Brand href={router.basePath ? router.basePath : '/'}>
-                        <FontAwesomeIcon icon={["fas", "fire-flame-curved"]}/> Edilkamin
-                    </Navbar.Brand>
-                </Link>
+                <NavbarBrand href={router.basePath ? router.basePath : `/${prefixPath ? locale : ''}`}>
+                    <FontAwesomeIcon icon={faFireFlameCurved}/> Edilkamin
+                </NavbarBrand>
                 <Navbar.Toggle/>
                 <Navbar.Collapse>
                     <Nav className="mr-auto">
-                        <Nav.Link href="https://github.com/AndreMiras/edilkamin">
-                            <FontAwesomeIcon icon={["fab", "github-alt"]}/> {t('about')}
-                        </Nav.Link>
+                        <NavLink href="https://github.com/AndreMiras/edilkamin">
+                            <FontAwesomeIcon icon={faGithubAlt}/> {t('about')}
+                        </NavLink>
                     </Nav>
                 </Navbar.Collapse>
                 <Button className="me-1" onClick={() => onToggleLanguageClick('en')}>en</Button>

@@ -1,15 +1,15 @@
-import React, {useCallback, useContext, useState} from "react";
-import {Button, Form} from "react-bootstrap";
-import {signIn} from "edilkamin";
-import {useTranslation} from "next-i18next";
-import {TokenContext} from "../context/token";
-import {ErrorContext, ErrorType} from "../context/error";
-import {setTokenLocalStorage} from "../utils/helpers";
+import React, {ReactElement, useCallback, useContext, useState} from 'react';
+import {Button, Form} from 'react-bootstrap';
+import {signIn} from 'edilkamin';
+import {useTranslation} from 'next-i18next';
+import {TokenContext} from '../context/token';
+import {ErrorContext, ErrorType} from '../context/error';
+import {setTokenLocalStorage} from '../utils/helpers';
 
-const Login = (): JSX.Element => {
+const Login = (): ReactElement => {
     const [t] = useTranslation('common');
-    const [username, setUsername] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const {setToken} = useContext(TokenContext);
     const {addError} = useContext(ErrorContext);
 
