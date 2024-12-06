@@ -5061,10 +5061,10 @@ duplexer@^0.1.2:
   resolved "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz#3abe43aef3835f8ae077d136ddce0f276b0400e6"
   integrity sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==
 
-edilkamin@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.3.2.tgz#dbcb4195aa58b09760fbe1b8034b9bdc3870ff4b"
-  integrity sha512-H3cZPa9952Ta0atVczHbQ5UwjcRZaYN2d2Iy8XloxwGJuAu4nd0EblxlrYmKfFlpJqDqSEYWpP1MJg52iaQd/Q==
+edilkamin@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.5.0.tgz#cf8e2a059147d5b9d5fc193f5324b34f8e1c00a7"
+  integrity sha512-Tv6Xw73Iqgj88ukc66guLrCQNPM38oQb8c2SlnnoJL4XL+y9faYXxtvMlAggUnnZQyEM7TcPWp2cx6O1+oEfqg==
   dependencies:
     aws-amplify "^6.10.0"
     axios "^0.26.0"

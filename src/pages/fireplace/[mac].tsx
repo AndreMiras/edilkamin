@@ -30,7 +30,7 @@ const Fireplace: NextPage<{}> = () => {
     if (!mac || !token) return;
     const fetch = async () => {
       try {
-        const data = (await deviceInfo(token, mac)).data;
+        const data = await deviceInfo(token, mac);
         setInfo(data);
         setPowerState(data.status.commands.power);
         setLoading(false);
