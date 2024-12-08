@@ -10,7 +10,7 @@ const TemperatureAdjuster = ({
   onTemperatureChange: (newTemperature: number) => void;
   loading: boolean;
 }) => (
-  <InputGroup className="mb-3">
+  <InputGroup size="lg">
     <Button onClick={() => onTemperatureChange(currentTemperature - 0.5)}>
       <FontAwesomeIcon icon={"minus"} />
     </Button>

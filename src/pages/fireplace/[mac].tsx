@@ -3,7 +3,7 @@ import { configure, DeviceInfoType } from "edilkamin";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Col, Row } from "react-bootstrap";
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
@@ -90,16 +90,22 @@ const Fireplace: NextPage = () => {
       <Accordion.Item eventKey="0">
         <Accordion.Header>Fireplace: {mac}</Accordion.Header>
         <Accordion.Body>
-          <PowerToggle
-            powerState={powerState}
-            onChange={onPowerChange}
-            loading={loading}
-          />
-          <TemperatureAdjuster
-            currentTemperature={temperature}
-            onTemperatureChange={onTemperatureChange}
-            loading={loading}
-          />
+          <Row>
+            <Col xs={12} className="mb-2">
+              <PowerToggle
+                powerState={powerState}
+                onChange={onPowerChange}
+                loading={loading}
+              />
+            </Col>
+            <Col xs={8} sm={5} lg={3}>
+              <TemperatureAdjuster
+                currentTemperature={temperature}
+                onTemperatureChange={onTemperatureChange}
+                loading={loading}
+              />
+            </Col>
+          </Row>
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="1">

@@ -19,6 +19,7 @@ const PowerToggle = ({
   <ToggleButtonGroup
     type="radio"
     name="power"
+    size="lg"
     value={Number(powerState)}
     onChange={onChange}
   >
