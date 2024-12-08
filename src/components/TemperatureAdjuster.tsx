@@ -11,7 +11,10 @@ const TemperatureAdjuster = ({
   loading: boolean;
 }) => (
   <InputGroup size="lg">
-    <Button onClick={() => onTemperatureChange(currentTemperature - 0.5)}>
+    <Button
+      variant="primary"
+      onClick={() => onTemperatureChange(currentTemperature - 0.5)}
+    >
       <FontAwesomeIcon icon={"minus"} />
     </Button>
     <FormControl
@@ -20,7 +23,10 @@ const TemperatureAdjuster = ({
       onChange={(e) => onTemperatureChange(Number(e.target.value))}
       disabled={loading}
     />
-    <Button onClick={() => onTemperatureChange(currentTemperature + 0.5)}>
+    <Button
+      variant="primary"
+      onClick={() => onTemperatureChange(currentTemperature + 0.5)}
+    >
       <FontAwesomeIcon icon={"plus"} />
     </Button>
   </InputGroup>

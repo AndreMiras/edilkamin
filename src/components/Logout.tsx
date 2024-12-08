@@ -8,7 +8,7 @@ const Logout = (): JSX.Element => {
   const onLogoutClick = (): void => logout();
 
   return (
-    <Button type="submit" onClick={onLogoutClick}>
+    <Button variant="primary" type="submit" onClick={onLogoutClick}>
       Logout
     </Button>
   );

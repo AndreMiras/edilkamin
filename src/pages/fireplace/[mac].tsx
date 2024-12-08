@@ -17,7 +17,7 @@ const Fireplace: NextPage = () => {
   const mac = router.query.mac as string;
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
-  const [temperature, setTemperature] = useState<number>(20);
+  const [temperature, setTemperature] = useState<number>(0);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);

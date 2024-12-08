@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +13,10 @@ import Header from "../components/Header";
 import { ErrorContextProvider } from "../context/error";
 import { TokenContextProvider } from "../context/token";
 
+// workaround SSR issue, refs:
+// https://github.com/FortAwesome/Font-Awesome/issues/19348
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { library } = require("@fortawesome/fontawesome-svg-core");
 library.add(fab, far, fas);
 
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (

@@ -25,6 +25,7 @@ const PowerToggle = ({
   >
     {togglePowerProps.map(({ value, label, icon }) => (
       <ToggleButton
+        variant="primary"
         id={`set-power-${value}`}
         key={value}
         value={value}

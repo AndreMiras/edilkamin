@@ -56,7 +56,7 @@ const Login = (): JSX.Element => {
         aria-label="Password"
         onChange={onPasswordChange}
       />
-      <Button type="submit" onClick={onLogin}>
+      <Button variant="primary" type="submit" onClick={onLogin}>
         Login
       </Button>
     </Form>
