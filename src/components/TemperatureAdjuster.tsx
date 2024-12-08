@@ -1,4 +1,5 @@
-import { FormControl, InputGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, FormControl, InputGroup } from "react-bootstrap";
 
 const TemperatureAdjuster = ({
   currentTemperature,
@@ -10,12 +11,18 @@ const TemperatureAdjuster = ({
   loading: boolean;
 }) => (
   <InputGroup className="mb-3">
+    <Button onClick={() => onTemperatureChange(currentTemperature - 0.5)}>
+      <FontAwesomeIcon icon={"minus"} />
+    </Button>
     <FormControl
       type="number"
       value={currentTemperature}
       onChange={(e) => onTemperatureChange(Number(e.target.value))}
       disabled={loading}
     />
+    <Button onClick={() => onTemperatureChange(currentTemperature + 0.5)}>
+      <FontAwesomeIcon icon={"plus"} />
+    </Button>
   </InputGroup>
 );
 
