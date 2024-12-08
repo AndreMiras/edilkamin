@@ -5,8 +5,10 @@ import { useRouter } from "next/router";
 import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
 import { DeviceInfoType, configure } from "edilkamin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { TokenContext } from "../../context/token";
+import PowerToggle from "../../components/PowerToggle";
+import DeviceDetails from "../../components/DeviceDetails";
+import DebugInfo from "../../components/DebugInfo";
 import { ErrorContext, ErrorType } from "../../context/error";
 
 const Fireplace: NextPage<{}> = () => {
@@ -66,70 +68,26 @@ const Fireplace: NextPage<{}> = () => {
     setPowerState(Boolean(value));
   };
 
-  const togglePowerProps = [
-    { value: 1, label: "On", icon: "sun" },
-    { value: 0, label: "Off", icon: "power-off" },
-  ];
-
   return (
     <Accordion defaultActiveKey="0" className="mt-2">
       <Accordion.Item eventKey="0">
         <Accordion.Header>Fireplace: {mac}</Accordion.Header>
         <Accordion.Body>
-          <ToggleButtonGroup
-            type="radio"
-            name="power"
-            value={Number(powerState)}
+          <PowerToggle
+            powerState={powerState}
             onChange={onPowerChange}
-          >
-            {togglePowerProps.map(({ value, label, icon }) => (
-              <ToggleButton
-                id={`set-power-${value}`}
-                key={value}
-                value={value}
-                disabled={loading}
-              >
-                <FontAwesomeIcon icon={icon as IconProp} /> {label}
-              </ToggleButton>
-            ))}
-          </ToggleButtonGroup>
+            loading={loading}
+          />
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="1">
         <Accordion.Header>Advanced</Accordion.Header>
-        <Accordion.Body>
-          {info && (
-            <ul>
-              <li>
-                board: {info.status.temperatures.board}
-                &deg;
-              </li>
-              <li>enviroment: {info.status.temperatures.enviroment}&deg;</li>
-              <li>
-                enviroment_1_temperature:{" "}
-                {info.nvm.user_parameters.enviroment_1_temperature}&deg;
-              </li>
-              <li>
-                enviroment_2_temperature:{" "}
-                {info.nvm.user_parameters.enviroment_2_temperature}&deg;
-              </li>
-              <li>
-                enviroment_3_temperature:{" "}
-                {info.nvm.user_parameters.enviroment_3_temperature}&deg;
-              </li>
-              <li>is_auto: {String(info.nvm.user_parameters.is_auto)}</li>
-              <li>
-                is_sound_active:{" "}
-                {String(info.nvm.user_parameters.is_sound_active)}
-              </li>
-            </ul>
-          )}
-        </Accordion.Body>
+        <Accordion.Body>{info && <DeviceDetails info={info} />}</Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="2">
         <Accordion.Header>Debug</Accordion.Header>
         <Accordion.Body>
-          <pre>{JSON.stringify(info, null, 2)}</pre>
+          <DebugInfo info={info} />
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>
