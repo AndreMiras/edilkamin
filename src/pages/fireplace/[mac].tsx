@@ -73,15 +73,18 @@ const Fireplace: NextPage = () => {
   };
 
   const onTemperatureChange = async (newTemperature: number) => {
+    // set the state before hand to avoid the lag feeling
+    setTemperature(newTemperature);
     try {
       await setTargetTemperature(token!, mac!, newTemperature);
-      setTemperature(newTemperature);
     } catch (error) {
       console.error(error);
       addErrorCallback({
         title: "Temperature Update Failed",
         body: "Unable to update the temperature. Please try again.",
       });
+      // rollback the temperature to the actual/previous value
+      setTemperature(temperature);
     }
   };
 
