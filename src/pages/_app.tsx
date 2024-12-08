@@ -1,16 +1,18 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Container } from "react-bootstrap";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
+
 import Errors from "../components/Errors";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { TokenContextProvider } from "../context/token";
 import { ErrorContextProvider } from "../context/error";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { TokenContextProvider } from "../context/token";
 
 library.add(fab, far, fas);
 

@@ -1,4 +1,4 @@
-import { InputGroup, FormControl } from "react-bootstrap";
+import { FormControl, InputGroup } from "react-bootstrap";
 
 const TemperatureAdjuster = ({
   currentTemperature,

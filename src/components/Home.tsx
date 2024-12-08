@@ -1,7 +1,8 @@
-import { KeyboardEvent, useEffect, useState } from "react";
-import Link from "next/link";
-import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
+import { KeyboardEvent, useEffect, useState } from "react";
+import { Button, Card, Form, ListGroup } from "react-bootstrap";
+
 import { isValidFireplace } from "../utils/helpers";
 
 // I suspect there's no API for fetching fireplaces.

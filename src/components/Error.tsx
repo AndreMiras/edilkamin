@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import { Alert } from "react-bootstrap";
+
 import { ErrorType } from "../context/error";
 
 interface ErrorProps extends ErrorType {

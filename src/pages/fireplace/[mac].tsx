@@ -1,18 +1,18 @@
-import { NextPage } from "next";
 import axios from "axios";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { configure, DeviceInfoType } from "edilkamin";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { Accordion, ToggleButton, ToggleButtonGroup } from "react-bootstrap";
-import { DeviceInfoType, configure } from "edilkamin";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { TokenContext } from "../../context/token";
-import PowerToggle from "../../components/PowerToggle";
-import DeviceDetails from "../../components/DeviceDetails";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Accordion } from "react-bootstrap";
+
 import DebugInfo from "../../components/DebugInfo";
+import DeviceDetails from "../../components/DeviceDetails";
+import PowerToggle from "../../components/PowerToggle";
 import TemperatureAdjuster from "../../components/TemperatureAdjuster";
 import { ErrorContext, ErrorType } from "../../context/error";
+import { TokenContext } from "../../context/token";
 
-const Fireplace: NextPage<{}> = () => {
+const Fireplace: NextPage = () => {
   const router = useRouter();
   const mac = router.query.mac as string;
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
@@ -26,7 +26,7 @@ const Fireplace: NextPage<{}> = () => {
 
   const addErrorCallback = useCallback(
     (error: ErrorType) => addError(error),
-    // eslint-disable-next-line
+
     []
   );
 
@@ -40,6 +40,7 @@ const Fireplace: NextPage<{}> = () => {
         setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
         setLoading(false);
       } catch (error: unknown) {
+        console.error(error);
         if (axios.isAxiosError(error) && error?.response?.status === 404) {
           addErrorCallback({
             title: "Device not found",
@@ -76,6 +77,7 @@ const Fireplace: NextPage<{}> = () => {
       await setTargetTemperature(token!, mac!, newTemperature);
       setTemperature(newTemperature);
     } catch (error) {
+      console.error(error);
       addErrorCallback({
         title: "Temperature Update Failed",
         body: "Unable to update the temperature. Please try again.",

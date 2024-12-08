@@ -32,9 +32,12 @@
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
-    "eslint": "next lint",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "lint:prettier": "prettier --check src docs .github *.json *.md *.mjs",
+    "format:prettier": "prettier --write src docs .github *.json *.md *.mjs",
+    "lint:eslint": "eslint src",
+    "format:eslint": "eslint --fix src",
+    "lint": "yarn lint:prettier && yarn lint:eslint",
+    "format": "yarn format:prettier && yarn format:eslint"
   },
   "engines": {
     "node": "22.x"
@@ -58,6 +61,15 @@
     ]
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.16.0",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
+    "@typescript-eslint/parser": "^8.17.0",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "^15.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
     "prettier": "^2.5.1",
     "typescript": "^5.7.2"
   }

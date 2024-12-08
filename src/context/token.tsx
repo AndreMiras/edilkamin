@@ -1,10 +1,11 @@
 import {
+  createContext,
   FunctionComponent,
   ReactNode,
-  createContext,
   useEffect,
   useState,
 } from "react";
+
 import { getTokenLocalStorage } from "../utils/helpers";
 
 interface TokenContextType {

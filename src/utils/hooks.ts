@@ -1,7 +1,8 @@
-import { useContext } from "react";
 import { useRouter } from "next/router";
-import { removeTokenLocalStorage } from "./helpers";
+import { useContext } from "react";
+
 import { TokenContext } from "../context/token";
+import { removeTokenLocalStorage } from "./helpers";
 
 /**
  * Returns:

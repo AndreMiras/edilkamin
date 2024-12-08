@@ -14,8 +14,8 @@ const removeTokenLocalStorage = (): void =>
   localStorage.removeItem(tokenLocalStorageKey);
 
 export {
-  isValidFireplace,
   getTokenLocalStorage,
-  setTokenLocalStorage,
+  isValidFireplace,
   removeTokenLocalStorage,
+  setTokenLocalStorage,
 };

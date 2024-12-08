@@ -1,8 +1,9 @@
+import { signIn } from "edilkamin";
 import React, { useCallback, useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { signIn } from "edilkamin";
-import { TokenContext } from "../context/token";
+
 import { ErrorContext, ErrorType } from "../context/error";
+import { TokenContext } from "../context/token";
 import { setTokenLocalStorage } from "../utils/helpers";
 
 const Login = (): JSX.Element => {
@@ -13,7 +14,7 @@ const Login = (): JSX.Element => {
 
   const addErrorCallback = useCallback(
     (error: ErrorType) => addError(error),
-    // eslint-disable-next-line
+
     []
   );
 
@@ -23,7 +24,7 @@ const Login = (): JSX.Element => {
   const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setPassword(e.target.value);
 
-  const onLogin = async (e: React.MouseEvent<HTMLElement>): Promise<void> => {
+  const onLogin = async (): Promise<void> => {
     try {
       const token = await signIn(username, password);
       setTokenLocalStorage(token);
