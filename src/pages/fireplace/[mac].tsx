@@ -67,9 +67,20 @@ const Fireplace: NextPage = () => {
     fetch();
   }, [addErrorCallback, mac, token]);
 
-  const onPowerChange = (value: number) => {
-    setPower(token!, mac!, value);
+  const onPowerChange = async (value: number) => {
+    // set the state before hand to avoid the lag feeling
     setPowerState(Boolean(value));
+    try {
+      await setPower(token!, mac!, value);
+    } catch (error) {
+      console.error(error);
+      addErrorCallback({
+        title: "Power State Update Failed",
+        body: "Unable to change the power state. Please try again.",
+      });
+      // rollback to the actual/previous value
+      setPowerState(powerState);
+    }
   };
 
   const onTemperatureChange = async (newTemperature: number) => {
