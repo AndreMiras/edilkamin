@@ -30,7 +30,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
-    "build": "next build",
+    "build": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always) next build",
     "start": "next start",
     "lint:prettier": "prettier --check src docs .github *.json *.md *.mjs",
     "format:prettier": "prettier --write src docs .github *.json *.md *.mjs",
