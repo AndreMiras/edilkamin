@@ -9,6 +9,7 @@ import { TokenContext } from "../../context/token";
 import PowerToggle from "../../components/PowerToggle";
 import DeviceDetails from "../../components/DeviceDetails";
 import DebugInfo from "../../components/DebugInfo";
+import TemperatureAdjuster from "../../components/TemperatureAdjuster";
 import { ErrorContext, ErrorType } from "../../context/error";
 
 const Fireplace: NextPage<{}> = () => {
@@ -16,11 +17,12 @@ const Fireplace: NextPage<{}> = () => {
   const mac = router.query.mac as string;
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
+  const [temperature, setTemperature] = useState<number>(20);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
   const baseUrl = "/api/proxy/";
-  const { deviceInfo, setPower } = configure(baseUrl);
+  const { deviceInfo, setPower, setTargetTemperature } = configure(baseUrl);
 
   const addErrorCallback = useCallback(
     (error: ErrorType) => addError(error),
@@ -35,6 +37,7 @@ const Fireplace: NextPage<{}> = () => {
         const data = await deviceInfo(token, mac);
         setInfo(data);
         setPowerState(data.status.commands.power);
+        setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
         setLoading(false);
       } catch (error: unknown) {
         if (axios.isAxiosError(error) && error?.response?.status === 404) {
@@ -68,6 +71,18 @@ const Fireplace: NextPage<{}> = () => {
     setPowerState(Boolean(value));
   };
 
+  const onTemperatureChange = async (newTemperature: number) => {
+    try {
+      await setTargetTemperature(token!, mac!, newTemperature);
+      setTemperature(newTemperature);
+    } catch (error) {
+      addErrorCallback({
+        title: "Temperature Update Failed",
+        body: "Unable to update the temperature. Please try again.",
+      });
+    }
+  };
+
   return (
     <Accordion defaultActiveKey="0" className="mt-2">
       <Accordion.Item eventKey="0">
@@ -76,6 +91,11 @@ const Fireplace: NextPage<{}> = () => {
           <PowerToggle
             powerState={powerState}
             onChange={onPowerChange}
+            loading={loading}
+          />
+          <TemperatureAdjuster
+            currentTemperature={temperature}
+            onTemperatureChange={onTemperatureChange}
             loading={loading}
           />
         </Accordion.Body>
