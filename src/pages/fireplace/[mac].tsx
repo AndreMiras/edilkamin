@@ -2,14 +2,14 @@ import axios from "axios";
 import { configure, DeviceInfoType } from "edilkamin";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Accordion, Col, Row } from "react-bootstrap";
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
 import PowerToggle from "../../components/PowerToggle";
 import TemperatureAdjuster from "../../components/TemperatureAdjuster";
-import { ErrorContext, ErrorType } from "../../context/error";
+import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
 
 const Fireplace: NextPage = () => {
@@ -24,12 +24,6 @@ const Fireplace: NextPage = () => {
   const baseUrl = "/api/proxy/";
   const { deviceInfo, setPower, setTargetTemperature } = configure(baseUrl);
 
-  const addErrorCallback = useCallback(
-    (error: ErrorType) => addError(error),
-
-    []
-  );
-
   useEffect(() => {
     if (!mac || !token) return;
     const fetch = async () => {
@@ -42,7 +36,7 @@ const Fireplace: NextPage = () => {
       } catch (error: unknown) {
         console.error(error);
         if (axios.isAxiosError(error) && error?.response?.status === 404) {
-          addErrorCallback({
+          addError({
             title: "Device not found",
             body: `The address provided ("${mac}") is invalid or the device is not registered.`,
           });
@@ -50,22 +44,23 @@ const Fireplace: NextPage = () => {
           axios.isAxiosError(error) &&
           error?.response?.data?.message !== undefined
         ) {
-          addErrorCallback({
+          addError({
             title: "Couldn't fetch device info.",
             body: error.response.data.message,
           });
         } else if (error instanceof Error) {
-          addErrorCallback({
+          addError({
             title: "Couldn't fetch device info.",
             body: error.message,
           });
         } else {
-          addErrorCallback({ body: "Couldn't fetch device info." });
+          addError({ body: "Couldn't fetch device info." });
         }
       }
     };
     fetch();
-  }, [addErrorCallback, mac, token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mac, token]);
 
   const onPowerChange = async (value: number) => {
     // set the state before hand to avoid the lag feeling
@@ -74,7 +69,7 @@ const Fireplace: NextPage = () => {
       await setPower(token!, mac!, value);
     } catch (error) {
       console.error(error);
-      addErrorCallback({
+      addError({
         title: "Power State Update Failed",
         body: "Unable to change the power state. Please try again.",
       });
@@ -90,7 +85,7 @@ const Fireplace: NextPage = () => {
       await setTargetTemperature(token!, mac!, newTemperature);
     } catch (error) {
       console.error(error);
-      addErrorCallback({
+      addError({
         title: "Temperature Update Failed",
         body: "Unable to update the temperature. Please try again.",
       });
