@@ -14,6 +14,7 @@ const TemperatureAdjuster = ({
     <Button
       variant="primary"
       onClick={() => onTemperatureChange(currentTemperature - 0.5)}
+      disabled={loading}
     >
       <FontAwesomeIcon icon={"minus"} />
     </Button>
@@ -26,6 +27,7 @@ const TemperatureAdjuster = ({
     <Button
       variant="primary"
       onClick={() => onTemperatureChange(currentTemperature + 0.5)}
+      disabled={loading}
     >
       <FontAwesomeIcon icon={"plus"} />
     </Button>
