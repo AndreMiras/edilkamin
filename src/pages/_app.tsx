@@ -1,17 +1,25 @@
-import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import {fab} from '@fortawesome/free-brands-svg-icons';
+import {far} from '@fortawesome/free-regular-svg-icons';
+import {fas} from '@fortawesome/free-solid-svg-icons';
 import type {AppProps} from 'next/app';
 import Head from 'next/head';
+import {appWithTranslation} from 'next-i18next';
 import {Container} from 'react-bootstrap';
 
-import {appWithTranslation} from 'next-i18next';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Errors from '../components/Errors';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import {TokenContextProvider} from '../context/token';
 import {ErrorContextProvider} from '../context/error';
+import {TokenContextProvider} from '../context/token';
 import DeviceInfosContextProvider from '../context/device-infos';
+
+// workaround SSR issue, refs:
+// https://github.com/FortAwesome/Font-Awesome/issues/19348
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const {library} = require('@fortawesome/fontawesome-svg-core');
+library.add(fab, far, fas);
 
 
 type MyAppProps = {

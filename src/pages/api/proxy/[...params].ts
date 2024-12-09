@@ -1,5 +1,5 @@
-import type {NextApiRequest, NextApiResponse} from 'next';
 import {API_URL} from 'edilkamin';
+import type {NextApiRequest, NextApiResponse} from 'next';
 
 const handler = async (
     req: NextApiRequest,

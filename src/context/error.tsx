@@ -1,4 +1,4 @@
-import {createContext, FunctionComponent, ReactNode, useState} from 'react';
+import { createContext, FunctionComponent, ReactNode, useState} from 'react';
 
 interface ErrorType {
     title?: string;

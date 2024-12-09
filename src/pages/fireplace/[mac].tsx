@@ -1,36 +1,37 @@
-import {GetStaticProps, NextPage} from 'next';
+import {NextPage} from 'next';
+import {useRouter} from 'next/router';
 import Link from 'next/link';
 import {useTranslation} from 'next-i18next';
-import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 import axios from 'axios';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
-import {Container, ToggleButton, ToggleButtonGroup, Tabs, Tab} from 'react-bootstrap';
 import {configure, DeviceInfoType} from 'edilkamin';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import {useCallback, useContext, useEffect, useState} from 'react';
+import {Container, Row, Col, Tabs, Tab} from 'react-bootstrap';
+import PowerToggle from "../../components/PowerToggle";
+import TemperatureAdjuster from "../../components/TemperatureAdjuster";
 import {TokenContext} from '../../context/token';
 import {ErrorContext, ErrorType} from '../../context/error';
 import {useSetDeviceInfosContext} from '../../context/device-infos';
 import EnvironmentInfos from '../../components/EnvironmentInfos';
 import SoftwareInfos from '../../components/SoftwareInfos';
 
-const Fireplace: NextPage<{}> = () => {
+
+const Fireplace: NextPage = () => {
     const [t] = useTranslation('common');
     const router = useRouter();
     const mac = router.query.mac as string;
     const [info, setInfo] = useState<DeviceInfoType | null>(null);
     const [powerState, setPowerState] = useState(false);
+    const [temperature, setTemperature] = useState<number>(0);
     const [loading, setLoading] = useState(true);
     const {token} = useContext(TokenContext);
     const {addError} = useContext(ErrorContext);
     const setDeviceInfos = useSetDeviceInfosContext();
     const baseUrl = `${router.basePath}/api/proxy/`;
-    const {deviceInfo, setPower} = configure(baseUrl);
+    const {deviceInfo, setPower, setTargetTemperature} = configure(baseUrl);
 
     const addErrorCallback = useCallback(
         (error: ErrorType) => addError(error),
-        // eslint-disable-next-line
+
         []
     );
 
@@ -38,12 +39,14 @@ const Fireplace: NextPage<{}> = () => {
         if (!mac || !token) return;
         const fetch = async () => {
             try {
-                const data = (await deviceInfo(token, mac)).data;
+                const data = await deviceInfo(token, mac);
                 setInfo(data);
                 setDeviceInfos(data);
                 setPowerState(data.status.commands.power);
+                setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
                 setLoading(false);
             } catch (error: unknown) {
+                console.error(error);
                 if (axios.isAxiosError(error) && error?.response?.status === 404) {
                     addErrorCallback({
                         title: t('device_not_found'),
@@ -72,15 +75,37 @@ const Fireplace: NextPage<{}> = () => {
         // eslint-disable-next-line
     }, [addErrorCallback, mac, token]);
 
-    const onPowerChange = (value: number) => {
-        setPower(token!, mac!, value);
+    const onPowerChange = async (value: number) => {
+        // set the state before hand to avoid the lag feeling
         setPowerState(Boolean(value));
+        try {
+            await setPower(token!, mac!, value);
+        } catch (error) {
+            console.error(error);
+            addErrorCallback({
+                title: "Power State Update Failed",
+                body: "Unable to change the power state. Please try again.",
+            });
+            // rollback to the actual/previous value
+            setPowerState(powerState);
+        }
     };
 
-    const togglePowerProps = [
-        {value: 1, label: t('on'), icon: "sun"},
-        {value: 0, label: t('off'), icon: "power-off"},
-    ];
+  const onTemperatureChange = async (newTemperature: number) => {
+    // set the state before hand to avoid the lag feeling
+    setTemperature(newTemperature);
+    try {
+      await setTargetTemperature(token!, mac!, newTemperature);
+    } catch (error) {
+      console.error(error);
+      addErrorCallback({
+        title: 'Temperature Update Failed',
+        body: 'Unable to update the temperature. Please try again.',
+      });
+      // rollback the temperature to the actual/previous value
+      setTemperature(temperature);
+    }
+  };
 
     return (
         <Container>
@@ -88,23 +113,22 @@ const Fireplace: NextPage<{}> = () => {
                 <div className="mb-2">{t('stove')} : {mac}
                     <Link href={`/fireplace/${mac}/debug`}>Debug</Link>
                 </div>
-                <ToggleButtonGroup
-                    type="radio"
-                    name="power"
-                    value={Number(powerState)}
-                    onChange={onPowerChange}
-                >
-                    {togglePowerProps.map(({value, label, icon}) => (
-                        <ToggleButton
-                            id={`set-power-${value}`}
-                            key={value}
-                            value={value}
-                            disabled={loading}
-                        >
-                            <FontAwesomeIcon icon={icon as IconProp}/> {label}
-                        </ToggleButton>
-                    ))}
-                </ToggleButtonGroup>
+                <Row>
+                    <Col xs={12} className="mb-2">
+                        <PowerToggle
+                            powerState={powerState}
+                            onChange={onPowerChange}
+                            loading={loading}
+                        />
+                    </Col>
+                    <Col xs={8} sm={5} lg={3}>
+                        <TemperatureAdjuster
+                            currentTemperature={temperature}
+                            onTemperatureChange={onTemperatureChange}
+                            loading={loading}
+                        />
+                    </Col>
+                </Row>
             </div>
             <Tabs
                 defaultActiveKey="environment-infos"
@@ -122,14 +146,14 @@ const Fireplace: NextPage<{}> = () => {
     );
 };
 
-export const getServerSideProps: GetStaticProps = async ({
-     locale,
- }) => ({
-    props: {
-        ...(await serverSideTranslations(locale ?? 'en', [
+            export const getServerSideProps: GetStaticProps = async ({
+            locale,
+        }) => ({
+            props: {
+            ...(await serverSideTranslations(locale ?? 'en', [
             'common',
-        ])),
-    },
-})
+            ])),
+        },
+        })
 
-export default Fireplace;
+            export default Fireplace;

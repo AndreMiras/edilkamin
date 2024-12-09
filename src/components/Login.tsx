@@ -15,7 +15,7 @@ const Login = (): ReactElement => {
 
     const addErrorCallback = useCallback(
         (error: ErrorType) => addError(error),
-        // eslint-disable-next-line
+
         []
     );
 
@@ -25,7 +25,7 @@ const Login = (): ReactElement => {
     const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
         setPassword(e.target.value);
 
-    const onLogin = async (e: React.MouseEvent<HTMLElement>): Promise<void> => {
+  const onLogin = async (): Promise<void> => {
         try {
             const token = await signIn(username, password);
             setTokenLocalStorage(token);
@@ -57,7 +57,7 @@ const Login = (): ReactElement => {
                 aria-label={t('password')}
                 onChange={onPasswordChange}
             />
-            <Button type="submit" onClick={onLogin}>
+            <Button variant="primary" type="submit" onClick={onLogin}>
                 {t('login')}
             </Button>
         </Form>

@@ -1,70 +1,81 @@
 {
-  "name": "edilkamin",
-  "homepage": "https://andremiras.github.io/edilkamin/",
-  "version": "2023.02.01",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "dev:classic": "next dev",
-    "dev:debug": "NODE_OPTIONS='--inspect' next dev",
-    "build": "next build",
-    "export": "next export",
-    "start": "next start",
-    "eslint": "next lint",
-    "lint": "prettier --check .",
-    "format": "prettier --write ."
-  },
-  "devDependencies": {
-    "@types/loadable__component": "~5.13.0",
-    "@types/node": "~22.9.0",
-    "@types/react": "~18.3.0",
-    "@types/react-dom": "~18.3.1",
-    "eslint": "~9.15.0",
-    "eslint-config-next": "~15.0.0",
-    "prettier": "~3.3.0",
-    "typescript": "~5.7.0",
-    "web-vitals": "~4.2.4"
-  },
-  "dependencies": {
-    "@emotion/react": "~11.13.0",
-    "@emotion/styled": "~11.13.0",
-    "@fortawesome/fontawesome-svg-core": "~6.7.0",
-    "@fortawesome/free-brands-svg-icons": "~6.7.0",
-    "@fortawesome/free-regular-svg-icons": "~6.7.0",
-    "@fortawesome/free-solid-svg-icons": "~6.7.0",
-    "@fortawesome/react-fontawesome": "~0.2.2",
-    "@loadable/component": "~5.16.0",
-    "@mui/material": "~6.1.0",
-    "assert": "~2.1.0",
-    "axios": "~1.7.0",
-    "bootstrap": "5.3.0",
-    "edilkamin": "link:/home/florent/projects/1-perso/edilkamin.js",
-    "i18next": "~22.5.0",
-    "i18next-browser-languagedetector": "~7.2.0",
-    "next": "~15.0.0",
-    "next-i18next": "~12.1.0",
-    "react": "~18.3.0",
-    "react-bootstrap": "~2.10.0",
-    "react-dom": "~18.3.0",
-    "react-i18next": "~12.3.0",
-    "react-json-view": "~1.21.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+    "name": "edilkamin",
+    "homepage": "https://andremiras.github.io/edilkamin/",
+    "version": "2024.12.08",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "dev:classic": "next dev",
+        "dev:debug": "NODE_OPTIONS='--inspect' next dev",
+        "build": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always) next build",
+        "start": "next start",
+        "lint:prettier": "prettier --check src docs .github *.json *.md *.mjs",
+        "format:prettier": "prettier --write src docs .github *.json *.md *.mjs",
+        "lint:eslint": "eslint src",
+        "format:eslint": "eslint --fix src",
+        "lint": "yarn lint:prettier && yarn lint:eslint",
+        "format": "yarn format:prettier && yarn format:eslint"
+    },
+    "devDependencies": {
+        "@types/loadable__component": "~5.13.0",
+        "@types/node": "~22.10.0",
+        "@types/react": "~18.3.0",
+        "@types/react-dom": "~18.3.0",
+        "@eslint/eslintrc": "~3.2.0",
+        "@eslint/js": "~9.16.0",
+        "@typescript-eslint/eslint-plugin": "~8.17.0",
+        "@typescript-eslint/parser": "~8.17.0",
+        "eslint": "~9.16.0",
+        "eslint-config-next": "~15.0.0",
+        "eslint-config-prettier": "~9.1.0",
+        "eslint-plugin-prettier": "~5.2.1",
+        "eslint-plugin-simple-import-sort": "~12.1.1",
+        "prettier": "~3.3.0",
+        "typescript": "~5.7.0",
+        "web-vitals": "~4.2.4"
+    },
+    "dependencies": {
+        "@emotion/react": "~11.13.0",
+        "@emotion/styled": "~11.13.0",
+        "@fortawesome/fontawesome-svg-core": "~6.7.0",
+        "@fortawesome/free-brands-svg-icons": "~6.7.0",
+        "@fortawesome/free-regular-svg-icons": "~6.7.0",
+        "@fortawesome/free-solid-svg-icons": "~6.7.0",
+        "@fortawesome/react-fontawesome": "~0.2.2",
+        "@loadable/component": "~5.16.0",
+        "@mui/material": "~6.1.0",
+        "assert": "~2.1.0",
+        "axios": "~1.7.0",
+        "bootstrap": "~5.3.0",
+        "edilkamin": "~1.5.0",
+        "i18next": "~22.5.0",
+        "i18next-browser-languagedetector": "~7.2.0",
+        "next": "~15.0.0",
+        "react": "~18.3.0",
+        "react-bootstrap": "~2.10.6",
+        "react-dom": "~18.3.0",
+        "react-i18next": "~12.3.0",
+        "react-json-view": "~1.21.0"
+    },
+    "engines": {
+        "node": "22.x"
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
   "packageManager": "yarn@4.5.2"
 }

@@ -11,7 +11,7 @@ const setTokenLocalStorage = (token: string): void =>
   localStorage.setItem(tokenLocalStorageKey, token);
 
 export {
-  isValidFireplace,
-  getTokenLocalStorage,
-  setTokenLocalStorage,
+    isValidFireplace,
+    getTokenLocalStorage,
+    setTokenLocalStorage,
 };
