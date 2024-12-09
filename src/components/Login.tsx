@@ -42,6 +42,7 @@ const Login = () => {
         className="me-2"
         aria-label="Email"
         onChange={onUsernameChange}
+        autoComplete="username"
       />
       <Form.Control
         type="password"
@@ -49,6 +50,7 @@ const Login = () => {
         className="me-2"
         aria-label="Password"
         onChange={onPasswordChange}
+        autoComplete="current-password"
       />
       <Button variant="primary" type="submit" onClick={onLogin}>
         Login
