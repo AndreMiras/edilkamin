@@ -2,12 +2,13 @@ import {createContext, Dispatch, FunctionComponent, ReactNode, SetStateAction, u
 import {DeviceInfoType} from 'edilkamin';
 import {useDeviceInfos} from '../utils/storage';
 
-const DeviceInfosContext = createContext<DeviceInfoType|null>(null);
-const SetDeviceInfosContext = createContext<Dispatch<SetStateAction<DeviceInfoType|null>>>(
+const DeviceInfosContext = createContext<DeviceInfoType | null>(null);
+const SetDeviceInfosContext = createContext<Dispatch<SetStateAction<DeviceInfoType | null>>>(
     (value) => {
         // console.log('Default function:', value);
     }
 );
+
 export function useDeviceInfosContext() {
     return useContext(DeviceInfosContext);
 }

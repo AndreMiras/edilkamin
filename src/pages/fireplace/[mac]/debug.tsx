@@ -15,7 +15,7 @@ const Debug: NextPage<{}> = () => {
             <Accordion.Item eventKey="2">
                 <Accordion.Header>Debug</Accordion.Header>
                 <Accordion.Body>
-                    <DynamicReactJson src={deviceInfos ?? {}}/>
+                    <DynamicReactJson src={deviceInfos ?? {}} />
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>

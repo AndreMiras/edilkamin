@@ -11,7 +11,10 @@ import {TokenContext} from '../context/token';
 const useIsLoggedIn = (): boolean | undefined => {
     const {token} = useContext(TokenContext);
     // application is still loading
-    if (token === undefined) return undefined;
+    if (token === undefined) {
+        return undefined
+    }
+
     return typeof token === 'string' ? token.length > 0 : false;
 };
 

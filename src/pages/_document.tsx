@@ -12,21 +12,21 @@ class MyDocument extends Document<DocumentProps> {
         return (
             <Html lang={currentLocale}>
                 <Head>
-                    <meta charSet="utf-8"/>
-                    <link rel="icon" href={config.basePath ? `${config.basePath}/favicon.ico` : '/favicon.ico'}/>
-                    <meta name="theme-color" content="#000000"/>
+                    <meta charSet="utf-8" />
+                    <link rel="icon" href={config.basePath ? `${config.basePath}/favicon.ico` : '/favicon.ico'} />
+                    <meta name="theme-color" content="#000000" />
                     <meta
                         name="description"
                         content="Open Edilkamin for controlling pellets stoves"
                     />
                     <link rel="apple-touch-icon"
-                          href={config.basePath ? `${config.basePath}/logo192.png` : '/logo192.png'}/>
+                          href={config.basePath ? `${config.basePath}/logo192.png` : '/logo192.png'} />
                     {/*
                       manifest.json provides metadata used when your web app is installed on a
                       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
                     */}
                     <link rel="manifest"
-                          href={config.basePath ? `${config.basePath}/manifest.json` : '/manifest.json'}/>
+                          href={config.basePath ? `${config.basePath}/manifest.json` : '/manifest.json'} />
                 </Head>
                 <body>
                     <Main />

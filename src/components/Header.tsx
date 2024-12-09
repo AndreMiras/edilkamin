@@ -10,7 +10,7 @@ import {useIsLoggedIn} from '../utils/hooks';
 import Login from './Login';
 import Logout from './Logout';
 
-const Header = ({locale, prefixPath}: {locale: string, prefixPath: boolean}): ReactElement => {
+const Header = ({locale, prefixPath}: { locale: string, prefixPath: boolean }): ReactElement => {
     const router = useRouter()
     const [t] = useTranslation('common');
 
@@ -23,13 +23,13 @@ const Header = ({locale, prefixPath}: {locale: string, prefixPath: boolean}): Re
         <Navbar bg="dark" variant="dark" expand="sm">
             <Container>
                 <NavbarBrand href={router.basePath ? router.basePath : `/${prefixPath ? locale : ''}`}>
-                    <FontAwesomeIcon icon={faFireFlameCurved}/> Edilkamin
+                    <FontAwesomeIcon icon={faFireFlameCurved} /> Edilkamin
                 </NavbarBrand>
-                <Navbar.Toggle/>
+                <Navbar.Toggle />
                 <Navbar.Collapse>
                     <Nav className="mr-auto">
                         <NavLink href="https://github.com/AndreMiras/edilkamin">
-                            <FontAwesomeIcon icon={faGithubAlt}/> {t('about')}
+                            <FontAwesomeIcon icon={faGithubAlt} /> {t('about')}
                         </NavLink>
                     </Nav>
                 </Navbar.Collapse>
@@ -37,10 +37,10 @@ const Header = ({locale, prefixPath}: {locale: string, prefixPath: boolean}): Re
                 <Button className="me-1" onClick={() => onToggleLanguageClick('fr')}>fr</Button>
                 {useIsLoggedIn() === true ? (
                     <div className="ms-auto">
-                        <Logout/>
+                        <Logout />
                     </div>
                 ) : (
-                    <Login/>
+                    <Login />
                 )}
             </Container>
         </Navbar>

@@ -5,7 +5,7 @@ import {useTranslation} from 'next-i18next';
 import axios from 'axios';
 import {configure, DeviceInfoType} from 'edilkamin';
 import {useCallback, useContext, useEffect, useState} from 'react';
-import {Container, Row, Col, Tabs, Tab} from 'react-bootstrap';
+import {Col, Container, Row, Tab, Tabs} from 'react-bootstrap';
 import PowerToggle from "../../components/PowerToggle";
 import TemperatureAdjuster from "../../components/TemperatureAdjuster";
 import {TokenContext} from '../../context/token';
@@ -91,21 +91,21 @@ const Fireplace: NextPage = () => {
         }
     };
 
-  const onTemperatureChange = async (newTemperature: number) => {
-    // set the state before hand to avoid the lag feeling
-    setTemperature(newTemperature);
-    try {
-      await setTargetTemperature(token!, mac!, newTemperature);
-    } catch (error) {
-      console.error(error);
-      addErrorCallback({
-        title: 'Temperature Update Failed',
-        body: 'Unable to update the temperature. Please try again.',
-      });
-      // rollback the temperature to the actual/previous value
-      setTemperature(temperature);
-    }
-  };
+    const onTemperatureChange = async (newTemperature: number) => {
+        // set the state before hand to avoid the lag feeling
+        setTemperature(newTemperature);
+        try {
+            await setTargetTemperature(token!, mac!, newTemperature);
+        } catch (error) {
+            console.error(error);
+            addErrorCallback({
+                title: 'Temperature Update Failed',
+                body: 'Unable to update the temperature. Please try again.',
+            });
+            // rollback the temperature to the actual/previous value
+            setTemperature(temperature);
+        }
+    };
 
     return (
         <Container>
@@ -146,14 +146,14 @@ const Fireplace: NextPage = () => {
     );
 };
 
-            export const getServerSideProps: GetStaticProps = async ({
-            locale,
-        }) => ({
-            props: {
-            ...(await serverSideTranslations(locale ?? 'en', [
+export const getServerSideProps: GetStaticProps = async ({
+    locale,
+}) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'en', [
             'common',
-            ])),
-        },
-        })
+        ])),
+    },
+})
 
-            export default Fireplace;
+export default Fireplace;

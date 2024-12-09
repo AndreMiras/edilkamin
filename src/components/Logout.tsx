@@ -9,7 +9,7 @@ const Logout = (): ReactElement => {
 
     // TODO: ideally hit the backend to invalidate the token too
     const logout = useLogout();
-  const onLogoutClick = (): void => logout();
+    const onLogoutClick = (): void => logout();
 
     return (
         <Button variant="primary" type="submit" onClick={onLogoutClick}>

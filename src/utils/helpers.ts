@@ -5,10 +5,10 @@ const isValidFireplace = (fireplace: string) => fireplaceRegex.test(fireplace);
 const tokenLocalStorageKey = 'edilkamin-token';
 
 const getTokenLocalStorage = (): string | null =>
-  localStorage.getItem(tokenLocalStorageKey);
+    localStorage?.getItem(tokenLocalStorageKey);
 
 const setTokenLocalStorage = (token: string): void =>
-  localStorage.setItem(tokenLocalStorageKey, token);
+    localStorage?.setItem(tokenLocalStorageKey, token);
 
 export {
     isValidFireplace,
