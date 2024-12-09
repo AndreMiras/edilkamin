@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { ErrorContext } from "../context/error";
 import Error from "./Error";
 
-const Errors = (): JSX.Element => {
+const Errors = () => {
   const { errors, setErrors } = useContext(ErrorContext);
   const removeIndex = (index: number) =>
     setErrors(errors.filter((error, i) => i !== index));

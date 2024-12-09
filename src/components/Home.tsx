@@ -11,7 +11,7 @@ import { isValidFireplace } from "../utils/helpers";
 // In our case fireplaces are added by the user and stored to the localStorage.
 const localStorageKey = "fireplaces";
 
-const Home = (): JSX.Element => {
+const Home = () => {
   const getFireplacesLocalStorage = (): string[] =>
     JSON.parse(localStorage.getItem(localStorageKey) || "[]");
 

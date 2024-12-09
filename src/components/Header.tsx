@@ -5,7 +5,7 @@ import { useIsLoggedIn } from "../utils/hooks";
 import Login from "./Login";
 import Logout from "./Logout";
 
-const Header = (): JSX.Element => (
+const Header = () => (
   <Navbar bg="dark" variant="dark" expand="sm">
     <Container>
       <Navbar.Brand href="/">

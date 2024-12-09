@@ -6,7 +6,7 @@ import { ErrorContext, ErrorType } from "../context/error";
 import { TokenContext } from "../context/token";
 import { setTokenLocalStorage } from "../utils/helpers";
 
-const Login = (): JSX.Element => {
+const Login = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { setToken } = useContext(TokenContext);
