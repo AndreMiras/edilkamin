@@ -3,6 +3,12 @@ import {DeviceInfoType} from 'edilkamin';
 
 const deviceInfosStorageKey = 'edilkamin-device-infos';
 
+// I suspect there's no API for fetching fireplaces.
+// Instead bluetooth is used to fetch the MAC addresses on the Android app
+// then it gets stored to a local database.
+// In our case fireplaces are added by the user and stored to the localStorage.
+const fireplacesStorageKey = 'edilkamin-fireplaces';
+
 export function useLocalStorage<T>(key: string, fallbackValue: T) {
     const [value, setValue] = useState(fallbackValue);
     useEffect(() => {
@@ -20,5 +26,9 @@ export function useLocalStorage<T>(key: string, fallbackValue: T) {
 }
 
 export function useDeviceInfos() {
-    return useLocalStorage<DeviceInfoType|null>(deviceInfosStorageKey, null);
+    return useLocalStorage<DeviceInfoType | null>(deviceInfosStorageKey, null);
+}
+
+export function useFireplaces() {
+    return useLocalStorage<string[] | null>(fireplacesStorageKey, null);
 }
