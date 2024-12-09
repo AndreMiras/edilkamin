@@ -1,8 +1,8 @@
+import {ReactElement} from 'react';
 import {Button} from 'react-bootstrap';
 
 import {useLogout} from '../utils/hooks';
 import {useTranslation} from 'next-i18next';
-import {ReactElement} from "react";
 
 const Logout = (): ReactElement => {
     const [t] = useTranslation('common');

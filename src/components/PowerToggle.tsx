@@ -1,6 +1,6 @@
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {ToggleButton, ToggleButtonGroup} from "react-bootstrap";
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
 
 const togglePowerProps = [
     {value: 1, label: 'On', icon: 'sun'},

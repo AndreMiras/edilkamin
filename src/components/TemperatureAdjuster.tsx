@@ -1,5 +1,5 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Button, FormControl, InputGroup} from "react-bootstrap";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {Button, FormControl, InputGroup} from 'react-bootstrap';
 
 const TemperatureAdjuster = ({
     currentTemperature,

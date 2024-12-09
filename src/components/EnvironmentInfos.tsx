@@ -1,7 +1,7 @@
 import React, {ReactElement} from 'react';
 import {Card} from 'react-bootstrap';
 import {useTranslation} from 'next-i18next';
-import {useDeviceInfosContext} from "../context/device-infos";
+import {useDeviceInfosContext} from '../context/device-infos';
 
 const EnvironmentInfos = (): ReactElement => {
     const [t] = useTranslation('common');

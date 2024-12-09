@@ -1,4 +1,4 @@
-import {NextPage} from 'next';
+import {GetStaticProps, NextPage} from 'next';
 import {useRouter} from 'next/router';
 import Link from 'next/link';
 import {useTranslation} from 'next-i18next';
@@ -6,13 +6,14 @@ import axios from 'axios';
 import {configure, DeviceInfoType} from 'edilkamin';
 import {useCallback, useContext, useEffect, useState} from 'react';
 import {Col, Container, Row, Tab, Tabs} from 'react-bootstrap';
-import PowerToggle from "../../components/PowerToggle";
-import TemperatureAdjuster from "../../components/TemperatureAdjuster";
+import PowerToggle from '../../components/PowerToggle';
+import TemperatureAdjuster from '../../components/TemperatureAdjuster';
 import {TokenContext} from '../../context/token';
 import {ErrorContext, ErrorType} from '../../context/error';
 import {useSetDeviceInfosContext} from '../../context/device-infos';
 import EnvironmentInfos from '../../components/EnvironmentInfos';
 import SoftwareInfos from '../../components/SoftwareInfos';
+import {serverSideTranslations} from 'next-i18next/serverSideTranslations';
 
 
 const Fireplace: NextPage = () => {
