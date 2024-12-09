@@ -17,12 +17,12 @@
         "format": "yarn format:prettier && yarn format:eslint"
     },
     "devDependencies": {
+        "@eslint/eslintrc": "~3.2.0",
+        "@eslint/js": "~9.16.0",
         "@types/loadable__component": "~5.13.0",
         "@types/node": "~22.10.0",
         "@types/react": "~18.3.0",
         "@types/react-dom": "~18.3.0",
-        "@eslint/eslintrc": "~3.2.0",
-        "@eslint/js": "~9.16.0",
         "@typescript-eslint/eslint-plugin": "~8.17.0",
         "@typescript-eslint/parser": "~8.17.0",
         "eslint": "~9.16.0",
@@ -77,5 +77,5 @@
             "last 1 safari version"
         ]
     },
-  "packageManager": "yarn@4.5.2"
+    "packageManager": "yarn@4.5.2"
 }
