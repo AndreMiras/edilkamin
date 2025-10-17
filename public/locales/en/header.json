@@ -1,6 +1,9 @@
 {
   "about": "About",
   "languageSwitcher": {
-    "switchTo": "FR"
+    "languages": {
+      "en": "English",
+      "fr": "Français"
+    }
   }
 }
