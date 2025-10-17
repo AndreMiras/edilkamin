@@ -1,0 +1,9 @@
+{
+  "title": "Fireplaces",
+  "emptyState": "No registered fireplaces saved, add one below",
+  "macPlaceholder": "aabbccddeeff",
+  "validation": {
+    "invalidMac": "Invalid MAC address.",
+    "alreadyAdded": "Device already added."
+  }
+}

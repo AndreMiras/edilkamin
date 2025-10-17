@@ -1,15 +1,20 @@
 import { FunctionComponent } from "react";
 import { Container } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
-const Footer: FunctionComponent = () => (
-  <footer className="footer mt-auto py-3 bg-light">
-    <Container className="text-center">
-      <span>
-        Copyleft &#x1f12f; Andre Miras 2022 - Open Edilkamin v
-        {process.env.NEXT_PUBLIC_GIT_DESCRIBE || "dev"}
-      </span>
-    </Container>
-  </footer>
-);
+const Footer: FunctionComponent = () => {
+  const { t } = useTranslation("footer");
+
+  return (
+    <footer className="footer mt-auto py-3 bg-light">
+      <Container className="text-center">
+        <span>
+          {t("text")}
+          {process.env.NEXT_PUBLIC_GIT_DESCRIBE || "dev"}
+        </span>
+      </Container>
+    </footer>
+  );
+};
 
 export default Footer;

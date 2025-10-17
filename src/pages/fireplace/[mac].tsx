@@ -4,6 +4,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { Accordion, Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
@@ -13,6 +14,7 @@ import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
 
 const Fireplace: NextPage = () => {
+  const { t } = useTranslation("fireplace");
   const router = useRouter();
   const mac = router.query.mac as string;
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
@@ -37,30 +39,30 @@ const Fireplace: NextPage = () => {
         console.error(error);
         if (axios.isAxiosError(error) && error?.response?.status === 404) {
           addError({
-            title: "Device not found",
-            body: `The address provided ("${mac}") is invalid or the device is not registered.`,
+            title: t("errors.deviceNotFound"),
+            body: t("errors.deviceNotFoundBody", { mac }),
           });
         } else if (
           axios.isAxiosError(error) &&
           error?.response?.data?.message !== undefined
         ) {
           addError({
-            title: "Couldn't fetch device info.",
+            title: t("errors.couldntFetchInfo"),
             body: error.response.data.message,
           });
         } else if (error instanceof Error) {
           addError({
-            title: "Couldn't fetch device info.",
+            title: t("errors.couldntFetchInfo"),
             body: error.message,
           });
         } else {
-          addError({ body: "Couldn't fetch device info." });
+          addError({ body: t("errors.couldntFetchInfo") });
         }
       }
     };
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mac, token]);
+  }, [mac, token, t]);
 
   const onPowerChange = async (value: number) => {
     // set the state before hand to avoid the lag feeling
@@ -70,8 +72,8 @@ const Fireplace: NextPage = () => {
     } catch (error) {
       console.error(error);
       addError({
-        title: "Power State Update Failed",
-        body: "Unable to change the power state. Please try again.",
+        title: t("errors.powerUpdateFailed"),
+        body: t("errors.powerUpdateBody"),
       });
       // rollback to the actual/previous value
       setPowerState(powerState);
@@ -86,8 +88,8 @@ const Fireplace: NextPage = () => {
     } catch (error) {
       console.error(error);
       addError({
-        title: "Temperature Update Failed",
-        body: "Unable to update the temperature. Please try again.",
+        title: t("errors.temperatureUpdateFailed"),
+        body: t("errors.temperatureUpdateBody"),
       });
       // rollback the temperature to the actual/previous value
       setTemperature(temperature);
@@ -97,7 +99,7 @@ const Fireplace: NextPage = () => {
   return (
     <Accordion defaultActiveKey="0" className="mt-2">
       <Accordion.Item eventKey="0">
-        <Accordion.Header>Fireplace: {mac}</Accordion.Header>
+        <Accordion.Header>{t("title", { mac })}</Accordion.Header>
         <Accordion.Body>
           <Row>
             <Col xs={12} className="mb-2">
@@ -118,11 +120,11 @@ const Fireplace: NextPage = () => {
         </Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="1">
-        <Accordion.Header>Advanced</Accordion.Header>
+        <Accordion.Header>{t("advanced")}</Accordion.Header>
         <Accordion.Body>{info && <DeviceDetails info={info} />}</Accordion.Body>
       </Accordion.Item>
       <Accordion.Item eventKey="2">
-        <Accordion.Header>Debug</Accordion.Header>
+        <Accordion.Header>{t("debug")}</Accordion.Header>
         <Accordion.Body>
           <DebugInfo info={info} />
         </Accordion.Body>

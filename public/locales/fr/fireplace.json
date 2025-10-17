@@ -1,0 +1,14 @@
+{
+  "title": "Cheminée : {{mac}}",
+  "advanced": "Avancé",
+  "debug": "Débogage",
+  "errors": {
+    "deviceNotFound": "Appareil non trouvé",
+    "deviceNotFoundBody": "L'adresse fournie (\"{{mac}}\") est invalide ou l'appareil n'est pas enregistré.",
+    "couldntFetchInfo": "Impossible de récupérer les informations de l'appareil.",
+    "powerUpdateFailed": "Échec de mise à jour de l'alimentation",
+    "powerUpdateBody": "Impossible de modifier l'état d'alimentation. Veuillez réessayer.",
+    "temperatureUpdateFailed": "Échec de mise à jour de la température",
+    "temperatureUpdateBody": "Impossible de mettre à jour la température. Veuillez réessayer."
+  }
+}

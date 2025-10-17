@@ -1,0 +1,9 @@
+{
+  "title": "Cheminées",
+  "emptyState": "Aucune cheminée enregistrée, ajoutez-en une ci-dessous",
+  "macPlaceholder": "aabbccddeeff",
+  "validation": {
+    "invalidMac": "Adresse MAC invalide.",
+    "alreadyAdded": "Appareil déjà ajouté."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Fireplace: {{mac}}",
+  "advanced": "Advanced",
+  "debug": "Debug",
+  "errors": {
+    "deviceNotFound": "Device not found",
+    "deviceNotFoundBody": "The address provided (\"{{mac}}\") is invalid or the device is not registered.",
+    "couldntFetchInfo": "Couldn't fetch device info.",
+    "powerUpdateFailed": "Power State Update Failed",
+    "powerUpdateBody": "Unable to change the power state. Please try again.",
+    "temperatureUpdateFailed": "Temperature Update Failed",
+    "temperatureUpdateBody": "Unable to update the temperature. Please try again."
+  }
+}

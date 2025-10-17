@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { KeyboardEvent, useEffect, useState } from "react";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 import { isValidFireplace } from "../utils/helpers";
 
@@ -12,6 +13,8 @@ import { isValidFireplace } from "../utils/helpers";
 const localStorageKey = "fireplaces";
 
 const Home = () => {
+  const { t } = useTranslation("home");
+
   const getFireplacesLocalStorage = (): string[] =>
     JSON.parse(localStorage.getItem(localStorageKey) || "[]");
 
@@ -26,13 +29,13 @@ const Home = () => {
 
   useEffect(() => {
     if (fireplace !== "" && !isValidFireplace(fireplace)) {
-      setFireplaceFeedback("Invalid MAC address.");
+      setFireplaceFeedback(t("validation.invalidMac"));
     } else if (fireplacesState.includes(fireplace.toLowerCase())) {
-      setFireplaceFeedback("Device already added.");
+      setFireplaceFeedback(t("validation.alreadyAdded"));
     } else {
       setFireplaceFeedback("");
     }
-  }, [fireplace, fireplacesState]);
+  }, [fireplace, fireplacesState, t]);
 
   /**
    * Sets `newFireplaces` to both state and local storage.
@@ -60,7 +63,7 @@ const Home = () => {
 
   return (
     <Card>
-      <Card.Header>Fireplaces</Card.Header>
+      <Card.Header>{t("title")}</Card.Header>
       <Card.Body>
         <ListGroup>
           {fireplacesState.map((mac, index) => (
@@ -77,9 +80,7 @@ const Home = () => {
             </ListGroup.Item>
           ))}
           <ListGroup.Item>
-            {fireplacesState.length === 0 && (
-              <span>No registered fireplaces saved, add one below</span>
-            )}
+            {fireplacesState.length === 0 && <span>{t("emptyState")}</span>}
           </ListGroup.Item>
           <ListGroup.Item
             className="d-flex justify-content-between align-items-start"
@@ -88,7 +89,7 @@ const Home = () => {
             <Form.Group>
               <Form.Control
                 className="me-2"
-                placeholder="aabbccddeeff"
+                placeholder={t("macPlaceholder")}
                 value={fireplace}
                 onChange={(e) => setFireplace(e.target.value)}
                 onKeyPress={onKeyPress}
