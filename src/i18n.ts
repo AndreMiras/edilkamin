@@ -3,10 +3,12 @@ import { initReactI18next } from "react-i18next";
 
 import commonEn from "../public/locales/en/common.json";
 import headerEn from "../public/locales/en/header.json";
+import loginEn from "../public/locales/en/login.json";
 import logoutEn from "../public/locales/en/logout.json";
 import powerEn from "../public/locales/en/power.json";
 import commonFr from "../public/locales/fr/common.json";
 import headerFr from "../public/locales/fr/header.json";
+import loginFr from "../public/locales/fr/login.json";
 import logoutFr from "../public/locales/fr/logout.json";
 import powerFr from "../public/locales/fr/power.json";
 
@@ -14,12 +16,14 @@ const resources = {
   en: {
     common: commonEn,
     header: headerEn,
+    login: loginEn,
     logout: logoutEn,
     power: powerEn,
   },
   fr: {
     common: commonFr,
     header: headerFr,
+    login: loginFr,
     logout: logoutFr,
     power: powerFr,
   },

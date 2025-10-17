@@ -1,0 +1,11 @@
+{
+  "usernamePlaceholder": "Username",
+  "emailAriaLabel": "Email",
+  "passwordPlaceholder": "Password",
+  "passwordAriaLabel": "Password",
+  "button": "Login",
+  "errors": {
+    "couldntLogin": "Couldn't login",
+    "unknownError": "Unknown login error"
+  }
+}

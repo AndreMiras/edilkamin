@@ -1,12 +1,14 @@
 import { signIn } from "edilkamin";
 import React, { useContext, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 import { ErrorContext } from "../context/error";
 import { TokenContext } from "../context/token";
 import { setTokenLocalStorage } from "../utils/helpers";
 
 const Login = () => {
+  const { t } = useTranslation("login");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { setToken } = useContext(TokenContext);
@@ -26,9 +28,9 @@ const Login = () => {
     } catch (error: unknown) {
       console.error(error);
       if (error instanceof Error) {
-        addError({ title: "Couldn't login", body: error.message });
+        addError({ title: t("errors.couldntLogin"), body: error.message });
       } else {
-        addError({ body: "Unknown login error" });
+        addError({ body: t("errors.unknownError") });
       }
     }
   };
@@ -38,22 +40,22 @@ const Login = () => {
   return (
     <Form className="d-flex" onSubmit={onFormSubmit}>
       <Form.Control
-        placeholder="Username"
+        placeholder={t("usernamePlaceholder")}
         className="me-2"
-        aria-label="Email"
+        aria-label={t("emailAriaLabel")}
         onChange={onUsernameChange}
         autoComplete="username"
       />
       <Form.Control
         type="password"
-        placeholder="Password"
+        placeholder={t("passwordPlaceholder")}
         className="me-2"
-        aria-label="Password"
+        aria-label={t("passwordAriaLabel")}
         onChange={onPasswordChange}
         autoComplete="current-password"
       />
       <Button variant="primary" type="submit" onClick={onLogin}>
-        Login
+        {t("button")}
       </Button>
     </Form>
   );
