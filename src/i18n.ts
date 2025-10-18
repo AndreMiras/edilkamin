@@ -10,6 +10,15 @@ import homeEn from "../public/locales/en/home.json";
 import loginEn from "../public/locales/en/login.json";
 import logoutEn from "../public/locales/en/logout.json";
 import powerEn from "../public/locales/en/power.json";
+import commonEs from "../public/locales/es/common.json";
+import errorEs from "../public/locales/es/error.json";
+import fireplaceEs from "../public/locales/es/fireplace.json";
+import footerEs from "../public/locales/es/footer.json";
+import headerEs from "../public/locales/es/header.json";
+import homeEs from "../public/locales/es/home.json";
+import loginEs from "../public/locales/es/login.json";
+import logoutEs from "../public/locales/es/logout.json";
+import powerEs from "../public/locales/es/power.json";
 import commonFr from "../public/locales/fr/common.json";
 import errorFr from "../public/locales/fr/error.json";
 import fireplaceFr from "../public/locales/fr/fireplace.json";
@@ -42,6 +51,17 @@ const resources = {
     login: loginFr,
     logout: logoutFr,
     power: powerFr,
+  },
+  es: {
+    common: commonEs,
+    error: errorEs,
+    fireplace: fireplaceEs,
+    footer: footerEs,
+    header: headerEs,
+    home: homeEs,
+    login: loginEs,
+    logout: logoutEs,
+    power: powerEs,
   },
 };
 

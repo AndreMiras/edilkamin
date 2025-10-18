@@ -1,0 +1,9 @@
+{
+  "title": "Chimeneas",
+  "emptyState": "No hay chimeneas registradas, agregue una a continuación",
+  "macPlaceholder": "aabbccddeeff",
+  "validation": {
+    "invalidMac": "Dirección MAC no válida.",
+    "alreadyAdded": "Dispositivo ya agregado."
+  }
+}

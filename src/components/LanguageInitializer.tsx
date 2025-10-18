@@ -8,7 +8,8 @@ const LanguageInitializer = () => {
 
   useEffect(() => {
     const savedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (savedLocale && (savedLocale === "en" || savedLocale === "fr")) {
+    const validLocales = ["en", "fr", "es"];
+    if (savedLocale && validLocales.includes(savedLocale)) {
       i18n.changeLanguage(savedLocale);
     }
   }, [i18n]);

@@ -6,7 +6,7 @@ const LOCALE_STORAGE_KEY = "edilkamin-locale";
 const LanguageSwitcher = () => {
   const { t, i18n } = useTranslation("header");
 
-  const languages = ["en", "fr"];
+  const languages = ["en", "fr", "es"];
 
   const switchLanguage = (locale: string) => {
     i18n.changeLanguage(locale);

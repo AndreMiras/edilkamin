@@ -1,0 +1,11 @@
+{
+  "usernamePlaceholder": "Nombre de usuario",
+  "emailAriaLabel": "Correo electrónico",
+  "passwordPlaceholder": "Contraseña",
+  "passwordAriaLabel": "Contraseña",
+  "button": "Iniciar sesión",
+  "errors": {
+    "couldntLogin": "No se pudo iniciar sesión",
+    "unknownError": "Error de inicio de sesión desconocido"
+  }
+}
