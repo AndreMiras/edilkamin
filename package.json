@@ -1,7 +1,7 @@
 {
   "name": "edilkamin",
   "homepage": "https://andremiras.github.io/edilkamin/",
-  "version": "2025.10.18",
+  "version": "2025.10.19",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
