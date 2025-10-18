@@ -13,7 +13,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "assert": "^2.0.0",
-    "axios": "^0.26.0",
+    "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "edilkamin": "^1.5.0",
     "i18next": "^25.6.0",
