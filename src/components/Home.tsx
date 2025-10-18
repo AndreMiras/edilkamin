@@ -4,7 +4,7 @@ import { KeyboardEvent, useEffect, useState } from "react";
 import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
-import { isValidFireplace } from "../utils/helpers";
+import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
 
 // I suspect there's no API for fetching fireplaces.
 // Instead bluetooth is used to fetch the MAC addresses on the Android app
@@ -30,7 +30,7 @@ const Home = () => {
   useEffect(() => {
     if (fireplace !== "" && !isValidFireplace(fireplace)) {
       setFireplaceFeedback(t("validation.invalidMac"));
-    } else if (fireplacesState.includes(fireplace.toLowerCase())) {
+    } else if (fireplacesState.includes(normalizeFireplace(fireplace))) {
       setFireplaceFeedback(t("validation.alreadyAdded"));
     } else {
       setFireplaceFeedback("");
@@ -46,7 +46,8 @@ const Home = () => {
   };
 
   const onAdd = () => {
-    setFireplaces([...fireplacesState, fireplace]);
+    const normalizedMac = normalizeFireplace(fireplace);
+    setFireplaces([...fireplacesState, normalizedMac]);
     setFireplace("");
   };
 
