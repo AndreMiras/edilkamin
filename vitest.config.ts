@@ -8,4 +8,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
   },
+  resolve: {
+    alias: {
+      'edilkamin': '/src/test/__mocks__/edilkamin.ts',
+    },
+  },
 })
