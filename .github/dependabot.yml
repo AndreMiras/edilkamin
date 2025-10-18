@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "andremiras"
+    commit-message:
+      prefix: "⬆️"
+      include: "scope"
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+          - "react-i18next"
+      nextjs:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+          - "next-i18next"
+      eslint:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@eslint/*"
+          - "@typescript-eslint/*"
+      fontawesome:
+        patterns:
+          - "@fortawesome/*"
+      bootstrap:
+        patterns:
+          - "bootstrap"
+          - "react-bootstrap"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
