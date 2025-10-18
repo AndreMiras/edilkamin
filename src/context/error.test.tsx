@@ -51,7 +51,7 @@ describe("ErrorContext", () => {
       render(
         <ErrorContextProvider>
           <TestComponent />
-        </ErrorContextProvider>
+        </ErrorContextProvider>,
       );
       expect(screen.getByTestId("errors")).toHaveTextContent("[]");
     });
@@ -76,14 +76,14 @@ describe("ErrorContext", () => {
       const { user } = render(
         <ErrorContextProvider>
           <TestComponent />
-        </ErrorContextProvider>
+        </ErrorContextProvider>,
       );
 
       const button = screen.getByRole("button");
       await user.click(button);
 
       expect(screen.getByTestId("errors")).toHaveTextContent(
-        JSON.stringify([{ title: "Error", body: "Something went wrong" }])
+        JSON.stringify([{ title: "Error", body: "Something went wrong" }]),
       );
     });
 
@@ -103,7 +103,7 @@ describe("ErrorContext", () => {
       const { user } = render(
         <ErrorContextProvider>
           <TestComponent />
-        </ErrorContextProvider>
+        </ErrorContextProvider>,
       );
 
       const button = screen.getByRole("button");
@@ -131,7 +131,7 @@ describe("ErrorContext", () => {
       const { user } = render(
         <ErrorContextProvider>
           <TestComponent />
-        </ErrorContextProvider>
+        </ErrorContextProvider>,
       );
 
       await user.click(screen.getByRole("button", { name: /Add Error 1/i }));
@@ -162,14 +162,14 @@ describe("ErrorContext", () => {
       const { user } = render(
         <ErrorContextProvider>
           <TestComponent />
-        </ErrorContextProvider>
+        </ErrorContextProvider>,
       );
 
       await user.click(screen.getByRole("button", { name: /Add With Title/i }));
       expect(screen.getByTestId("errors")).toHaveTextContent("Warning");
 
       await user.click(
-        screen.getByRole("button", { name: /Add Without Title/i })
+        screen.getByRole("button", { name: /Add Without Title/i }),
       );
       expect(screen.getByTestId("errors")).toHaveTextContent("No title");
     });

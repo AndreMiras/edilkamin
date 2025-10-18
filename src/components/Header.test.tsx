@@ -26,7 +26,7 @@ describe("Header", () => {
     expect(aboutLink).toBeInTheDocument();
     expect(aboutLink).toHaveAttribute(
       "href",
-      "https://github.com/AndreMiras/edilkamin"
+      "https://github.com/AndreMiras/edilkamin",
     );
   });
 
@@ -46,7 +46,7 @@ describe("Header", () => {
         }}
       >
         <Header />
-      </TokenContext.Provider>
+      </TokenContext.Provider>,
     );
 
     // Login form should be present with username input
@@ -63,7 +63,7 @@ describe("Header", () => {
         }}
       >
         <Header />
-      </TokenContext.Provider>
+      </TokenContext.Provider>,
     );
 
     // Logout button should be present
@@ -79,14 +79,14 @@ describe("Header", () => {
         }}
       >
         <Header />
-      </TokenContext.Provider>
+      </TokenContext.Provider>,
     );
 
     // Login component should be present during loading (same as unauthenticated)
     expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
     // Logout should not be present
     expect(
-      screen.queryByRole("button", { name: /logout/i })
+      screen.queryByRole("button", { name: /logout/i }),
     ).not.toBeInTheDocument();
   });
 });

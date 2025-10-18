@@ -139,7 +139,7 @@ describe("useLogout", () => {
         logout: useLogout(),
         isLoggedIn: useIsLoggedIn(),
       }),
-      { wrapper }
+      { wrapper },
     );
 
     // Wait for token to load

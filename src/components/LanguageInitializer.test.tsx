@@ -25,7 +25,7 @@ describe("LanguageInitializer", () => {
       () => {
         expect(changeLanguageSpy).toHaveBeenCalledWith("fr");
       },
-      { timeout: 1000 }
+      { timeout: 1000 },
     );
 
     changeLanguageSpy.mockRestore();
@@ -41,7 +41,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Should use default language (en)
@@ -61,7 +61,7 @@ describe("LanguageInitializer", () => {
       () => {
         expect(changeLanguageSpy).toHaveBeenCalledWith("es");
       },
-      { timeout: 1000 }
+      { timeout: 1000 },
     );
 
     changeLanguageSpy.mockRestore();
@@ -79,14 +79,14 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     await waitFor(
       () => {
         expect(getByTestId("language")).toHaveTextContent("en");
       },
-      { timeout: 2000 }
+      { timeout: 2000 },
     );
   });
 
@@ -102,7 +102,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Should stay at default language since invalid locale is not in validLocales array
@@ -121,7 +121,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Should use default language
@@ -161,7 +161,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Should not change language because "FR" !== "fr"
@@ -180,7 +180,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Should stay at default language
@@ -199,7 +199,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Wait for initial language change
@@ -215,7 +215,7 @@ describe("LanguageInitializer", () => {
       <>
         <LanguageInitializer />
         <TestComponent />
-      </>
+      </>,
     );
 
     // Language should still be 'fr' because effect only runs on mount

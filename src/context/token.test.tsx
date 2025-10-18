@@ -50,7 +50,7 @@ describe("TokenContext", () => {
       render(
         <TokenContextProvider>
           <TestComponent />
-        </TokenContextProvider>
+        </TokenContextProvider>,
       );
 
       // After useEffect runs, token becomes null (no token in localStorage)
@@ -70,13 +70,13 @@ describe("TokenContext", () => {
       render(
         <TokenContextProvider>
           <TestComponent />
-        </TokenContextProvider>
+        </TokenContextProvider>,
       );
 
       // Should load from localStorage via useEffect
       await waitFor(() => {
         expect(screen.getByTestId("token")).toHaveTextContent(
-          "stored-token-12345"
+          "stored-token-12345",
         );
       });
     });
@@ -95,7 +95,7 @@ describe("TokenContext", () => {
       render(
         <TokenContextProvider>
           <TestComponent />
-        </TokenContextProvider>
+        </TokenContextProvider>,
       );
 
       screen.getByRole("button").click();
@@ -121,7 +121,7 @@ describe("TokenContext", () => {
       render(
         <TokenContextProvider>
           <TestComponent />
-        </TokenContextProvider>
+        </TokenContextProvider>,
       );
 
       // Wait for token to load from localStorage
@@ -152,7 +152,7 @@ describe("TokenContext", () => {
       render(
         <TokenContextProvider>
           <TestComponent />
-        </TokenContextProvider>
+        </TokenContextProvider>,
       );
 
       // Empty string is loaded as-is from localStorage

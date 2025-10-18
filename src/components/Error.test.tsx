@@ -6,7 +6,7 @@ import Error from "./Error";
 describe("Error Component", () => {
   it("renders with title and body", () => {
     render(
-      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />
+      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />,
     );
 
     expect(screen.getByText("Test Error")).toBeInTheDocument();
@@ -23,7 +23,7 @@ describe("Error Component", () => {
   it("calls onClose when dismiss button is clicked", async () => {
     const onClose = vi.fn();
     const { user } = render(
-      <Error title="Test Error" body="Test error message" onClose={onClose} />
+      <Error title="Test Error" body="Test error message" onClose={onClose} />,
     );
 
     const closeButton = screen.getByRole("button", { name: /close/i });
@@ -34,7 +34,7 @@ describe("Error Component", () => {
 
   it("renders as dismissible alert", () => {
     const { container } = render(
-      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />
+      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />,
     );
 
     const alert = container.querySelector(".alert-dismissible");
@@ -43,7 +43,7 @@ describe("Error Component", () => {
 
   it("renders with danger variant", () => {
     const { container } = render(
-      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />
+      <Error title="Test Error" body="Test error message" onClose={vi.fn()} />,
     );
 
     const alert = container.querySelector(".alert-danger");

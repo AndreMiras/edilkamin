@@ -46,7 +46,7 @@ describe("Fireplace Page", () => {
   // Helper to create mock device info
   const createMockDeviceInfo = (
     power: boolean = true,
-    temperature: number = 22
+    temperature: number = 22,
   ): DeviceInfoType =>
     ({
       status: {
@@ -67,7 +67,7 @@ describe("Fireplace Page", () => {
           is_sound_active: true,
         },
       } as any,
-    } as DeviceInfoType);
+    }) as DeviceInfoType;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -85,7 +85,7 @@ describe("Fireplace Page", () => {
   describe("Data Fetching", () => {
     it("should show loading state initially", () => {
       const mockDeviceInfo = vi.fn(
-        () => new Promise(() => {}) // Never resolves
+        () => new Promise(() => {}), // Never resolves
       );
       vi.mocked(configure).mockReturnValue({
         deviceInfo: mockDeviceInfo,
@@ -149,7 +149,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       // Error should be added to ErrorContext and displayed
@@ -157,7 +157,7 @@ describe("Fireplace Page", () => {
         expect(screen.getByRole("alert")).toBeInTheDocument();
       });
       expect(
-        screen.getByText(/device.*not found/i, { exact: false })
+        screen.getByText(/device.*not found/i, { exact: false }),
       ).toBeInTheDocument();
     });
 
@@ -180,7 +180,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -202,7 +202,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -223,12 +223,12 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
         expect(
-          screen.getByText(/couldn.*fetch.*info/i, { exact: false })
+          screen.getByText(/couldn.*fetch.*info/i, { exact: false }),
         ).toBeInTheDocument();
       });
     });
@@ -305,7 +305,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -320,10 +320,10 @@ describe("Fireplace Page", () => {
         () => {
           expect(screen.getByRole("alert")).toBeInTheDocument();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
       expect(
-        screen.getByText(/power.*update.*failed/i, { exact: false })
+        screen.getByText(/power.*update.*failed/i, { exact: false }),
       ).toBeInTheDocument();
     });
 
@@ -345,7 +345,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -359,7 +359,7 @@ describe("Fireplace Page", () => {
         () => {
           expect(screen.getByRole("alert")).toBeInTheDocument();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
     });
   });
@@ -386,7 +386,7 @@ describe("Fireplace Page", () => {
       // Find temperature increase button (plus icon button)
       const buttons = screen.getAllByRole("button");
       const increaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="plus"]')
+        btn.querySelector('[data-icon="plus"]'),
       );
       await user.click(increaseButton!);
 
@@ -395,7 +395,7 @@ describe("Fireplace Page", () => {
         expect(mockSetTargetTemperature).toHaveBeenCalledWith(
           mockToken,
           mockMac,
-          20.5
+          20.5,
         );
       });
     });
@@ -420,7 +420,7 @@ describe("Fireplace Page", () => {
 
       const buttons = screen.getAllByRole("button");
       const decreaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="minus"]')
+        btn.querySelector('[data-icon="minus"]'),
       );
       await user.click(decreaseButton!);
 
@@ -428,7 +428,7 @@ describe("Fireplace Page", () => {
         expect(mockSetTargetTemperature).toHaveBeenCalledWith(
           mockToken,
           mockMac,
-          21.5
+          21.5,
         );
       });
     });
@@ -451,7 +451,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -460,7 +460,7 @@ describe("Fireplace Page", () => {
 
       const buttons = screen.getAllByRole("button");
       const increaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="plus"]')
+        btn.querySelector('[data-icon="plus"]'),
       );
       await user.click(increaseButton!);
 
@@ -469,10 +469,10 @@ describe("Fireplace Page", () => {
         () => {
           expect(screen.getByRole("alert")).toBeInTheDocument();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
       expect(
-        screen.getByText(/temperature.*update.*failed/i, { exact: false })
+        screen.getByText(/temperature.*update.*failed/i, { exact: false }),
       ).toBeInTheDocument();
     });
 
@@ -494,7 +494,7 @@ describe("Fireplace Page", () => {
         <>
           <Fireplace />
           <Errors />
-        </>
+        </>,
       );
 
       await waitFor(() => {
@@ -503,7 +503,7 @@ describe("Fireplace Page", () => {
 
       const buttons = screen.getAllByRole("button");
       const decreaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="minus"]')
+        btn.querySelector('[data-icon="minus"]'),
       );
       await user.click(decreaseButton!);
 
@@ -511,7 +511,7 @@ describe("Fireplace Page", () => {
         () => {
           expect(screen.getByRole("alert")).toBeInTheDocument();
         },
-        { timeout: 2000 }
+        { timeout: 2000 },
       );
     });
   });
