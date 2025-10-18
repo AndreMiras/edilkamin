@@ -1,6 +1,7 @@
 # Open Edilkamin
 
 [![Tests](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml/badge.svg)](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/AndreMiras/edilkamin/branch/main/graph/badge.svg)](https://codecov.io/gh/AndreMiras/edilkamin)
 
 <https://edilkamin.vercel.app/>
 

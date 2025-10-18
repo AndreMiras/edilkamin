@@ -7,6 +7,25 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html', 'lcov', 'json'],
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/test/**',
+        'src/**/__mocks__/**',
+        'src/pages/_app.tsx',
+        'src/pages/_document.tsx',
+      ],
+      thresholds: {
+        lines: 50,
+        functions: 50,
+        branches: 40,
+        statements: 50,
+      },
+      all: true,
+    },
   },
   resolve: {
     alias: {
