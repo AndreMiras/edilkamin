@@ -12,7 +12,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     expect(screen.getByDisplayValue("20")).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -42,7 +42,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -63,7 +63,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -83,7 +83,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const input = screen.getByDisplayValue("20") as HTMLInputElement;
@@ -103,7 +103,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={true}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -123,7 +123,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={true}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -143,7 +143,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20.5}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     expect(screen.getByDisplayValue("20.5")).toBeInTheDocument();
@@ -166,7 +166,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={0.5}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const buttons = screen.getAllByRole("button");
@@ -186,7 +186,7 @@ describe("TemperatureAdjuster", () => {
         currentTemperature={20}
         onTemperatureChange={onTemperatureChange}
         loading={false}
-      />
+      />,
     );
 
     const input = screen.getByDisplayValue("20");

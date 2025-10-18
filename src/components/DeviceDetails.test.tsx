@@ -7,7 +7,7 @@ import DeviceDetails from "./DeviceDetails";
 
 // Create a mock DeviceInfoType with all required fields
 const createMockDevice = (
-  overrides?: Partial<DeviceInfoType>
+  overrides?: Partial<DeviceInfoType>,
 ): DeviceInfoType =>
   ({
     status: {
@@ -31,7 +31,7 @@ const createMockDevice = (
     name: "Test Fireplace",
     mac_address: "aabbccddeeff",
     ...overrides,
-  } as DeviceInfoType);
+  }) as DeviceInfoType;
 
 describe("DeviceDetails", () => {
   it("should render board temperature", () => {

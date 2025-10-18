@@ -28,7 +28,7 @@ describe("Errors", () => {
         }}
       >
         <Errors />
-      </ErrorContext.Provider>
+      </ErrorContext.Provider>,
     );
 
     expect(screen.getByText("Test Error")).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("Errors", () => {
         }}
       >
         <Errors />
-      </ErrorContext.Provider>
+      </ErrorContext.Provider>,
     );
 
     expect(screen.getAllByRole("alert")).toHaveLength(3);
@@ -84,7 +84,7 @@ describe("Errors", () => {
         }}
       >
         <Errors />
-      </ErrorContext.Provider>
+      </ErrorContext.Provider>,
     );
 
     // Find and close first error
@@ -112,7 +112,7 @@ describe("Errors", () => {
         }}
       >
         <Errors />
-      </ErrorContext.Provider>
+      </ErrorContext.Provider>,
     );
 
     expect(screen.getByText("Error message without title")).toBeInTheDocument();

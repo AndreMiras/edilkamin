@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): Promise<void> => {
   const { params } = req.query;
   const resource = API_URL + (Array.isArray(params) ? params : []).join("/");

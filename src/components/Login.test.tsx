@@ -23,7 +23,7 @@ describe("Login", () => {
     expect(screen.getByLabelText(/email|username/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /login|sign in/i })
+      screen.getByRole("button", { name: /login|sign in/i }),
     ).toBeInTheDocument();
   });
 
@@ -86,7 +86,7 @@ describe("Login", () => {
       <>
         <Login />
         <Errors />
-      </>
+      </>,
     );
 
     await user.type(screen.getByLabelText(/email|username/i), "wronguser");
@@ -107,7 +107,7 @@ describe("Login", () => {
       <>
         <Login />
         <Errors />
-      </>
+      </>,
     );
 
     await user.type(screen.getByLabelText(/email|username/i), "testuser");
@@ -161,7 +161,7 @@ describe("Login", () => {
 
     await user.type(
       screen.getByLabelText(/email|username/i),
-      "user@example.com"
+      "user@example.com",
     );
     await user.type(screen.getByLabelText(/password/i), "securepass");
     await user.click(screen.getByRole("button", { name: /login|sign in/i }));

@@ -27,7 +27,7 @@ describe("API Proxy Handler", () => {
     params: string[],
     method: string = "GET",
     authorization?: string,
-    body?: unknown
+    body?: unknown,
   ): Partial<NextApiRequest> => ({
     query: { params },
     method,
@@ -63,7 +63,7 @@ describe("API Proxy Handler", () => {
           Accept: "application/json",
           "Content-Type": "application/json",
         }),
-      })
+      }),
     );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ data: "test" });
@@ -80,7 +80,7 @@ describe("API Proxy Handler", () => {
       ["devices", "abc123", "power"],
       "POST",
       "Bearer token456",
-      requestBody
+      requestBody,
     );
     const res = createMockRes();
 
@@ -91,7 +91,7 @@ describe("API Proxy Handler", () => {
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify(requestBody),
-      })
+      }),
     );
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({ success: true });
@@ -106,7 +106,7 @@ describe("API Proxy Handler", () => {
     const req = createMockReq(
       ["devices", "aabbcc", "status", "details"],
       "GET",
-      "Bearer token"
+      "Bearer token",
     );
     const res = createMockRes();
 
@@ -114,7 +114,7 @@ describe("API Proxy Handler", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       "https://api.edilkamin.com/devices/aabbcc/status/details",
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
@@ -135,7 +135,7 @@ describe("API Proxy Handler", () => {
         headers: expect.objectContaining({
           Authorization: "",
         }),
-      })
+      }),
     );
   });
 
@@ -188,7 +188,7 @@ describe("API Proxy Handler", () => {
     // Should fallback to empty array and just use API_URL
     expect(mockFetch).toHaveBeenCalledWith(
       "https://api.edilkamin.com/",
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 

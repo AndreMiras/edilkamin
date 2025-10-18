@@ -8,7 +8,7 @@ describe("PowerToggle", () => {
   it("should render both on and off buttons", () => {
     const onChange = vi.fn();
     render(
-      <PowerToggle powerState={false} onChange={onChange} loading={false} />
+      <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
     expect(screen.getByRole("radio", { name: /on/i })).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe("PowerToggle", () => {
   it("should select correct button based on powerState", () => {
     const onChange = vi.fn();
     const { rerender } = render(
-      <PowerToggle powerState={true} onChange={onChange} loading={false} />
+      <PowerToggle powerState={true} onChange={onChange} loading={false} />,
     );
 
     const onButton = screen.getByRole("radio", { name: /on/i });
@@ -30,7 +30,7 @@ describe("PowerToggle", () => {
 
     // Rerender with powerState false
     rerender(
-      <PowerToggle powerState={false} onChange={onChange} loading={false} />
+      <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
     expect(onButton).not.toBeChecked();
@@ -42,7 +42,7 @@ describe("PowerToggle", () => {
     const user = userEvent.setup();
 
     render(
-      <PowerToggle powerState={false} onChange={onChange} loading={false} />
+      <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
     const onButton = screen.getByRole("radio", { name: /on/i });
@@ -58,7 +58,7 @@ describe("PowerToggle", () => {
     const user = userEvent.setup();
 
     render(
-      <PowerToggle powerState={true} onChange={onChange} loading={false} />
+      <PowerToggle powerState={true} onChange={onChange} loading={false} />,
     );
 
     const offButton = screen.getByRole("radio", { name: /off/i });
@@ -72,7 +72,7 @@ describe("PowerToggle", () => {
   it("should disable both buttons when loading is true", () => {
     const onChange = vi.fn();
     render(
-      <PowerToggle powerState={false} onChange={onChange} loading={true} />
+      <PowerToggle powerState={false} onChange={onChange} loading={true} />,
     );
 
     const onButton = screen.getByRole("radio", { name: /on/i });
@@ -87,7 +87,7 @@ describe("PowerToggle", () => {
     const user = userEvent.setup();
 
     render(
-      <PowerToggle powerState={false} onChange={onChange} loading={true} />
+      <PowerToggle powerState={false} onChange={onChange} loading={true} />,
     );
 
     const onButton = screen.getByRole("radio", { name: /on/i });
@@ -101,7 +101,7 @@ describe("PowerToggle", () => {
   it("should render icons with labels", () => {
     const onChange = vi.fn();
     render(
-      <PowerToggle powerState={false} onChange={onChange} loading={false} />
+      <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
     const onButton = screen.getByRole("radio", { name: /on/i });

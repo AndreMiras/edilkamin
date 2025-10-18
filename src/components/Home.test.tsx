@@ -90,7 +90,7 @@ describe("Home", () => {
     const user = userEvent.setup();
     localStorage.setItem(
       "fireplaces",
-      JSON.stringify(["aabbccddeeff", "112233445566"])
+      JSON.stringify(["aabbccddeeff", "112233445566"]),
     );
 
     render(<Home />);
@@ -156,7 +156,7 @@ describe("Home", () => {
     // Should not add duplicate
     const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
     expect(stored.filter((mac: string) => mac === "aabbccddeeff")).toHaveLength(
-      1
+      1,
     );
   });
 
