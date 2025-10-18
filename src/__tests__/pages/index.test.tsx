@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { render, screen } from "../test/utils";
-import Index from "./index";
+import Index from "../../pages/index";
+import { render, screen } from "../../test/utils";
 
 // Mock the Home component since it's already tested
-vi.mock("../components/Home", () => ({
+vi.mock("../../components/Home", () => ({
   default: () => <div data-testid="home-component">Home</div>,
 }));
 
