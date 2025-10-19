@@ -16,6 +16,24 @@ const Document = () => (
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     */}
       <link rel="manifest" href="/manifest.json" />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark' || theme === 'light') {
+                  document.documentElement.setAttribute('data-bs-theme', theme);
+                } else {
+                  document.documentElement.setAttribute('data-bs-theme', 'light');
+                }
+              } catch (e) {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+              }
+            })();
+          `,
+        }}
+      />
     </Head>
     <body>
       <Main />

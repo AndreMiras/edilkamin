@@ -38,7 +38,12 @@ describe("Footer Component", () => {
     const { container } = render(<Footer />);
 
     const footer = container.querySelector("footer");
-    expect(footer).toHaveClass("footer", "mt-auto", "py-3", "bg-light");
+    expect(footer).toHaveClass(
+      "footer",
+      "mt-auto",
+      "py-3",
+      "bg-body-secondary",
+    );
   });
 
   it("centers the text content", () => {

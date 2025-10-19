@@ -6,12 +6,13 @@ import { useIsLoggedIn } from "../utils/hooks";
 import LanguageSwitcher from "./LanguageSwitcher";
 import Login from "./Login";
 import Logout from "./Logout";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 const Header = () => {
   const { t } = useTranslation("header");
 
   return (
-    <Navbar bg="dark" variant="dark" expand="sm">
+    <Navbar expand="sm">
       <Container>
         <Navbar.Brand href="/">
           <FontAwesomeIcon icon={["fas", "fire-flame-curved"]} /> Edilkamin
@@ -23,6 +24,7 @@ const Header = () => {
               <FontAwesomeIcon icon={["fab", "github-alt"]} /> {t("about")}
             </Nav.Link>
             <LanguageSwitcher />
+            <ThemeSwitcher />
           </Nav>
         </Navbar.Collapse>
         {useIsLoggedIn() === true ? (

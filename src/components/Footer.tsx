@@ -6,7 +6,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation("footer");
 
   return (
-    <footer className="footer mt-auto py-3 bg-light">
+    <footer className="footer mt-auto py-3 bg-body-secondary">
       <Container className="text-center">
         <span>
           {t("text")}

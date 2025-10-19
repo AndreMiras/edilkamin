@@ -12,7 +12,9 @@ import Errors from "../components/Errors";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LanguageInitializer from "../components/LanguageInitializer";
+import ThemeInitializer from "../components/ThemeInitializer";
 import { ErrorContextProvider } from "../context/error";
+import { ThemeContextProvider } from "../context/theme";
 import { TokenContextProvider } from "../context/token";
 import i18n from "../i18n";
 
@@ -32,11 +34,14 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
       <LanguageInitializer />
       <ErrorContextProvider>
         <TokenContextProvider>
-          <Header />
-          <Container className="mt-3">
-            <Errors />
-            <Component {...pageProps} />
-          </Container>
+          <ThemeContextProvider>
+            <ThemeInitializer />
+            <Header />
+            <Container className="mt-3">
+              <Errors />
+              <Component {...pageProps} />
+            </Container>
+          </ThemeContextProvider>
         </TokenContextProvider>
       </ErrorContextProvider>
       <Footer />
