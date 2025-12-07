@@ -38,7 +38,6 @@ vi.mock("next/router", () => ({
   }),
 }));
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 describe("Fireplace Page", () => {
   const mockMac = "aabbccddeeff";
   const mockToken = "test-token-12345";

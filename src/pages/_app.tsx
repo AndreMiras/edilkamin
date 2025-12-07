@@ -1,5 +1,7 @@
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import { config, library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -18,10 +20,9 @@ import { ThemeContextProvider } from "../context/theme";
 import { TokenContextProvider } from "../context/token";
 import i18n from "../i18n";
 
-// workaround SSR issue, refs:
-// https://github.com/FortAwesome/Font-Awesome/issues/19348
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { library } = require("@fortawesome/fontawesome-svg-core");
+// Prevent FontAwesome from adding CSS automatically since we import it above
+// This fixes hydration mismatch issues with SSR
+config.autoAddCss = false;
 library.add(fab, far, fas);
 
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (

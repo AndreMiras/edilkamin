@@ -95,19 +95,17 @@ describe("isValidFireplace", () => {
     });
 
     it("should reject undefined input", () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isValidFireplace(undefined as any)).toBe(false);
     });
 
     it("should reject null input", () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect(isValidFireplace(null as any)).toBe(false);
     });
 
     it("should accept numeric input that stringifies to valid hex", () => {
       // Note: Numbers are coerced to strings by regex.test()
       // 123456789012 becomes "123456789012" which is 12 hex chars
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       expect(isValidFireplace(123456789012 as any)).toBe(true);
     });
   });
