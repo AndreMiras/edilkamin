@@ -2807,13 +2807,6 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
 
-axios@^0.26.0:
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.26.1.tgz#1ede41c51fcf51bbbd6fd43669caaa4f0495aaa9"
-  integrity sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==
-  dependencies:
-    follow-redirects "^1.14.8"
-
 axios@^1.13.2:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
@@ -3242,13 +3235,14 @@ eastasianwidth@^0.2.0:
   resolved "https://registry.yarnpkg.com/eastasianwidth/-/eastasianwidth-0.2.0.tgz#696ce2ec0aa0e6ea93a397ffcf24aa7840c827cb"
   integrity sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==
 
-edilkamin@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.5.0.tgz#cf8e2a059147d5b9d5fc193f5324b34f8e1c00a7"
-  integrity sha512-Tv6Xw73Iqgj88ukc66guLrCQNPM38oQb8c2SlnnoJL4XL+y9faYXxtvMlAggUnnZQyEM7TcPWp2cx6O1+oEfqg==
+edilkamin@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.6.2.tgz#36ee59f266c7744fd3845f08510688ebaefd71f3"
+  integrity sha512-LGJEuCTgs6nFMqZqXSmV14KBiUwXNJUUgRynHu2WwH1efPX3rXu6XOy0R2C+QCYrEdQUhatBdA77phHQZ64I/Q==
   dependencies:
     aws-amplify "^6.10.0"
-    axios "^0.26.0"
+    axios "^1.13.2"
+    pako "^2.1.0"
   optionalDependencies:
     commander "^12.1.0"
 
@@ -3877,7 +3871,7 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.2.tgz#adba1448a9841bec72b42c532ea23dbbedef1a27"
   integrity sha512-AiwGJM8YcNOaobumgtng+6NHuOqC3A7MixFeDafM3X9cIUM+xUXoS5Vfgf+OihAYe20fxqNM9yPBXJzRtZ/4eA==
 
-follow-redirects@^1.14.8, follow-redirects@^1.15.6:
+follow-redirects@^1.15.6:
   version "1.15.11"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.11.tgz#777d73d72a92f8ec4d2e410eb47352a56b8e8340"
   integrity sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==
@@ -5095,6 +5089,11 @@ package-json-from-dist@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/package-json-from-dist/-/package-json-from-dist-1.0.1.tgz#4f1471a010827a86f94cfd9b0727e36d267de505"
   integrity sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==
+
+pako@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-2.1.0.tgz#266cc37f98c7d883545d11335c00fbd4062c9a86"
+  integrity sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==
 
 parent-module@^1.0.0:
   version "1.0.1"

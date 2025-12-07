@@ -1,4 +1,4 @@
-import { API_URL } from "edilkamin";
+import { OLD_API_URL as API_URL } from "edilkamin";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (

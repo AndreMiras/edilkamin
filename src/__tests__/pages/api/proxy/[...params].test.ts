@@ -3,10 +3,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import handler from "../../../../pages/api/proxy/[...params]";
 
-// Mock edilkamin to get API_URL
+// Mock edilkamin to get OLD_API_URL (used by proxy handler)
 vi.mock("edilkamin", () => ({
   API_URL: "https://api.edilkamin.com/",
+  OLD_API_URL:
+    "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
 }));
+
+// Constants for test assertions (must match mock values above)
+const OLD_API_URL =
+  "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/";
 
 describe("API Proxy Handler", () => {
   let mockFetch: ReturnType<typeof vi.fn>;
@@ -55,7 +61,7 @@ describe("API Proxy Handler", () => {
     await handler(req as NextApiRequest, res as NextApiResponse);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.edilkamin.com/devices/abc123",
+      `${OLD_API_URL}devices/abc123`,
       expect.objectContaining({
         method: "GET",
         headers: expect.objectContaining({
@@ -87,7 +93,7 @@ describe("API Proxy Handler", () => {
     await handler(req as NextApiRequest, res as NextApiResponse);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.edilkamin.com/devices/abc123/power",
+      `${OLD_API_URL}devices/abc123/power`,
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify(requestBody),
@@ -113,7 +119,7 @@ describe("API Proxy Handler", () => {
     await handler(req as NextApiRequest, res as NextApiResponse);
 
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.edilkamin.com/devices/aabbcc/status/details",
+      `${OLD_API_URL}devices/aabbcc/status/details`,
       expect.any(Object),
     );
   });
@@ -185,11 +191,8 @@ describe("API Proxy Handler", () => {
 
     await handler(req, res as NextApiResponse);
 
-    // Should fallback to empty array and just use API_URL
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://api.edilkamin.com/",
-      expect.any(Object),
-    );
+    // Should fallback to empty array and just use OLD_API_URL
+    expect(mockFetch).toHaveBeenCalledWith(OLD_API_URL, expect.any(Object));
   });
 
   it("should not include body in GET request", async () => {

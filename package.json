@@ -15,7 +15,7 @@
     "assert": "^2.0.0",
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
-    "edilkamin": "^1.5.0",
+    "edilkamin": "^1.6.2",
     "i18next": "^25.7.2",
     "next": "^16",
     "next-i18next": "^15.4.3",

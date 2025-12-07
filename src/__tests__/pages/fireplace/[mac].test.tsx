@@ -16,6 +16,8 @@ vi.mock("edilkamin", () => ({
     setTargetTemperature: vi.fn(),
   })),
   API_URL: "https://api.edilkamin.com/",
+  OLD_API_URL:
+    "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
 }));
 
 // Mock axios for error type checking
