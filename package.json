@@ -18,7 +18,7 @@
     "edilkamin": "^1.5.0",
     "i18next": "^25.6.0",
     "next": "^16",
-    "next-i18next": "^15.4.2",
+    "next-i18next": "^15.4.3",
     "react": "^19",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19",
