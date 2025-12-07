@@ -42,7 +42,7 @@
     "format": "yarn format:prettier && yarn format:eslint"
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   },
   "eslintConfig": {
     "extends": [
