@@ -1,4 +1,5 @@
 import { render as renderWithoutProviders } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { useContext } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 
@@ -82,6 +83,7 @@ describe("TokenContext", () => {
     });
 
     it("should update token when setToken is called with string", async () => {
+      const user = userEvent.setup();
       const TestComponent = () => {
         const { token, setToken } = useContext(TokenContext);
         return (
@@ -98,7 +100,7 @@ describe("TokenContext", () => {
         </TokenContextProvider>,
       );
 
-      screen.getByRole("button").click();
+      await user.click(screen.getByRole("button"));
 
       await waitFor(() => {
         expect(screen.getByTestId("token")).toHaveTextContent("new-token");
@@ -106,6 +108,7 @@ describe("TokenContext", () => {
     });
 
     it("should update token when setToken is called with null", async () => {
+      const user = userEvent.setup();
       localStorage.setItem("edilkamin-token", "existing-token");
 
       const TestComponent = () => {
@@ -130,7 +133,7 @@ describe("TokenContext", () => {
       });
 
       // Clear token
-      screen.getByRole("button").click();
+      await user.click(screen.getByRole("button"));
 
       await waitFor(() => {
         expect(screen.getByTestId("token")).toHaveTextContent("null");

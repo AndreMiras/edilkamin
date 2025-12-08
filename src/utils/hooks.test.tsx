@@ -1,5 +1,5 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { ReactNode } from "react";
+import { act, ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { TokenContextProvider } from "../context/token";
@@ -118,7 +118,9 @@ describe("useLogout", () => {
     const { result } = renderHook(() => useLogout(), { wrapper });
 
     // Call logout function
-    result.current();
+    act(() => {
+      result.current();
+    });
 
     // localStorage should be cleared
     await waitFor(() => {
@@ -148,7 +150,9 @@ describe("useLogout", () => {
     });
 
     // Call logout
-    result.current.logout();
+    act(() => {
+      result.current.logout();
+    });
 
     // Token should be set to null
     await waitFor(() => {
@@ -164,7 +168,9 @@ describe("useLogout", () => {
     const { result } = renderHook(() => useLogout(), { wrapper });
 
     // Call logout function
-    result.current();
+    act(() => {
+      result.current();
+    });
 
     // Router push should be called with "/"
     expect(mockPush).toHaveBeenCalledWith("/");
@@ -180,7 +186,9 @@ describe("useLogout", () => {
     const { result } = renderHook(() => useLogout(), { wrapper });
 
     // Call logout
-    result.current();
+    act(() => {
+      result.current();
+    });
 
     // All three actions should occur
     await waitFor(() => {
