@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { signIn } from "edilkamin";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen, waitFor } from "../test/utils";
 import Errors from "./Errors";
@@ -15,6 +15,11 @@ describe("Login", () => {
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    vi.spyOn(console, "error").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("should render login form with username and password inputs", () => {
@@ -97,6 +102,8 @@ describe("Login", () => {
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
     });
+
+    expect(console.error).toHaveBeenCalledWith(mockError);
   });
 
   it("should handle non-Error exceptions gracefully", async () => {
@@ -118,6 +125,8 @@ describe("Login", () => {
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
     });
+
+    expect(console.error).toHaveBeenCalledWith("String error");
   });
 
   it("should prevent default form submission", async () => {
