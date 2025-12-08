@@ -16,7 +16,7 @@
     "axios": "^1.13.2",
     "bootstrap": "^5.3.8",
     "edilkamin": "^1.5.0",
-    "i18next": "^25.6.0",
+    "i18next": "^25.7.2",
     "next": "^16",
     "next-i18next": "^15.4.3",
     "react": "^19",
