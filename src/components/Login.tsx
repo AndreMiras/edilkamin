@@ -22,7 +22,8 @@ const Login = () => {
 
   const onLogin = async (): Promise<void> => {
     try {
-      const token = await signIn(username, password);
+      const useLegacy = process.env.NEXT_PUBLIC_USE_LEGACY_API === "true";
+      const token = await signIn(username, password, useLegacy);
       setTokenLocalStorage(token);
       setToken(token);
     } catch (error: unknown) {

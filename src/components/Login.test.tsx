@@ -63,7 +63,8 @@ describe("Login", () => {
     await user.type(screen.getByLabelText(/password/i), "password123");
     await user.click(screen.getByRole("button", { name: /login|sign in/i }));
 
-    expect(signIn).toHaveBeenCalledWith("testuser", "password123");
+    // Third argument is useLegacy flag (false when NEXT_PUBLIC_USE_LEGACY_API is unset)
+    expect(signIn).toHaveBeenCalledWith("testuser", "password123", false);
   });
 
   it("should store token in localStorage on successful login", async () => {
