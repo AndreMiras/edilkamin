@@ -1,26 +1,25 @@
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import axios from "axios";
-import { configure, DeviceInfoType } from "edilkamin";
+import { configure, DeviceInfoType, getSession } from "edilkamin";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import Errors from "../../../components/Errors";
 import Fireplace from "../../../pages/fireplace/[mac]";
 import { render, screen } from "../../../test/utils";
 
-// Mock edilkamin library
 vi.mock("edilkamin", () => ({
   configure: vi.fn(() => ({
     deviceInfo: vi.fn(),
     setPower: vi.fn(),
     setTargetTemperature: vi.fn(),
   })),
+  getSession: vi.fn(),
   API_URL: "https://api.edilkamin.com/",
   OLD_API_URL:
     "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
 }));
 
-// Mock axios for error type checking
 vi.mock("axios", async () => {
   const actual = await vi.importActual("axios");
   return {
@@ -29,11 +28,12 @@ vi.mock("axios", async () => {
   };
 });
 
-// Mock next/router (globally mocked, but override for this test)
+const mockRouterPush = vi.fn();
+
 vi.mock("next/router", () => ({
   useRouter: () => ({
     query: { mac: "aabbccddeeff" },
-    push: vi.fn(),
+    push: mockRouterPush,
     pathname: "/fireplace/[mac]",
     route: "/fireplace/[mac]",
     asPath: "/fireplace/aabbccddeeff",
@@ -74,6 +74,7 @@ describe("Fireplace Page", () => {
     vi.clearAllMocks();
     localStorage.clear();
     localStorage.setItem("edilkamin-token", mockToken);
+    vi.mocked(getSession).mockResolvedValue(mockToken);
     // Suppress console.error for cleaner test output
     vi.spyOn(console, "error").mockImplementation(() => {});
   });
@@ -582,6 +583,57 @@ describe("Fireplace Page", () => {
 
       // Should not call deviceInfo when token is missing
       expect(mockDeviceInfo).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("401 error handling", () => {
+    it("should refresh token and retry on 401 error from deviceInfo", async () => {
+      const newToken = "refreshed-token";
+      const error401 = { response: { status: 401 } };
+      const mockDeviceInfo = vi
+        .fn()
+        .mockRejectedValueOnce(error401)
+        .mockResolvedValueOnce(createMockDeviceInfo());
+      vi.mocked(axios).isAxiosError = vi.fn().mockReturnValue(true) as any;
+      vi.mocked(getSession)
+        .mockResolvedValueOnce(mockToken) // Initial load
+        .mockResolvedValueOnce(newToken); // Refresh after 401
+      vi.mocked(configure).mockReturnValue({
+        deviceInfo: mockDeviceInfo,
+        setPower: vi.fn(),
+        setTargetTemperature: vi.fn(),
+      } as any);
+
+      render(<Fireplace />);
+
+      await waitFor(() => {
+        // getSession called twice: once for initial load, once for refresh
+        expect(getSession).toHaveBeenCalledTimes(2);
+        expect(mockDeviceInfo).toHaveBeenCalledTimes(2);
+        expect(mockDeviceInfo).toHaveBeenLastCalledWith(newToken, mockMac);
+      });
+    });
+
+    it("should redirect to home when refresh fails on 401", async () => {
+      const error401 = { response: { status: 401 } };
+      const mockDeviceInfo = vi.fn().mockRejectedValueOnce(error401);
+      vi.mocked(axios).isAxiosError = vi.fn().mockReturnValue(true) as any;
+      vi.mocked(getSession)
+        .mockResolvedValueOnce(mockToken) // Initial load
+        .mockRejectedValueOnce(new Error("Refresh failed")); // Refresh fails
+      vi.mocked(configure).mockReturnValue({
+        deviceInfo: mockDeviceInfo,
+        setPower: vi.fn(),
+        setTargetTemperature: vi.fn(),
+      } as any);
+
+      render(<Fireplace />);
+
+      // Wait for the error flow to complete - when refresh fails, localStorage is cleared
+      await waitFor(() => {
+        expect(localStorage.getItem("edilkamin-token")).toBeNull();
+      });
+      expect(mockRouterPush).toHaveBeenCalledWith("/");
     });
   });
 });

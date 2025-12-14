@@ -1,8 +1,10 @@
+import axios from "axios";
+import { getSession } from "edilkamin";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 
 import { TokenContext } from "../context/token";
-import { removeTokenLocalStorage } from "./helpers";
+import { removeTokenLocalStorage, setTokenLocalStorage } from "./helpers";
 
 /**
  * Returns:
@@ -28,4 +30,57 @@ const useLogout = (): (() => void) => {
   };
 };
 
-export { useIsLoggedIn, useLogout };
+type RefreshTokenFn = () => Promise<string | null>;
+
+interface TokenRefreshResult {
+  refreshToken: RefreshTokenFn;
+  withRetry: <T>(
+    token: string,
+    apiCall: (t: string) => Promise<T>,
+  ) => Promise<T>;
+}
+
+const useTokenRefresh = (): TokenRefreshResult => {
+  const { setToken } = useContext(TokenContext);
+  const router = useRouter();
+
+  const refreshToken = useCallback(async (): Promise<string | null> => {
+    try {
+      const useLegacy = process.env.NEXT_PUBLIC_USE_LEGACY_API === "true";
+      const newToken = await getSession(true, useLegacy);
+      setTokenLocalStorage(newToken);
+      setToken(newToken);
+      return newToken;
+    } catch {
+      // Refresh failed, force logout
+      removeTokenLocalStorage();
+      setToken(null);
+      router.push("/");
+      return null;
+    }
+  }, [setToken, router]);
+
+  const withRetry = useCallback(
+    async <T>(
+      token: string,
+      apiCall: (t: string) => Promise<T>,
+    ): Promise<T> => {
+      try {
+        return await apiCall(token);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error?.response?.status === 401) {
+          const newToken = await refreshToken();
+          if (newToken) {
+            return await apiCall(newToken);
+          }
+        }
+        throw error;
+      }
+    },
+    [refreshToken],
+  );
+
+  return { refreshToken, withRetry };
+};
+
+export { useIsLoggedIn, useLogout, useTokenRefresh };

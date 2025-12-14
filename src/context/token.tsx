@@ -1,3 +1,4 @@
+import { getSession } from "edilkamin";
 import {
   createContext,
   FunctionComponent,
@@ -6,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { getTokenLocalStorage } from "../utils/helpers";
+import { getTokenLocalStorage, setTokenLocalStorage } from "../utils/helpers";
 
 interface TokenContextType {
   token: string | null | undefined;
@@ -26,7 +27,25 @@ const TokenContextProvider: FunctionComponent<{ children: ReactNode }> = ({
 }) => {
   const [token, setToken] = useState<string | null | undefined>();
 
-  useEffect(() => setToken(getTokenLocalStorage()), []);
+  useEffect(() => {
+    const initializeToken = async () => {
+      const storedToken = getTokenLocalStorage();
+      if (!storedToken) {
+        setToken(null);
+        return;
+      }
+      try {
+        const useLegacy = process.env.NEXT_PUBLIC_USE_LEGACY_API === "true";
+        const refreshedToken = await getSession(false, useLegacy);
+        setTokenLocalStorage(refreshedToken);
+        setToken(refreshedToken);
+      } catch {
+        // Session expired or invalid, clear token and require re-login
+        setToken(null);
+      }
+    };
+    initializeToken();
+  }, []);
 
   return (
     <TokenContext.Provider value={{ token, setToken }}>

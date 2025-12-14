@@ -10,6 +10,9 @@ export const configure = vi.fn(() => ({
   setTargetTemperature: vi.fn(),
 }));
 
+// Mock for getSession (token refresh)
+export const getSession = vi.fn();
+
 // Mock API_URL constants
 export const API_URL = "https://api.edilkamin.com/";
 export const OLD_API_URL =

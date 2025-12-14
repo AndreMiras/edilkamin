@@ -12,6 +12,7 @@ import PowerToggle from "../../components/PowerToggle";
 import TemperatureAdjuster from "../../components/TemperatureAdjuster";
 import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
+import { useTokenRefresh } from "../../utils/hooks";
 
 const Fireplace: NextPage = () => {
   const { t } = useTranslation("fireplace");
@@ -23,6 +24,7 @@ const Fireplace: NextPage = () => {
   const [loading, setLoading] = useState(true);
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
+  const { withRetry } = useTokenRefresh();
   const baseUrl = "/api/proxy/";
   const { deviceInfo, setPower, setTargetTemperature } = configure(baseUrl);
 
@@ -30,7 +32,7 @@ const Fireplace: NextPage = () => {
     if (!mac || !token) return;
     const fetch = async () => {
       try {
-        const data = await deviceInfo(token, mac);
+        const data = await withRetry(token, (t) => deviceInfo(t, mac));
         setInfo(data);
         setPowerState(data.status.commands.power);
         setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
@@ -68,7 +70,7 @@ const Fireplace: NextPage = () => {
     // set the state before hand to avoid the lag feeling
     setPowerState(Boolean(value));
     try {
-      await setPower(token!, mac!, value);
+      await withRetry(token!, (t) => setPower(t, mac!, value));
     } catch (error) {
       console.error(error);
       addError({
@@ -84,7 +86,9 @@ const Fireplace: NextPage = () => {
     // set the state before hand to avoid the lag feeling
     setTemperature(newTemperature);
     try {
-      await setTargetTemperature(token!, mac!, newTemperature);
+      await withRetry(token!, (t) =>
+        setTargetTemperature(t, mac!, newTemperature),
+      );
     } catch (error) {
       console.error(error);
       addError({

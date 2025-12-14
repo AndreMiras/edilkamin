@@ -1,7 +1,8 @@
 import { render as renderWithoutProviders } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { getSession } from "edilkamin";
 import { useContext } from "react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { screen, waitFor } from "../test/utils";
 import { render } from "../test/utils";
@@ -10,6 +11,12 @@ import { TokenContext, TokenContextProvider } from "./token";
 describe("TokenContext", () => {
   beforeEach(() => {
     localStorage.clear();
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    // Clean up env var
+    delete process.env.NEXT_PUBLIC_USE_LEGACY_API;
   });
 
   describe("default context values", () => {
@@ -58,28 +65,33 @@ describe("TokenContext", () => {
       await waitFor(() => {
         expect(screen.getByTestId("token")).toHaveTextContent("null");
       });
+      // getSession should not be called when no stored token
+      expect(getSession).not.toHaveBeenCalled();
     });
 
-    it("should load token from localStorage on mount", async () => {
-      localStorage.setItem("edilkamin-token", "stored-token-12345");
+    it("should refresh token on load when stored token exists", async () => {
+      const storedToken = "stored-token-12345";
+      const refreshedToken = "refreshed-token";
+      localStorage.setItem("edilkamin-token", storedToken);
+      vi.mocked(getSession).mockResolvedValueOnce(refreshedToken);
 
       const TestComponent = () => {
         const { token } = useContext(TokenContext);
         return <div data-testid="token">{String(token)}</div>;
       };
 
-      render(
+      renderWithoutProviders(
         <TokenContextProvider>
           <TestComponent />
         </TokenContextProvider>,
       );
 
-      // Should load from localStorage via useEffect
+      // Should call getSession and use the refreshed token
       await waitFor(() => {
-        expect(screen.getByTestId("token")).toHaveTextContent(
-          "stored-token-12345",
-        );
+        expect(screen.getByTestId("token")).toHaveTextContent(refreshedToken);
       });
+      expect(getSession).toHaveBeenCalledWith(false, false);
+      expect(localStorage.getItem("edilkamin-token")).toBe(refreshedToken);
     });
 
     it("should update token when setToken is called with string", async () => {
@@ -100,6 +112,11 @@ describe("TokenContext", () => {
         </TokenContextProvider>,
       );
 
+      // Wait for initial load
+      await waitFor(() => {
+        expect(screen.getByTestId("token")).toHaveTextContent("null");
+      });
+
       await user.click(screen.getByRole("button"));
 
       await waitFor(() => {
@@ -109,7 +126,9 @@ describe("TokenContext", () => {
 
     it("should update token when setToken is called with null", async () => {
       const user = userEvent.setup();
+      const refreshedToken = "refreshed-token";
       localStorage.setItem("edilkamin-token", "existing-token");
+      vi.mocked(getSession).mockResolvedValueOnce(refreshedToken);
 
       const TestComponent = () => {
         const { token, setToken } = useContext(TokenContext);
@@ -127,9 +146,9 @@ describe("TokenContext", () => {
         </TokenContextProvider>,
       );
 
-      // Wait for token to load from localStorage
+      // Wait for token to load (refreshed)
       await waitFor(() => {
-        expect(screen.getByTestId("token")).toHaveTextContent("existing-token");
+        expect(screen.getByTestId("token")).toHaveTextContent(refreshedToken);
       });
 
       // Clear token
@@ -140,7 +159,7 @@ describe("TokenContext", () => {
       });
     });
 
-    it("should load empty string from localStorage", async () => {
+    it("should set token to null when empty string in localStorage", async () => {
       localStorage.setItem("edilkamin-token", "");
 
       const TestComponent = () => {
@@ -158,9 +177,54 @@ describe("TokenContext", () => {
         </TokenContextProvider>,
       );
 
-      // Empty string is loaded as-is from localStorage
+      // Empty string is treated as no token (falsy), so token becomes null
       await waitFor(() => {
-        expect(screen.getByTestId("token")).toHaveTextContent("empty");
+        expect(screen.getByTestId("token")).toHaveTextContent("null");
+      });
+      expect(getSession).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("token refresh on load", () => {
+    it("should set token to null when refresh fails", async () => {
+      localStorage.setItem("edilkamin-token", "expired-token");
+      vi.mocked(getSession).mockRejectedValueOnce(new Error("Session expired"));
+
+      const TestComponent = () => {
+        const { token } = useContext(TokenContext);
+        return <div data-testid="token">{String(token)}</div>;
+      };
+
+      render(
+        <TokenContextProvider>
+          <TestComponent />
+        </TokenContextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(getSession).toHaveBeenCalled();
+        expect(screen.getByTestId("token")).toHaveTextContent("null");
+      });
+    });
+
+    it("should pass legacy flag based on environment variable", async () => {
+      localStorage.setItem("edilkamin-token", "token");
+      process.env.NEXT_PUBLIC_USE_LEGACY_API = "true";
+      vi.mocked(getSession).mockResolvedValueOnce("new-token");
+
+      const TestComponent = () => {
+        const { token } = useContext(TokenContext);
+        return <div data-testid="token">{String(token)}</div>;
+      };
+
+      render(
+        <TokenContextProvider>
+          <TestComponent />
+        </TokenContextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(getSession).toHaveBeenCalledWith(false, true);
       });
     });
   });
