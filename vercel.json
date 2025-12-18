@@ -1,0 +1,3 @@
+{
+  "buildCommand": "git remote add origin https://github.com/AndreMiras/edilkamin.git && git fetch --unshallow --tags && yarn build"
+}
