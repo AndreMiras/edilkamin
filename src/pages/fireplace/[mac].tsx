@@ -3,13 +3,12 @@ import { configure, DeviceInfoType } from "edilkamin";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { Accordion, Col, Row } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
-import PowerToggle from "../../components/PowerToggle";
-import TemperatureAdjuster from "../../components/TemperatureAdjuster";
+import { Thermostat } from "../../components/thermostat";
 import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
 import { useTokenRefresh } from "../../utils/hooks";
@@ -101,39 +100,28 @@ const Fireplace: NextPage = () => {
   };
 
   return (
-    <Accordion defaultActiveKey="0" className="mt-2">
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>{t("title", { mac })}</Accordion.Header>
-        <Accordion.Body>
-          <Row>
-            <Col xs={12} className="mb-2">
-              <PowerToggle
-                powerState={powerState}
-                onChange={onPowerChange}
-                loading={loading}
-              />
-            </Col>
-            <Col xs={8} sm={5} lg={3}>
-              <TemperatureAdjuster
-                currentTemperature={temperature}
-                onTemperatureChange={onTemperatureChange}
-                loading={loading}
-              />
-            </Col>
-          </Row>
-        </Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="1">
-        <Accordion.Header>{t("advanced")}</Accordion.Header>
-        <Accordion.Body>{info && <DeviceDetails info={info} />}</Accordion.Body>
-      </Accordion.Item>
-      <Accordion.Item eventKey="2">
-        <Accordion.Header>{t("debug")}</Accordion.Header>
-        <Accordion.Body>
-          <DebugInfo info={info} />
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
+    <Thermostat
+      temperature={temperature}
+      powerState={powerState}
+      loading={loading}
+      onTemperatureChange={onTemperatureChange}
+      onPowerChange={onPowerChange}
+    >
+      <Accordion className="mt-8 w-full max-w-[340px]">
+        <Accordion.Item eventKey="0">
+          <Accordion.Header>{t("advanced")}</Accordion.Header>
+          <Accordion.Body>
+            {info && <DeviceDetails info={info} />}
+          </Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header>{t("debug")}</Accordion.Header>
+          <Accordion.Body>
+            <DebugInfo info={info} />
+          </Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
+    </Thermostat>
   );
 };
 

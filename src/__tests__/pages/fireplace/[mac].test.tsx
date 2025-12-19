@@ -70,6 +70,24 @@ describe("Fireplace Page", () => {
       } as any,
     }) as DeviceInfoType;
 
+  // Helper to find power button (the one with power-off icon)
+  const findPowerButton = () => {
+    const buttons = screen.getAllByRole("button");
+    return buttons.find((btn) => btn.querySelector('[data-icon="power-off"]'));
+  };
+
+  // Helper to find temperature increase button
+  const findIncreaseButton = () => {
+    const buttons = screen.getAllByRole("button");
+    return buttons.find((btn) => btn.querySelector('[data-icon="plus"]'));
+  };
+
+  // Helper to find temperature decrease button
+  const findDecreaseButton = () => {
+    const buttons = screen.getAllByRole("button");
+    return buttons.find((btn) => btn.querySelector('[data-icon="minus"]'));
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     localStorage.clear();
@@ -97,9 +115,11 @@ describe("Fireplace Page", () => {
 
       render(<Fireplace />);
 
-      // PowerToggle and TemperatureAdjuster should be in loading state
-      expect(screen.getByRole("radio", { name: /on/i })).toBeDisabled();
-      expect(screen.getByRole("radio", { name: /off/i })).toBeDisabled();
+      // Temperature control buttons should be disabled in loading state
+      const increaseButton = findIncreaseButton();
+      const decreaseButton = findDecreaseButton();
+      expect(increaseButton).toBeDisabled();
+      expect(decreaseButton).toBeDisabled();
     });
 
     it("should fetch device info on mount with correct mac and token", async () => {
@@ -129,10 +149,10 @@ describe("Fireplace Page", () => {
 
       render(<Fireplace />);
 
-      // Wait for data to load and check that temperature is displayed in the input
+      // Wait for data to load and check that temperature is displayed
       await waitFor(() => {
-        const temperatureInput = screen.getByRole("spinbutton");
-        expect(temperatureInput).toHaveValue(25);
+        // The thermostat displays temperature as text "25.0"
+        expect(screen.getByText("25.0")).toBeInTheDocument();
       });
     });
 
@@ -256,12 +276,11 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      // Find and click power toggle (clicking "on" radio button)
-      const powerButton = screen.getByRole("radio", { name: /on/i });
-      await user.click(powerButton);
+      // Find and click power button
+      const powerButton = findPowerButton();
+      await user.click(powerButton!);
 
       // State should update immediately (optimistic)
-      // PowerToggle component will reflect the new state
       expect(mockSetPower).toHaveBeenCalledWith(mockToken, mockMac, 1);
     });
 
@@ -283,8 +302,8 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const powerButton = screen.getByRole("radio", { name: /on/i });
-      await user.click(powerButton);
+      const powerButton = findPowerButton();
+      await user.click(powerButton!);
 
       await waitFor(() => {
         expect(mockSetPower).toHaveBeenCalledWith(mockToken, mockMac, 1);
@@ -314,8 +333,8 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const powerButton = screen.getByRole("radio", { name: /on/i });
-      await user.click(powerButton);
+      const powerButton = findPowerButton();
+      await user.click(powerButton!);
 
       // Should show error (rollback happens, but closure captures old value)
       await waitFor(
@@ -354,8 +373,9 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const powerButton = screen.getByRole("radio", { name: /off/i });
-      await user.click(powerButton);
+      // Click power button to turn off
+      const powerButton = findPowerButton();
+      await user.click(powerButton!);
 
       await waitFor(
         () => {
@@ -386,10 +406,7 @@ describe("Fireplace Page", () => {
       });
 
       // Find temperature increase button (plus icon button)
-      const buttons = screen.getAllByRole("button");
-      const increaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="plus"]'),
-      );
+      const increaseButton = findIncreaseButton();
       await user.click(increaseButton!);
 
       // Temperature should update immediately (optimistic)
@@ -420,10 +437,7 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const buttons = screen.getAllByRole("button");
-      const decreaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="minus"]'),
-      );
+      const decreaseButton = findDecreaseButton();
       await user.click(decreaseButton!);
 
       await waitFor(() => {
@@ -460,10 +474,7 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const buttons = screen.getAllByRole("button");
-      const increaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="plus"]'),
-      );
+      const increaseButton = findIncreaseButton();
       await user.click(increaseButton!);
 
       // Should show error and rollback
@@ -503,10 +514,7 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      const buttons = screen.getAllByRole("button");
-      const decreaseButton = buttons.find((btn) =>
-        btn.querySelector('[data-icon="minus"]'),
-      );
+      const decreaseButton = findDecreaseButton();
       await user.click(decreaseButton!);
 
       await waitFor(
@@ -536,7 +544,6 @@ describe("Fireplace Page", () => {
       });
 
       // Check accordion headers exist
-      expect(screen.getByText(new RegExp(mockMac))).toBeInTheDocument();
       expect(screen.getByText(/advanced/i)).toBeInTheDocument();
       expect(screen.getByText(/debug/i)).toBeInTheDocument();
     });
@@ -557,15 +564,12 @@ describe("Fireplace Page", () => {
         expect(mockDeviceInfo).toHaveBeenCalled();
       });
 
-      // PowerToggle should show power state
-      const onButton = screen.getByRole("radio", { name: /on/i });
-      const offButton = screen.getByRole("radio", { name: /off/i });
-      expect(onButton).toBeInTheDocument();
-      expect(offButton).toBeInTheDocument();
+      // Temperature should display correct value
+      expect(screen.getByText("24.0")).toBeInTheDocument();
 
-      // Temperature should display correct value in the input
-      const temperatureInput = screen.getByRole("spinbutton");
-      expect(temperatureInput).toHaveValue(24);
+      // Power button should exist
+      const powerButton = findPowerButton();
+      expect(powerButton).toBeInTheDocument();
     });
 
     it("should not fetch when mac or token is missing", () => {
