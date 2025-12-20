@@ -5,7 +5,7 @@ const Footer: FunctionComponent = () => {
   const { t } = useTranslation("footer");
 
   return (
-    <footer className="mt-auto py-3 !bg-secondary">
+    <footer className="mt-auto py-3 bg-secondary">
       <div className="max-w-7xl mx-auto px-4 text-center">
         <span className="text-secondary-foreground">
           {t("text")}

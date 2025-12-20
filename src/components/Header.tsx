@@ -21,7 +21,7 @@ const Header = () => {
           {/* Brand */}
           <Link
             href="/"
-            className="flex items-center !text-foreground font-semibold text-lg !no-underline hover:!text-foreground"
+            className="flex items-center text-foreground font-semibold text-lg no-underline hover:text-foreground"
           >
             <FontAwesomeIcon
               icon={["fas", "fire-flame-curved"]}
@@ -34,7 +34,7 @@ const Header = () => {
           <div className="hidden sm:flex sm:items-center sm:gap-2">
             <a
               href="https://github.com/AndreMiras/edilkamin"
-              className="!text-muted-foreground hover:!text-foreground px-3 py-2 text-sm !no-underline"
+              className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm no-underline"
             >
               <FontAwesomeIcon icon={["fab", "github-alt"]} className="mr-1" />
               {t("about")}
@@ -65,7 +65,7 @@ const Header = () => {
           <div className="px-4 py-3 space-y-3">
             <a
               href="https://github.com/AndreMiras/edilkamin"
-              className="block !text-muted-foreground hover:!text-foreground !no-underline"
+              className="block text-muted-foreground hover:text-foreground no-underline"
             >
               <FontAwesomeIcon icon={["fab", "github-alt"]} className="mr-2" />
               {t("about")}

@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { render } from "../test/utils";
 import ThemeInitializer from "./ThemeInitializer";
@@ -6,8 +6,8 @@ import ThemeInitializer from "./ThemeInitializer";
 describe("ThemeInitializer", () => {
   beforeEach(() => {
     localStorage.clear();
-    // Clean up any data-bs-theme attribute
-    document.documentElement.removeAttribute("data-bs-theme");
+    // Clean up dark class
+    document.documentElement.classList.remove("dark");
   });
 
   it("should render without crashing", () => {
@@ -20,55 +20,43 @@ describe("ThemeInitializer", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it("should set data-bs-theme attribute on document element when theme is light", () => {
+  it("should not add dark class when theme is light", () => {
     localStorage.setItem("theme", "light");
 
     render(<ThemeInitializer />);
 
-    // Wait for useEffect to run and set the attribute
-    expect(document.documentElement.getAttribute("data-bs-theme")).toBe(
-      "light",
-    );
+    // Should not have dark class
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
   });
 
-  it("should set data-bs-theme attribute on document element when theme is dark", () => {
+  it("should add dark class when theme is dark", () => {
     localStorage.setItem("theme", "dark");
 
     render(<ThemeInitializer />);
 
-    // Wait for useEffect to run and set the attribute
-    expect(document.documentElement.getAttribute("data-bs-theme")).toBe("dark");
+    // Should have dark class
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
   });
 
-  it("should update data-bs-theme attribute when theme changes", () => {
+  it("should not change class when re-rendering with same theme", () => {
     localStorage.setItem("theme", "light");
 
     const { rerender } = render(<ThemeInitializer />);
 
-    expect(document.documentElement.getAttribute("data-bs-theme")).toBe(
-      "light",
-    );
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
 
-    // Change theme in localStorage and re-render
-    localStorage.setItem("theme", "dark");
+    // Re-render without changing theme
     rerender(<ThemeInitializer />);
 
-    // Note: The attribute won't change in this test because ThemeContext
-    // doesn't re-read from localStorage on rerender. This is expected behavior.
-    // The theme change would happen through ThemeContext.setTheme in real usage.
-    expect(document.documentElement.getAttribute("data-bs-theme")).toBe(
-      "light",
-    );
+    // Should still not have dark class
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
   });
 
-  it("should not set attribute when theme is undefined", () => {
+  it("should default to light theme when localStorage is empty", () => {
     // Don't set anything in localStorage
-    const setAttributeSpy = vi.spyOn(document.documentElement, "setAttribute");
-
     render(<ThemeInitializer />);
 
-    // Theme will be undefined initially, then set to "light" after useEffect in ThemeContext
-    // So we should see setAttribute being called with "light" eventually
-    expect(setAttributeSpy).toHaveBeenCalled();
+    // Should not have dark class (default is light)
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
   });
 });

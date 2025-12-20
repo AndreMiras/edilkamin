@@ -7,9 +7,7 @@ const ThemeInitializer = () => {
 
   useEffect(() => {
     if (theme) {
-      // Apply both Bootstrap (data-bs-theme) and Tailwind (.dark class) for dark mode
-      // This allows incremental migration from Bootstrap to Tailwind
-      document.documentElement.setAttribute("data-bs-theme", theme);
+      // Apply Tailwind dark mode class
       if (theme === "dark") {
         document.documentElement.classList.add("dark");
       } else {

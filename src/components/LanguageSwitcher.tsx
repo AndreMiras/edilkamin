@@ -21,7 +21,7 @@ const LanguageSwitcher = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="ml-2 px-3 py-2 border !border-input !bg-background text-foreground !rounded-md hover:bg-muted focus:outline-hidden focus:ring-2 focus:ring-ring">
+      <DropdownMenuTrigger className="ml-2 px-3 py-2 border border-input bg-background text-foreground rounded-md hover:bg-muted focus:outline-hidden focus:ring-2 focus:ring-ring">
         {i18n.language.toUpperCase()}
       </DropdownMenuTrigger>
       <DropdownMenuContent>

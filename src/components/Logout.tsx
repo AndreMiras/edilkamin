@@ -12,7 +12,7 @@ const Logout = () => {
     <button
       type="submit"
       onClick={onLogoutClick}
-      className="px-4 py-2 !bg-primary text-primary-foreground !rounded-md hover:!bg-primary/90 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
     >
       {t("button")}
     </button>

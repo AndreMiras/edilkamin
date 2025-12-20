@@ -84,7 +84,7 @@ const Home = () => {
               </Link>
               <button
                 onClick={() => onRemove(index)}
-                className="p-2 !rounded-md hover:bg-muted transition-colors !bg-primary text-primary-foreground"
+                className="p-2 rounded-md hover:bg-muted transition-colors bg-primary text-primary-foreground"
                 aria-label={`Remove ${mac}`}
               >
                 <FontAwesomeIcon icon={["fas", "minus"]} />
@@ -109,10 +109,10 @@ const Home = () => {
                   value={fireplace}
                   onChange={(e) => setFireplace(e.target.value)}
                   onKeyPress={onKeyPress}
-                  className={`w-full px-3 py-2 border !rounded-md !bg-background text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+                  className={`w-full px-3 py-2 border rounded-md bg-background text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
                     fireplaceFeedback !== ""
-                      ? "!border-destructive is-invalid"
-                      : "!border-input"
+                      ? "border-destructive"
+                      : "border-input"
                   }`}
                 />
                 {fireplaceFeedback !== "" && (
@@ -124,7 +124,7 @@ const Home = () => {
               <button
                 onClick={onAdd}
                 disabled={addDisabled}
-                className="p-2 !rounded-md !bg-primary text-primary-foreground hover:!bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 aria-label="Add fireplace"
               >
                 <FontAwesomeIcon icon={["fas", "plus"]} />

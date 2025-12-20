@@ -27,13 +27,13 @@ const Thermostat = ({
     <div
       className={`flex flex-col items-center justify-center min-h-[70vh] p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
     >
-      <div className="w-full max-w-[340px] bg-card text-card-foreground !rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
+      <div className="w-full max-w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
         <div className="flex justify-center mb-6">
           <button
-            className={`px-8 py-3 !rounded-full border-0 text-base font-medium cursor-pointer flex items-center gap-3 transition-all ${
+            className={`px-8 py-3 rounded-full border-0 text-base font-medium cursor-pointer flex items-center gap-3 transition-all ${
               powerState
                 ? "bg-linear-to-br from-orange-500 to-orange-600 text-white shadow-[0_4px_15px_rgba(249,115,22,0.3)]"
-                : "!bg-secondary text-secondary-foreground"
+                : "bg-secondary text-secondary-foreground"
             }`}
             onClick={() => onPowerChange(powerState ? 0 : 1)}
             disabled={loading}
@@ -64,7 +64,7 @@ const Thermostat = ({
 
         <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">
           <button
-            className="w-12 h-12 !rounded-xl border-0 !bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
             onClick={() => onTemperatureChange(temperature - TEMP_STEP)}
             disabled={loading || temperature <= MIN_TEMP}
             aria-label={t("decreaseTemp")}
@@ -72,7 +72,7 @@ const Thermostat = ({
             <FontAwesomeIcon icon="minus" />
           </button>
           <button
-            className="w-12 h-12 !rounded-xl border-0 !bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
             onClick={() => onTemperatureChange(temperature + TEMP_STEP)}
             disabled={loading || temperature >= MAX_TEMP}
             aria-label={t("increaseTemp")}

@@ -19,17 +19,17 @@ const PowerToggle = ({
   ];
 
   return (
-    <div className="inline-flex !rounded-lg border !border-input overflow-hidden">
+    <div className="inline-flex rounded-lg border border-input overflow-hidden">
       {togglePowerProps.map(({ value, label, icon }) => (
         <button
           key={value}
           id={`set-power-${value}`}
           onClick={() => onChange(value)}
           disabled={loading}
-          className={`px-6 py-3 text-lg font-medium transition-colors border-r !border-input last:border-r-0 disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`px-6 py-3 text-lg font-medium transition-colors border-r border-input last:border-r-0 disabled:opacity-50 disabled:cursor-not-allowed ${
             Number(powerState) === value
-              ? "!bg-primary text-primary-foreground"
-              : "!bg-background text-foreground hover:bg-muted"
+              ? "bg-primary text-primary-foreground"
+              : "bg-background text-foreground hover:bg-muted"
           }`}
         >
           <FontAwesomeIcon icon={icon as IconProp} className="mr-2" />

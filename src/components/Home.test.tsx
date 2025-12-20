@@ -212,9 +212,9 @@ describe("Home", () => {
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     await user.type(input, "xyz");
 
-    // Should mark input as invalid
+    // Should mark input as invalid with destructive border
     await waitFor(() => {
-      expect(input).toHaveClass("is-invalid");
+      expect(input.className).toContain("border-destructive");
     });
   });
 
@@ -227,7 +227,7 @@ describe("Home", () => {
     // Type invalid value
     await user.type(input, "xyz");
     await waitFor(() => {
-      expect(input).toHaveClass("is-invalid");
+      expect(input.className).toContain("border-destructive");
     });
 
     // Clear input
@@ -235,7 +235,7 @@ describe("Home", () => {
 
     // Validation should be cleared
     await waitFor(() => {
-      expect(input).not.toHaveClass("is-invalid");
+      expect(input.className).not.toContain("border-destructive");
     });
   });
 

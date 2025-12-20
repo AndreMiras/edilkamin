@@ -14,7 +14,7 @@ const ThemeSwitcher = () => {
     <button
       onClick={toggleTheme}
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      className="ml-2 p-2 !rounded-md text-foreground hover:bg-muted transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring"
+      className="ml-2 p-2 rounded-md text-foreground hover:bg-muted transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring"
     >
       <FontAwesomeIcon icon={theme === "light" ? "moon" : "sun"} />
     </button>
