@@ -1,5 +1,8 @@
 {
   "title": "Chimenea: {{mac}}",
+  "auth": {
+    "loginToControl": "Por favor, inicia sesión para controlar esta estufa."
+  },
   "advanced": "Avanzado",
   "debug": "Depuración",
   "heating": "Calentando",

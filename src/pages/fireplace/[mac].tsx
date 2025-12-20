@@ -14,6 +14,7 @@ import {
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
+import RequireAuth from "../../components/RequireAuth";
 import { Thermostat } from "../../components/thermostat";
 import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
@@ -106,32 +107,34 @@ const Fireplace: NextPage = () => {
   };
 
   return (
-    <Thermostat
-      temperature={temperature}
-      powerState={powerState}
-      loading={loading}
-      onTemperatureChange={onTemperatureChange}
-      onPowerChange={onPowerChange}
-    >
-      <Accordion
-        type="single"
-        collapsible
-        className="mt-8 w-full max-w-[340px]"
+    <RequireAuth message={t("auth.loginToControl")}>
+      <Thermostat
+        temperature={temperature}
+        powerState={powerState}
+        loading={loading}
+        onTemperatureChange={onTemperatureChange}
+        onPowerChange={onPowerChange}
       >
-        <AccordionItem value="device-details">
-          <AccordionTrigger>{t("advanced")}</AccordionTrigger>
-          <AccordionContent>
-            {info && <DeviceDetails info={info} />}
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="debug-info">
-          <AccordionTrigger>{t("debug")}</AccordionTrigger>
-          <AccordionContent>
-            <DebugInfo info={info} />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </Thermostat>
+        <Accordion
+          type="single"
+          collapsible
+          className="mt-8 w-full max-w-[340px]"
+        >
+          <AccordionItem value="device-details">
+            <AccordionTrigger>{t("advanced")}</AccordionTrigger>
+            <AccordionContent>
+              {info && <DeviceDetails info={info} />}
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="debug-info">
+            <AccordionTrigger>{t("debug")}</AccordionTrigger>
+            <AccordionContent>
+              <DebugInfo info={info} />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Thermostat>
+    </RequireAuth>
   );
 };
 

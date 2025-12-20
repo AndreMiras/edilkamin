@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
+import authEn from "../public/locales/en/auth.json";
 import commonEn from "../public/locales/en/common.json";
 import errorEn from "../public/locales/en/error.json";
 import fireplaceEn from "../public/locales/en/fireplace.json";
@@ -10,6 +11,7 @@ import homeEn from "../public/locales/en/home.json";
 import loginEn from "../public/locales/en/login.json";
 import logoutEn from "../public/locales/en/logout.json";
 import powerEn from "../public/locales/en/power.json";
+import authEs from "../public/locales/es/auth.json";
 import commonEs from "../public/locales/es/common.json";
 import errorEs from "../public/locales/es/error.json";
 import fireplaceEs from "../public/locales/es/fireplace.json";
@@ -19,6 +21,7 @@ import homeEs from "../public/locales/es/home.json";
 import loginEs from "../public/locales/es/login.json";
 import logoutEs from "../public/locales/es/logout.json";
 import powerEs from "../public/locales/es/power.json";
+import authFr from "../public/locales/fr/auth.json";
 import commonFr from "../public/locales/fr/common.json";
 import errorFr from "../public/locales/fr/error.json";
 import fireplaceFr from "../public/locales/fr/fireplace.json";
@@ -31,6 +34,7 @@ import powerFr from "../public/locales/fr/power.json";
 
 const resources = {
   en: {
+    auth: authEn,
     common: commonEn,
     error: errorEn,
     fireplace: fireplaceEn,
@@ -42,6 +46,7 @@ const resources = {
     power: powerEn,
   },
   fr: {
+    auth: authFr,
     common: commonFr,
     error: errorFr,
     fireplace: fireplaceFr,
@@ -53,6 +58,7 @@ const resources = {
     power: powerFr,
   },
   es: {
+    auth: authEs,
     common: commonEs,
     error: errorEs,
     fireplace: fireplaceEs,

@@ -1,5 +1,8 @@
 {
   "title": "Cheminée : {{mac}}",
+  "auth": {
+    "loginToControl": "Veuillez vous connecter pour contrôler ce poêle."
+  },
   "advanced": "Avancé",
   "debug": "Débogage",
   "heating": "Chauffage",

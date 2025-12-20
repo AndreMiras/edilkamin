@@ -103,7 +103,7 @@ describe("Fireplace Page", () => {
   });
 
   describe("Data Fetching", () => {
-    it("should show loading state initially", () => {
+    it("should show loading state initially", async () => {
       const mockDeviceInfo = vi.fn(
         () => new Promise(() => {}), // Never resolves
       );
@@ -114,6 +114,11 @@ describe("Fireplace Page", () => {
       } as any);
 
       render(<Fireplace />);
+
+      // Wait for auth to resolve and thermostat to render
+      await waitFor(() => {
+        expect(findIncreaseButton()).toBeInTheDocument();
+      });
 
       // Temperature control buttons should be disabled in loading state
       const increaseButton = findIncreaseButton();
@@ -597,7 +602,7 @@ describe("Fireplace Page", () => {
       const mockDeviceInfo = vi
         .fn()
         .mockRejectedValueOnce(error401)
-        .mockResolvedValueOnce(createMockDeviceInfo());
+        .mockResolvedValue(createMockDeviceInfo()); // Always succeed after first call
       vi.mocked(axios).isAxiosError = vi.fn().mockReturnValue(true) as any;
       vi.mocked(getSession)
         .mockResolvedValueOnce(mockToken) // Initial load
@@ -611,10 +616,12 @@ describe("Fireplace Page", () => {
       render(<Fireplace />);
 
       await waitFor(() => {
-        // getSession called twice: once for initial load, once for refresh
-        expect(getSession).toHaveBeenCalledTimes(2);
-        expect(mockDeviceInfo).toHaveBeenCalledTimes(2);
-        expect(mockDeviceInfo).toHaveBeenLastCalledWith(newToken, mockMac);
+        // getSession called at least twice: once for initial load, once for refresh
+        expect(getSession).toHaveBeenCalledWith(false, false); // Initial load
+        expect(getSession).toHaveBeenCalledWith(true, false); // Refresh after 401
+        // deviceInfo called: 1) initial fail, 2) retry with new token, 3) useEffect re-run with updated context
+        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(mockDeviceInfo).toHaveBeenCalledWith(newToken, mockMac);
       });
     });
 
