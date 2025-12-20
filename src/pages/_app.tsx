@@ -8,7 +8,6 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { Container } from "react-bootstrap";
 import { I18nextProvider } from "react-i18next";
 
 import Errors from "../components/Errors";
@@ -28,7 +27,7 @@ library.add(fab, far, fas);
 
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
   <I18nextProvider i18n={i18n}>
-    <div className="App d-flex flex-column min-vh-100">
+    <div className="App flex flex-col min-h-screen">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Open Edilkamin</title>
@@ -39,10 +38,10 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
           <ThemeContextProvider>
             <ThemeInitializer />
             <Header />
-            <Container className="mt-3">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
               <Errors />
               <Component {...pageProps} />
-            </Container>
+            </div>
           </ThemeContextProvider>
         </TokenContextProvider>
       </ErrorContextProvider>
