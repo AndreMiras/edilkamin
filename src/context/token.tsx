@@ -1,11 +1,5 @@
 import { getSession } from "edilkamin";
-import {
-  createContext,
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { getTokenLocalStorage, setTokenLocalStorage } from "../utils/helpers";
 
@@ -22,9 +16,7 @@ const tokenContextDefault = {
 
 const TokenContext = createContext<TokenContextType>(tokenContextDefault);
 
-const TokenContextProvider: FunctionComponent<{ children: ReactNode }> = ({
-  children,
-}) => {
+const TokenContextProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null | undefined>();
 
   useEffect(() => {

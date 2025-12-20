@@ -1,10 +1,4 @@
-import {
-  createContext,
-  FunctionComponent,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 import {
   getThemeLocalStorage,
@@ -25,9 +19,7 @@ const themeContextDefault: ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType>(themeContextDefault);
 
-const ThemeContextProvider: FunctionComponent<{ children: ReactNode }> = ({
-  children,
-}) => {
+const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme | undefined>(undefined);
 
   useEffect(() => {

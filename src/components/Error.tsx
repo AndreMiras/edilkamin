@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -10,7 +9,7 @@ interface ErrorProps extends ErrorType {
   onClose: () => void;
 }
 
-const Error: FunctionComponent<ErrorProps> = ({ title, body, onClose }) => {
+const Error = ({ title, body, onClose }: ErrorProps) => {
   const { t } = useTranslation("error");
 
   return (

@@ -1,7 +1,6 @@
-import { FunctionComponent } from "react";
 import { useTranslation } from "react-i18next";
 
-const Footer: FunctionComponent = () => {
+const Footer = () => {
   const { t } = useTranslation("footer");
 
   return (
