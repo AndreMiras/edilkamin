@@ -11,30 +11,30 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
-    expect(screen.getByRole("radio", { name: /on/i })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: /off/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /on/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /off/i })).toBeInTheDocument();
   });
 
-  it("should select correct button based on powerState", () => {
+  it("should apply active styling based on powerState", () => {
     const onChange = vi.fn();
     const { rerender } = render(
       <PowerToggle powerState={true} onChange={onChange} loading={false} />,
     );
 
-    const onButton = screen.getByRole("radio", { name: /on/i });
-    const offButton = screen.getByRole("radio", { name: /off/i });
+    const onButton = screen.getByRole("button", { name: /on/i });
+    const offButton = screen.getByRole("button", { name: /off/i });
 
-    // When powerState is true, on button should be checked
-    expect(onButton).toBeChecked();
-    expect(offButton).not.toBeChecked();
+    // When powerState is true, on button should have active styling
+    expect(onButton.className).toContain("bg-primary");
+    expect(offButton.className).toContain("bg-background");
 
     // Rerender with powerState false
     rerender(
       <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
-    expect(onButton).not.toBeChecked();
-    expect(offButton).toBeChecked();
+    expect(onButton.className).toContain("bg-background");
+    expect(offButton.className).toContain("bg-primary");
   });
 
   it("should call onChange with 1 when on button is clicked", async () => {
@@ -45,12 +45,11 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
-    const onButton = screen.getByRole("radio", { name: /on/i });
+    const onButton = screen.getByRole("button", { name: /on/i });
     await user.click(onButton);
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    // First argument should be 1, second is the event object
-    expect(onChange.mock.calls[0][0]).toBe(1);
+    expect(onChange).toHaveBeenCalledWith(1);
   });
 
   it("should call onChange with 0 when off button is clicked", async () => {
@@ -61,12 +60,11 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={true} onChange={onChange} loading={false} />,
     );
 
-    const offButton = screen.getByRole("radio", { name: /off/i });
+    const offButton = screen.getByRole("button", { name: /off/i });
     await user.click(offButton);
 
     expect(onChange).toHaveBeenCalledTimes(1);
-    // First argument should be 0, second is the event object
-    expect(onChange.mock.calls[0][0]).toBe(0);
+    expect(onChange).toHaveBeenCalledWith(0);
   });
 
   it("should disable both buttons when loading is true", () => {
@@ -75,8 +73,8 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={false} onChange={onChange} loading={true} />,
     );
 
-    const onButton = screen.getByRole("radio", { name: /on/i });
-    const offButton = screen.getByRole("radio", { name: /off/i });
+    const onButton = screen.getByRole("button", { name: /on/i });
+    const offButton = screen.getByRole("button", { name: /off/i });
 
     expect(onButton).toBeDisabled();
     expect(offButton).toBeDisabled();
@@ -90,7 +88,7 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={false} onChange={onChange} loading={true} />,
     );
 
-    const onButton = screen.getByRole("radio", { name: /on/i });
+    const onButton = screen.getByRole("button", { name: /on/i });
 
     // Attempting to click disabled button should not trigger onChange
     await user.click(onButton);
@@ -104,8 +102,8 @@ describe("PowerToggle", () => {
       <PowerToggle powerState={false} onChange={onChange} loading={false} />,
     );
 
-    const onButton = screen.getByRole("radio", { name: /on/i });
-    const offButton = screen.getByRole("radio", { name: /off/i });
+    const onButton = screen.getByRole("button", { name: /on/i });
+    const offButton = screen.getByRole("button", { name: /off/i });
 
     // Buttons should contain both icon and text
     expect(onButton).toBeInTheDocument();

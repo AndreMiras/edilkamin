@@ -3,8 +3,14 @@ import { configure, DeviceInfoType } from "edilkamin";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { Accordion } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
@@ -107,19 +113,23 @@ const Fireplace: NextPage = () => {
       onTemperatureChange={onTemperatureChange}
       onPowerChange={onPowerChange}
     >
-      <Accordion className="mt-8 w-full max-w-[340px]">
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>{t("advanced")}</Accordion.Header>
-          <Accordion.Body>
+      <Accordion
+        type="single"
+        collapsible
+        className="mt-8 w-full max-w-[340px]"
+      >
+        <AccordionItem value="device-details">
+          <AccordionTrigger>{t("advanced")}</AccordionTrigger>
+          <AccordionContent>
             {info && <DeviceDetails info={info} />}
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>{t("debug")}</Accordion.Header>
-          <Accordion.Body>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="debug-info">
+          <AccordionTrigger>{t("debug")}</AccordionTrigger>
+          <AccordionContent>
             <DebugInfo info={info} />
-          </Accordion.Body>
-        </Accordion.Item>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </Thermostat>
   );
