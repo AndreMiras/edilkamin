@@ -35,10 +35,13 @@ updates:
       fontawesome:
         patterns:
           - "@fortawesome/*"
-      bootstrap:
+      tailwind:
         patterns:
-          - "bootstrap"
-          - "react-bootstrap"
+          - "tailwindcss"
+          - "@tailwindcss/*"
+      shadcn:
+        patterns:
+          - "@radix-ui/*"
       testing:
         patterns:
           - "vitest"
