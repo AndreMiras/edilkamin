@@ -5,5 +5,15 @@
   "validation": {
     "invalidMac": "Invalid MAC address.",
     "alreadyAdded": "Device already added."
+  },
+  "bluetooth": {
+    "scanButton": "Scan for devices",
+    "notSupported": "Bluetooth not supported in this browser. Use Chrome, Edge, or Opera.",
+    "scanFailed": "Bluetooth scan failed",
+    "scanIncomplete": "Scan incomplete",
+    "manualEntryFallback": "Could not determine device MAC address. Please enter it manually.",
+    "alreadyAdded": "Device already added",
+    "deviceExists": "Device {{mac}} is already in your list.",
+    "unknownError": "An unknown error occurred"
   }
 }

@@ -1,5 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it } from "vitest";
+import * as bluetoothWeb from "edilkamin/bluetooth";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen, waitFor, within } from "../test/utils";
 import Home from "./Home";
@@ -263,5 +264,117 @@ describe("Home", () => {
     // Both should be in localStorage
     const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
     expect(stored).toEqual(["aabbccddeeff", "112233445566"]);
+  });
+
+  describe("Bluetooth scanning", () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it("should render scan button", () => {
+      render(<Home />);
+
+      const scanButton = screen.getByRole("button", {
+        name: /scan for devices/i,
+      });
+      expect(scanButton).toBeInTheDocument();
+    });
+
+    it("should show disabled scan button when bluetooth not supported", () => {
+      // By default, the mock returns false for isWebBluetoothSupported
+      render(<Home />);
+
+      const scanButton = screen.getByRole("button", {
+        name: /scan for devices/i,
+      });
+      expect(scanButton).toBeDisabled();
+    });
+
+    it("should show tooltip on hover when bluetooth not supported", async () => {
+      const user = userEvent.setup();
+      render(<Home />);
+
+      const scanButton = screen.getByRole("button", {
+        name: /scan for devices/i,
+      });
+      const buttonContainer = scanButton.parentElement;
+
+      await user.hover(buttonContainer!);
+
+      // Tooltip should be visible (opacity changes on hover via CSS, but element should exist)
+      const tooltip = screen.getByText(/bluetooth not supported/i);
+      expect(tooltip).toBeInTheDocument();
+    });
+
+    it("should add device to list after successful scan", async () => {
+      // Mock bluetooth as supported
+      vi.spyOn(bluetoothWeb, "isWebBluetoothSupported").mockReturnValue(true);
+      vi.spyOn(bluetoothWeb, "scanForDevices").mockResolvedValue([
+        {
+          bleMac: "a8032afed50a",
+          wifiMac: "a8032afed508",
+          name: "EDILKAMIN_EP",
+        },
+      ]);
+
+      // We need to mock the global navigator.bluetooth for the component's own check
+      Object.defineProperty(global.navigator, "bluetooth", {
+        value: {},
+        configurable: true,
+      });
+
+      const user = userEvent.setup();
+      render(<Home />);
+
+      const scanButton = screen.getByRole("button", {
+        name: /scan for devices/i,
+      });
+
+      await user.click(scanButton);
+
+      // Device should be added to the list
+      await waitFor(() => {
+        expect(screen.getByText("a8032afed508")).toBeInTheDocument();
+      });
+
+      // Should be persisted to localStorage
+      const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
+      expect(stored).toContain("a8032afed508");
+
+      // Cleanup
+      // @ts-expect-error - resetting navigator.bluetooth
+      delete global.navigator.bluetooth;
+    });
+
+    it("should not show error when user cancels scan", async () => {
+      // Mock bluetooth as supported but user cancels (empty array)
+      vi.spyOn(bluetoothWeb, "isWebBluetoothSupported").mockReturnValue(true);
+      vi.spyOn(bluetoothWeb, "scanForDevices").mockResolvedValue([]);
+
+      Object.defineProperty(global.navigator, "bluetooth", {
+        value: {},
+        configurable: true,
+      });
+
+      const user = userEvent.setup();
+      render(<Home />);
+
+      const scanButton = screen.getByRole("button", {
+        name: /scan for devices/i,
+      });
+
+      await user.click(scanButton);
+
+      // Wait a bit to ensure no error appears
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // No error message should be shown
+      expect(screen.queryByText(/scan failed/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/scan incomplete/i)).not.toBeInTheDocument();
+
+      // Cleanup
+      // @ts-expect-error - resetting navigator.bluetooth
+      delete global.navigator.bluetooth;
+    });
   });
 });

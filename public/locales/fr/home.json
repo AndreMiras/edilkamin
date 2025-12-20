@@ -5,5 +5,15 @@
   "validation": {
     "invalidMac": "Adresse MAC invalide.",
     "alreadyAdded": "Appareil déjà ajouté."
+  },
+  "bluetooth": {
+    "scanButton": "Rechercher des appareils",
+    "notSupported": "Bluetooth non pris en charge par ce navigateur. Utilisez Chrome, Edge ou Opera.",
+    "scanFailed": "Echec de la recherche Bluetooth",
+    "scanIncomplete": "Recherche incomplete",
+    "manualEntryFallback": "Impossible de determiner l'adresse MAC. Veuillez la saisir manuellement.",
+    "alreadyAdded": "Appareil deja ajoute",
+    "deviceExists": "L'appareil {{mac}} est deja dans votre liste.",
+    "unknownError": "Une erreur inconnue s'est produite"
   }
 }

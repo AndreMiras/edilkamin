@@ -5,5 +5,15 @@
   "validation": {
     "invalidMac": "Dirección MAC no válida.",
     "alreadyAdded": "Dispositivo ya agregado."
+  },
+  "bluetooth": {
+    "scanButton": "Buscar dispositivos",
+    "notSupported": "Bluetooth no compatible con este navegador. Use Chrome, Edge u Opera.",
+    "scanFailed": "Error en la busqueda Bluetooth",
+    "scanIncomplete": "Busqueda incompleta",
+    "manualEntryFallback": "No se pudo determinar la direccion MAC. Ingresela manualmente.",
+    "alreadyAdded": "Dispositivo ya agregado",
+    "deviceExists": "El dispositivo {{mac}} ya esta en su lista.",
+    "unknownError": "Ocurrio un error desconocido"
   }
 }

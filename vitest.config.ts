@@ -29,7 +29,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'edilkamin': '/src/test/__mocks__/edilkamin.ts',
+      'edilkamin/bluetooth': path.resolve(__dirname, 'src/test/__mocks__/edilkamin-bluetooth.ts'),
+      'edilkamin': path.resolve(__dirname, 'src/test/__mocks__/edilkamin.ts'),
       '@': path.resolve(__dirname, './src'),
     },
   },
