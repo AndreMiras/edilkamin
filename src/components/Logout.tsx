@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import { useLogout } from "../utils/hooks";
@@ -10,9 +9,13 @@ const Logout = () => {
   const onLogoutClick = (): void => logout();
 
   return (
-    <Button variant="primary" type="submit" onClick={onLogoutClick}>
+    <button
+      type="submit"
+      onClick={onLogoutClick}
+      className="px-4 py-2 !bg-primary text-primary-foreground !rounded-md hover:!bg-primary/90 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
+    >
       {t("button")}
-    </Button>
+    </button>
   );
 };
 

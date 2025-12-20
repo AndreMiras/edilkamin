@@ -32,7 +32,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     await user.type(input, "aabbccddeeff");
     await user.click(addButton);
@@ -52,7 +52,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     await user.type(input, "aa:bb:cc:dd:ee:ff");
     await user.click(addButton);
@@ -69,7 +69,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     await user.type(input, "invalid-mac");
 
@@ -100,7 +100,7 @@ describe("Home", () => {
     expect(listItems).toHaveLength(2);
 
     // Find remove button for first device
-    const firstItem = screen.getByText("aabbccddeeff").closest("div");
+    const firstItem = screen.getByText("aabbccddeeff").closest("li");
     expect(firstItem).toBeInTheDocument();
 
     const removeButton = within(firstItem!).getByRole("button");
@@ -122,7 +122,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     await user.type(input, "aabbccddeeff");
     await user.click(addButton);
@@ -148,9 +148,8 @@ describe("Home", () => {
       expect(screen.getByText(/Device already added/i)).toBeInTheDocument();
     });
 
-    // Add button should be disabled (find it by getting all buttons and looking for the one in the input group)
-    const buttons = screen.getAllByRole("button");
-    const addButton = buttons[buttons.length - 1]; // Last button is the add button
+    // Add button should be disabled
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
     expect(addButton).toBeDisabled();
 
     // Should not add duplicate
@@ -163,7 +162,7 @@ describe("Home", () => {
   it("should disable add button when input is empty", () => {
     render(<Home />);
 
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
     expect(addButton).toBeDisabled();
   });
 
@@ -172,7 +171,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     await user.type(input, "aabbccddeeff");
 
@@ -245,7 +244,7 @@ describe("Home", () => {
     render(<Home />);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button");
+    const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
     // Add first device
     await user.type(input, "aabbccddeeff");

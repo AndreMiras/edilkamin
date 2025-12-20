@@ -1,5 +1,11 @@
-import { Dropdown } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const LOCALE_STORAGE_KEY = "edilkamin-locale";
 
@@ -14,22 +20,23 @@ const LanguageSwitcher = () => {
   };
 
   return (
-    <Dropdown className="ms-2">
-      <Dropdown.Toggle variant="outline-secondary">
+    <DropdownMenu>
+      <DropdownMenuTrigger className="ml-2 px-3 py-2 border !border-input !bg-background text-foreground !rounded-md hover:bg-muted focus:outline-hidden focus:ring-2 focus:ring-ring">
         {i18n.language.toUpperCase()}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
         {languages.map((locale) => (
-          <Dropdown.Item
+          <DropdownMenuItem
             key={locale}
-            active={i18n.language === locale}
             onClick={() => switchLanguage(locale)}
+            className={i18n.language === locale ? "bg-muted" : ""}
+            data-active={i18n.language === locale}
           >
             {t(`languageSwitcher.languages.${locale}`)}
-          </Dropdown.Item>
+          </DropdownMenuItem>
         ))}
-      </Dropdown.Menu>
-    </Dropdown>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

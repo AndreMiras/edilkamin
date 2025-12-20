@@ -32,21 +32,23 @@ describe("Error Component", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("renders as dismissible alert", () => {
-    const { container } = render(
+  it("renders as alert with close button", () => {
+    render(
       <Error title="Test Error" body="Test error message" onClose={vi.fn()} />,
     );
 
-    const alert = container.querySelector(".alert-dismissible");
+    const alert = screen.getByRole("alert");
     expect(alert).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /close/i })).toBeInTheDocument();
   });
 
-  it("renders with danger variant", () => {
+  it("renders with destructive variant styling", () => {
     const { container } = render(
       <Error title="Test Error" body="Test error message" onClose={vi.fn()} />,
     );
 
-    const alert = container.querySelector(".alert-danger");
+    const alert = container.querySelector('[role="alert"]');
     expect(alert).toBeInTheDocument();
+    expect(alert?.className).toContain("border-destructive");
   });
 });

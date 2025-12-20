@@ -68,7 +68,7 @@ describe("LanguageSwitcher", () => {
     });
   });
 
-  it("should mark active language with active class", async () => {
+  it("should mark active language with data attribute", async () => {
     const user = userEvent.setup();
     render(<LanguageSwitcher />);
 
@@ -77,7 +77,10 @@ describe("LanguageSwitcher", () => {
 
     // English should be marked as active initially
     const englishOption = screen.getByText("English");
-    expect(englishOption).toHaveClass("dropdown-item", "active");
+    expect(englishOption.closest("[data-active]")).toHaveAttribute(
+      "data-active",
+      "true",
+    );
   });
 
   it("should update active state after language change", async () => {
@@ -100,7 +103,10 @@ describe("LanguageSwitcher", () => {
 
     // Français should now be marked as active
     const frenchOption = screen.getByText("Français");
-    expect(frenchOption).toHaveClass("dropdown-item", "active");
+    expect(frenchOption.closest("[data-active]")).toHaveAttribute(
+      "data-active",
+      "true",
+    );
   });
 
   it("should render all three language options", async () => {
@@ -118,7 +124,7 @@ describe("LanguageSwitcher", () => {
 
   it("should close dropdown after selecting a language", async () => {
     const user = userEvent.setup();
-    const { container } = render(<LanguageSwitcher />);
+    render(<LanguageSwitcher />);
 
     // Open dropdown
     const toggle = screen.getByRole("button", { name: "EN" });
@@ -126,8 +132,6 @@ describe("LanguageSwitcher", () => {
 
     // Verify dropdown is open
     expect(screen.getByText("English")).toBeInTheDocument();
-    const dropdown = container.querySelector(".dropdown");
-    expect(dropdown).toHaveClass("show");
 
     // Select Español
     const spanishOption = screen.getByText("Español");
@@ -138,9 +142,9 @@ describe("LanguageSwitcher", () => {
       expect(screen.getByRole("button", { name: "ES" })).toBeInTheDocument();
     });
 
-    // Dropdown should close
+    // Dropdown should close - English option should no longer be visible
     await waitFor(() => {
-      expect(dropdown).not.toHaveClass("show");
+      expect(screen.queryByText("English")).not.toBeInTheDocument();
     });
   });
 });

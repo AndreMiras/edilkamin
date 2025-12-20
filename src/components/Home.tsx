@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { KeyboardEvent, useEffect, useState } from "react";
-import { Button, Card, Form, ListGroup } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
 
@@ -64,48 +65,74 @@ const Home = () => {
 
   return (
     <Card>
-      <Card.Header>{t("title")}</Card.Header>
-      <Card.Body>
-        <ListGroup>
+      <CardHeader>
+        <CardTitle>{t("title")}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Device list */}
+        <ul className="divide-y divide-border">
           {fireplacesState.map((mac, index) => (
-            <ListGroup.Item
+            <li
               key={mac}
-              className="d-flex justify-content-between align-items-center"
-              as="div"
-              action
+              className="flex justify-between items-center py-3 hover:bg-muted/50 transition-colors"
             >
-              <Link href={`/fireplace/${mac}`}>{mac}</Link>
-              <Button onClick={() => onRemove(index)}>
+              <Link
+                href={`/fireplace/${mac}`}
+                className="text-primary hover:text-primary/80 underline-offset-4 hover:underline"
+              >
+                {mac}
+              </Link>
+              <button
+                onClick={() => onRemove(index)}
+                className="p-2 !rounded-md hover:bg-muted transition-colors !bg-primary text-primary-foreground"
+                aria-label={`Remove ${mac}`}
+              >
                 <FontAwesomeIcon icon={["fas", "minus"]} />
-              </Button>
-            </ListGroup.Item>
+              </button>
+            </li>
           ))}
-          <ListGroup.Item>
-            {fireplacesState.length === 0 && <span>{t("emptyState")}</span>}
-          </ListGroup.Item>
-          <ListGroup.Item
-            className="d-flex justify-content-between align-items-start"
-            as="div"
-          >
-            <Form.Group>
-              <Form.Control
-                className="me-2"
-                placeholder={t("macPlaceholder")}
-                value={fireplace}
-                onChange={(e) => setFireplace(e.target.value)}
-                onKeyPress={onKeyPress}
-                isInvalid={fireplaceFeedback !== ""}
-              />
-              <Form.Control.Feedback type="invalid">
-                {fireplaceFeedback}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Button onClick={onAdd} disabled={addDisabled}>
-              <FontAwesomeIcon icon={["fas", "plus"]} />
-            </Button>
-          </ListGroup.Item>
-        </ListGroup>
-      </Card.Body>
+
+          {/* Empty state */}
+          {fireplacesState.length === 0 && (
+            <li className="py-3 text-muted-foreground text-center">
+              {t("emptyState")}
+            </li>
+          )}
+
+          {/* Add new device form */}
+          <li className="pt-3">
+            <div className="flex gap-4 items-start">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  placeholder={t("macPlaceholder")}
+                  value={fireplace}
+                  onChange={(e) => setFireplace(e.target.value)}
+                  onKeyPress={onKeyPress}
+                  className={`w-full px-3 py-2 border !rounded-md !bg-background text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 ${
+                    fireplaceFeedback !== ""
+                      ? "!border-destructive is-invalid"
+                      : "!border-input"
+                  }`}
+                />
+                {fireplaceFeedback !== "" && (
+                  <p className="mt-1 text-sm text-destructive">
+                    {fireplaceFeedback}
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={onAdd}
+                disabled={addDisabled}
+                className="p-2 !rounded-md !bg-primary text-primary-foreground hover:!bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                aria-label="Add fireplace"
+              >
+                <FontAwesomeIcon icon={["fas", "plus"]} />
+              </button>
+            </div>
+          </li>
+        </ul>
+      </CardContent>
     </Card>
   );
 };

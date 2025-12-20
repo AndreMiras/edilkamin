@@ -1,6 +1,5 @@
 import { signIn } from "edilkamin";
 import React, { useContext, useState } from "react";
-import { Button, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
 import { ErrorContext } from "../context/error";
@@ -39,26 +38,31 @@ const Login = () => {
   const onFormSubmit = (e: React.FormEvent): void => e.preventDefault();
 
   return (
-    <Form className="d-flex" onSubmit={onFormSubmit}>
-      <Form.Control
+    <form className="flex flex-col gap-2 sm:flex-row" onSubmit={onFormSubmit}>
+      <input
+        type="text"
         placeholder={t("usernamePlaceholder")}
-        className="me-2"
         aria-label={t("emailAriaLabel")}
         onChange={onUsernameChange}
         autoComplete="username"
+        className="w-full sm:flex-1 px-3 py-2 border !border-input !rounded-md !bg-background text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       />
-      <Form.Control
+      <input
         type="password"
         placeholder={t("passwordPlaceholder")}
-        className="me-2"
         aria-label={t("passwordAriaLabel")}
         onChange={onPasswordChange}
         autoComplete="current-password"
+        className="w-full sm:flex-1 px-3 py-2 border !border-input !rounded-md !bg-background text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       />
-      <Button variant="primary" type="submit" onClick={onLogin}>
+      <button
+        type="submit"
+        onClick={onLogin}
+        className="w-full sm:w-auto px-4 py-2 !bg-primary text-primary-foreground !rounded-md hover:!bg-primary/90 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      >
         {t("button")}
-      </Button>
-    </Form>
+      </button>
+    </form>
   );
 };
 
