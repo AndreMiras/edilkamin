@@ -4,6 +4,8 @@
   "version": "2025.12.14",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
     "@fortawesome/free-regular-svg-icons": "^7.1.0",
@@ -34,6 +36,7 @@
     "dev": "next dev",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always) next build",
+    "build:mobile": "BUILD_TARGET=mobile next build",
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -44,7 +47,10 @@
     "lint:eslint": "eslint src",
     "format:eslint": "eslint --fix src",
     "lint": "yarn lint:prettier && yarn lint:eslint",
-    "format": "yarn format:prettier && yarn format:eslint"
+    "format": "yarn format:prettier && yarn format:eslint",
+    "cap:sync": "cap sync",
+    "cap:android": "cap open android",
+    "android": "yarn build:mobile && yarn cap:sync && yarn cap:android"
   },
   "engines": {
     "node": "24.x"
@@ -62,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.0.0",
     "@eslint/js": "^9.39.2",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/dom": "^10.4.1",

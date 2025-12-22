@@ -23,3 +23,54 @@ yarn dev
 yarn lint
 yarn test
 ```
+
+## Mobile Development (Android)
+
+The app can be built as a native Android app using [Capacitor](https://capacitorjs.com/).
+
+### Requirements
+
+- **Node.js** 24.x
+- **Java** 21+ (OpenJDK recommended)
+- **Android Studio** Meerkat (2024.3.1) or newer
+- **Android SDK** 36
+
+On Arch Linux:
+
+```sh
+sudo pacman -S jdk21-openjdk
+sudo archlinux-java set java-21-openjdk
+yay -S android-studio
+```
+
+### Build & Run
+
+1. Build the web app for static export:
+
+   ```sh
+   yarn build:mobile
+   ```
+
+2. Sync web assets to the Android project:
+
+   ```sh
+   yarn cap:sync
+   ```
+
+3. Open in Android Studio:
+
+   ```sh
+   npx cap open android
+   ```
+
+4. Run on device/emulator from Android Studio (Shift+F10)
+
+### Development Workflow
+
+After making changes to the web app:
+
+```sh
+yarn build:mobile && yarn cap:sync
+```
+
+Then rebuild from Android Studio.

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { configure, DeviceInfoType } from "edilkamin";
+import { configure, DeviceInfoType, NEW_API_URL, OLD_API_URL } from "edilkamin";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import { Thermostat } from "../../components/thermostat";
 import { ErrorContext } from "../../context/error";
 import { TokenContext } from "../../context/token";
 import { useTokenRefresh } from "../../utils/hooks";
+import { isNativePlatform } from "../../utils/platform";
 
 const Fireplace: NextPage = () => {
   const { t } = useTranslation("fireplace");
@@ -31,7 +32,12 @@ const Fireplace: NextPage = () => {
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
   const { withRetry } = useTokenRefresh();
-  const baseUrl = "/api/proxy/";
+  // Native apps don't need proxy (no CORS restrictions in WebView)
+  const baseUrl = isNativePlatform()
+    ? process.env.NEXT_PUBLIC_USE_LEGACY_API === "true"
+      ? OLD_API_URL
+      : NEW_API_URL
+    : "/api/proxy/";
   const { deviceInfo, setPower, setTargetTemperature } = configure(baseUrl);
 
   useEffect(() => {

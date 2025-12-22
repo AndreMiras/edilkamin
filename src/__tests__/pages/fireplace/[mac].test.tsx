@@ -15,9 +15,13 @@ vi.mock("edilkamin", () => ({
     setTargetTemperature: vi.fn(),
   })),
   getSession: vi.fn(),
-  API_URL: "https://api.edilkamin.com/",
+  NEW_API_URL: "https://api.edilkamin.com/",
   OLD_API_URL:
     "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
+}));
+
+vi.mock("../../../utils/platform", () => ({
+  isNativePlatform: vi.fn(() => false),
 }));
 
 vi.mock("axios", async () => {
