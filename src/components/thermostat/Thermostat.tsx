@@ -25,7 +25,7 @@ const Thermostat = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-[70vh] p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
+      className={`flex flex-col items-center justify-center flex-1 p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
     >
       <div className="w-full max-w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
         <div className="flex justify-center mb-6">

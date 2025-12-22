@@ -197,7 +197,7 @@ const Home = () => {
                   />
                 </button>
                 {!bluetoothSupported && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-md shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-md shadow-md opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all whitespace-nowrap pointer-events-none z-10 origin-bottom">
                     {t("bluetooth.notSupported")}
                   </div>
                 )}

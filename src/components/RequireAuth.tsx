@@ -17,7 +17,7 @@ const RequireAuth = ({ children, message }: RequireAuthProps) => {
   // Loading state - show spinner while checking auth
   if (isLoggedIn === undefined) {
     return (
-      <div className="flex items-center justify-center min-h-[200px]">
+      <div className="flex items-center justify-center flex-1">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
@@ -26,7 +26,7 @@ const RequireAuth = ({ children, message }: RequireAuthProps) => {
   // Not authenticated - show login prompt
   if (isLoggedIn === false) {
     return (
-      <div className="flex items-center justify-center min-h-[70vh] p-4">
+      <div className="flex items-center justify-center flex-1 p-4">
         <Alert className="max-w-md">
           <AlertTitle>{t("loginRequired")}</AlertTitle>
           <AlertDescription>

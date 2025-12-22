@@ -37,7 +37,7 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
           <ThemeContextProvider>
             <ThemeInitializer />
             <Header />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
+            <div className="flex-1 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
               <Errors />
               <Component {...pageProps} />
             </div>
