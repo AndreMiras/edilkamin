@@ -4,6 +4,12 @@ import { KeyboardEvent, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ErrorContext } from "@/context/error";
 
 import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
@@ -184,10 +190,31 @@ const Home = () => {
               >
                 <FontAwesomeIcon icon={["fas", "plus"]} />
               </button>
-              <div className="relative group">
+              {!bluetoothSupported ? (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={onScan}
+                        disabled={!bluetoothSupported || isScanning}
+                        className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        aria-label={t("bluetooth.scanButton")}
+                      >
+                        <FontAwesomeIcon
+                          icon={["fab", "bluetooth-b"]}
+                          spin={isScanning}
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      {t("bluetooth.notSupported")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              ) : (
                 <button
                   onClick={onScan}
-                  disabled={!bluetoothSupported || isScanning}
+                  disabled={isScanning}
                   className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   aria-label={t("bluetooth.scanButton")}
                 >
@@ -196,12 +223,7 @@ const Home = () => {
                     spin={isScanning}
                   />
                 </button>
-                {!bluetoothSupported && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-popover text-popover-foreground text-sm rounded-md shadow-md opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transition-all whitespace-nowrap pointer-events-none z-10 origin-bottom">
-                    {t("bluetooth.notSupported")}
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </li>
         </ul>

@@ -297,13 +297,14 @@ describe("Home", () => {
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,
       });
-      const buttonContainer = scanButton.parentElement;
 
-      await user.hover(buttonContainer!);
+      await user.hover(scanButton);
 
-      // Tooltip should be visible (opacity changes on hover via CSS, but element should exist)
-      const tooltip = screen.getByText(/bluetooth not supported/i);
-      expect(tooltip).toBeInTheDocument();
+      // Radix Tooltip renders content in a Portal, wait for it to appear
+      // Query by role="tooltip" to get the accessible tooltip element
+      await waitFor(() => {
+        expect(screen.getByRole("tooltip")).toBeInTheDocument();
+      });
     });
 
     it("should add device to list after successful scan", async () => {
