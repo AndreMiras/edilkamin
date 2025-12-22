@@ -17,6 +17,7 @@ jobs:
       - run: yarn lint
       - run: yarn tsc
       - run: yarn test:coverage
+      - run: yarn build
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
