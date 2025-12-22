@@ -4,6 +4,7 @@
   "version": "2025.12.14",
   "private": true,
   "dependencies": {
+    "@capacitor-community/bluetooth-le": "^7.3.0",
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",

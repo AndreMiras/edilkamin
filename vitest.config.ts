@@ -31,6 +31,7 @@ export default defineConfig({
     alias: {
       'edilkamin/bluetooth': path.resolve(__dirname, 'src/test/__mocks__/edilkamin-bluetooth.ts'),
       'edilkamin': path.resolve(__dirname, 'src/test/__mocks__/edilkamin.ts'),
+      '@capacitor-community/bluetooth-le': path.resolve(__dirname, 'src/test/__mocks__/capacitor-bluetooth-le.ts'),
       '@': path.resolve(__dirname, './src'),
     },
   },

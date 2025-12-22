@@ -899,6 +899,13 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-1.0.2.tgz#bbe12dca5b4ef983a0d0af4b07b9bc90ea0ababa"
   integrity sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==
 
+"@capacitor-community/bluetooth-le@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/bluetooth-le/-/bluetooth-le-7.3.0.tgz#2c6f6b7628b038632cac098e97a0544871efaef1"
+  integrity sha512-QsM8jIlseTWnpEHdlzB5OxweNoxS9QDKUyQEX49IyeRCmi0uVMf4A8l6VPtyfT6wKUdWf4VrEZAED8UCOWW1DQ==
+  dependencies:
+    "@types/web-bluetooth" "^0.0.20"
+
 "@capacitor/android@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-8.0.0.tgz#8cd63ed432460c70db0770dccd9234700152f31a"
@@ -2827,6 +2834,11 @@
   version "9.0.8"
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.8.tgz#7545ba4fc3c003d6c756f651f3bf163d8f0f29ba"
   integrity sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==
+
+"@types/web-bluetooth@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz#f066abfcd1cbe66267cdbbf0de010d8a41b41597"
+  integrity sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==
 
 "@typescript-eslint/eslint-plugin@8.50.0", "@typescript-eslint/eslint-plugin@^8.50.0":
   version "8.50.0"

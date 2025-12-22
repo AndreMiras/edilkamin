@@ -12,12 +12,8 @@ import {
 } from "@/components/ui/tooltip";
 import { ErrorContext } from "@/context/error";
 
+import { isBluetoothSupported, scanForDevices } from "../utils/bluetooth";
 import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
-
-// Check if Web Bluetooth API is supported
-const isWebBluetoothSupported = (): boolean => {
-  return typeof navigator !== "undefined" && "bluetooth" in navigator;
-};
 
 // I suspect there's no API for fetching fireplaces.
 // Instead bluetooth is used to fetch the MAC addresses on the Android app
@@ -29,6 +25,15 @@ const Home = () => {
   const { t } = useTranslation("home");
   const { addError } = useContext(ErrorContext);
   const [isScanning, setIsScanning] = useState(false);
+  // Start with null to indicate "not yet checked" - avoids hydration mismatch
+  const [bluetoothSupported, setBluetoothSupported] = useState<boolean | null>(
+    null,
+  );
+
+  // Check bluetooth support on client-side only (after hydration)
+  useEffect(() => {
+    setBluetoothSupported(isBluetoothSupported());
+  }, []);
 
   const getFireplacesLocalStorage = (): string[] =>
     JSON.parse(localStorage.getItem(localStorageKey) || "[]");
@@ -76,12 +81,11 @@ const Home = () => {
     setFireplaces(fireplacesState.filter((item, i) => i !== index));
 
   const onScan = async () => {
-    if (!isWebBluetoothSupported()) return;
+    if (!bluetoothSupported) return;
 
     setIsScanning(true);
     try {
-      // Dynamic import to avoid SSR issues
-      const { scanForDevices } = await import("edilkamin/bluetooth");
+      // Use platform-conditional scanning from utility
       const devices = await scanForDevices();
 
       if (devices.length === 0) {
@@ -122,7 +126,8 @@ const Home = () => {
   };
 
   const addDisabled = fireplace === "" || fireplaceFeedback !== "";
-  const bluetoothSupported = isWebBluetoothSupported();
+  // Button is disabled while checking support (null) or if not supported
+  const scanDisabled = bluetoothSupported !== true || isScanning;
 
   return (
     <Card>
@@ -190,20 +195,16 @@ const Home = () => {
               >
                 <FontAwesomeIcon icon={["fas", "plus"]} />
               </button>
-              {!bluetoothSupported ? (
+              {bluetoothSupported === false ? (
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        onClick={onScan}
-                        disabled={!bluetoothSupported || isScanning}
-                        className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        disabled
+                        className="p-2 rounded-md bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         aria-label={t("bluetooth.scanButton")}
                       >
-                        <FontAwesomeIcon
-                          icon={["fab", "bluetooth-b"]}
-                          spin={isScanning}
-                        />
+                        <FontAwesomeIcon icon={["fab", "bluetooth-b"]} />
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
@@ -214,7 +215,7 @@ const Home = () => {
               ) : (
                 <button
                   onClick={onScan}
-                  disabled={isScanning}
+                  disabled={scanDisabled}
                   className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   aria-label={t("bluetooth.scanButton")}
                 >
