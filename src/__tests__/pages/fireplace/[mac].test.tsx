@@ -569,12 +569,10 @@ describe("Fireplace Page", () => {
 
       render(<Fireplace />);
 
+      // Wait for data to load and temperature to display
       await waitFor(() => {
-        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(screen.getByText("24.0")).toBeInTheDocument();
       });
-
-      // Temperature should display correct value
-      expect(screen.getByText("24.0")).toBeInTheDocument();
 
       // Power button should exist
       const powerButton = findPowerButton();
