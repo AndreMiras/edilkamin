@@ -21,7 +21,6 @@ jobs:
       - uses: android-actions/setup-android@v3
       - run: yarn install
       - run: yarn build:mobile
-      - run: npx cap add android
       - run: yarn cap:sync
       - name: Build Android debug APK
         run: |

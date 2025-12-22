@@ -35,6 +35,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Capacitor native platforms (regenerated with `cap add`)
-/android/
+# Capacitor native platforms - track source, ignore build outputs
+# Android build outputs and caches
+android/build/
+android/.gradle/
+android/.idea/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+
+# iOS build outputs (when iOS is added)
 /ios/
