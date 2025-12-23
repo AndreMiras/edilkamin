@@ -116,6 +116,7 @@ const Fireplace: NextPage = () => {
     <RequireAuth message={t("auth.loginToControl")}>
       <Thermostat
         temperature={temperature}
+        environmentTemperature={info?.status.temperatures.enviroment}
         powerState={powerState}
         loading={loading}
         onTemperatureChange={onTemperatureChange}

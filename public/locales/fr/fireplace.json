@@ -8,6 +8,7 @@
   "heating": "Chauffage",
   "standby": "Veille",
   "targetTemp": "Température cible",
+  "currentTemp": "Actuelle",
   "on": "ON",
   "off": "OFF",
   "turnOn": "Allumer",

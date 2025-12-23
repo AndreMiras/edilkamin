@@ -6,6 +6,7 @@ import { MAX_TEMP, MIN_TEMP, TEMP_STEP } from "./constants";
 
 interface ThermostatProps {
   temperature: number;
+  environmentTemperature?: number;
   powerState: boolean;
   loading: boolean;
   onTemperatureChange: (temp: number) => void;
@@ -15,6 +16,7 @@ interface ThermostatProps {
 
 const Thermostat = ({
   temperature,
+  environmentTemperature,
   powerState,
   loading,
   onTemperatureChange,
@@ -60,6 +62,14 @@ const Thermostat = ({
             {temperature.toFixed(1)}
             <span className="text-[2rem] align-super opacity-50">°C</span>
           </div>
+          {environmentTemperature !== undefined && (
+            <div className="mt-4 flex items-center justify-center gap-2 text-muted-foreground">
+              <FontAwesomeIcon icon="thermometer-half" className="text-lg" />
+              <span className="text-base">
+                {t("currentTemp")}: {environmentTemperature.toFixed(1)}°C
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">

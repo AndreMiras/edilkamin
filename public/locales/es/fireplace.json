@@ -8,6 +8,7 @@
   "heating": "Calentando",
   "standby": "En espera",
   "targetTemp": "Temperatura objetivo",
+  "currentTemp": "Actual",
   "on": "ON",
   "off": "OFF",
   "turnOn": "Encender",

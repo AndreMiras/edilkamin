@@ -8,6 +8,7 @@
   "heating": "Heating",
   "standby": "Standby",
   "targetTemp": "Target Temperature",
+  "currentTemp": "Current",
   "on": "ON",
   "off": "OFF",
   "turnOn": "Turn On",
