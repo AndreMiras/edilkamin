@@ -195,36 +195,30 @@ const Home = () => {
               >
                 <FontAwesomeIcon icon={["fas", "plus"]} />
               </button>
-              {bluetoothSupported === false ? (
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        disabled
-                        className="p-2 rounded-md bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        aria-label={t("bluetooth.scanButton")}
-                      >
-                        <FontAwesomeIcon icon={["fab", "bluetooth-b"]} />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="top">
-                      {t("bluetooth.notSupported")}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <button
-                  onClick={onScan}
-                  disabled={scanDisabled}
-                  className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  aria-label={t("bluetooth.scanButton")}
-                >
-                  <FontAwesomeIcon
-                    icon={["fab", "bluetooth-b"]}
-                    spin={isScanning}
-                  />
-                </button>
-              )}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={scanDisabled ? undefined : onScan}
+                      disabled={scanDisabled}
+                      className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      aria-label={t("bluetooth.scanButton")}
+                    >
+                      <FontAwesomeIcon
+                        icon={["fab", "bluetooth-b"]}
+                        spin={isScanning}
+                      />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    {bluetoothSupported === false
+                      ? t("bluetooth.notSupported")
+                      : isScanning
+                        ? t("bluetooth.scanning")
+                        : t("bluetooth.scanTooltip")}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </li>
         </ul>

@@ -8,6 +8,8 @@
   },
   "bluetooth": {
     "scanButton": "Scan for devices",
+    "scanTooltip": "Find your stove via Bluetooth",
+    "scanning": "Scanning for nearby stoves...",
     "notSupported": "Bluetooth not supported in this browser. Use Chrome, Edge, or Opera.",
     "scanFailed": "Bluetooth scan failed",
     "scanIncomplete": "Scan incomplete",

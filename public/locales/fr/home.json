@@ -8,6 +8,8 @@
   },
   "bluetooth": {
     "scanButton": "Rechercher des appareils",
+    "scanTooltip": "Trouver votre poêle via Bluetooth",
+    "scanning": "Recherche de poêles à proximité...",
     "notSupported": "Bluetooth non pris en charge par ce navigateur. Utilisez Chrome, Edge ou Opera.",
     "scanFailed": "Echec de la recherche Bluetooth",
     "scanIncomplete": "Recherche incomplete",

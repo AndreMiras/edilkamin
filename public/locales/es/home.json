@@ -8,6 +8,8 @@
   },
   "bluetooth": {
     "scanButton": "Buscar dispositivos",
+    "scanTooltip": "Encuentra tu estufa via Bluetooth",
+    "scanning": "Buscando estufas cercanas...",
     "notSupported": "Bluetooth no compatible con este navegador. Use Chrome, Edge u Opera.",
     "scanFailed": "Error en la busqueda Bluetooth",
     "scanIncomplete": "Busqueda incompleta",
