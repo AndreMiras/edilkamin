@@ -19,7 +19,9 @@
   "powerLevel": {
     "label": "Heating Intensity",
     "current": "Level: {{level}}",
-    "auto": "Auto"
+    "auto": "Auto",
+    "increase": "Increase intensity",
+    "decrease": "Decrease intensity"
   },
   "pellet": {
     "lowWarning": "Pellet Reserve Low",

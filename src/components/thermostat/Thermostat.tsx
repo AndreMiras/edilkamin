@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import PelletWarning from "../PelletWarning";
-import PowerLevelSlider from "../PowerLevelSlider";
+import PowerLevelControl from "../PowerLevelControl";
 import { MAX_TEMP, MIN_TEMP, TEMP_STEP } from "./constants";
 
 interface ThermostatProps {
@@ -39,9 +39,9 @@ const Thermostat = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center flex-1 p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
+      className={`flex flex-col items-center justify-center p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
     >
-      <div className="w-full max-w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
+      <div className="w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
         {isPelletInReserve && pelletAutonomyTime !== undefined && (
           <PelletWarning autonomyTime={pelletAutonomyTime} />
         )}
@@ -60,15 +60,6 @@ const Thermostat = ({
           </button>
         </div>
 
-        {powerLevel !== undefined && onPowerLevelChange && (
-          <PowerLevelSlider
-            level={powerLevel}
-            onLevelChange={onPowerLevelChange}
-            loading={loading}
-            readOnly={isAuto}
-          />
-        )}
-
         <div className="flex items-center justify-center gap-2 font-medium mb-4">
           <FontAwesomeIcon
             icon="fire"
@@ -81,6 +72,7 @@ const Thermostat = ({
           <span>{powerState ? t("heating") : t("standby")}</span>
         </div>
 
+        {/* Temperature controls when auto mode is ON */}
         {isAuto && (
           <div className="text-center py-8">
             <div className="text-[5rem] font-extralight leading-none">
@@ -98,15 +90,14 @@ const Thermostat = ({
           </div>
         )}
 
-        {!isAuto && environmentTemperature !== undefined && (
-          <div className="text-center py-8">
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
-              <FontAwesomeIcon icon="thermometer-half" className="text-lg" />
-              <span className="text-base">
-                {t("currentTemp")}: {environmentTemperature.toFixed(1)}°C
-              </span>
-            </div>
-          </div>
+        {/* Power level controls when auto mode is OFF */}
+        {!isAuto && powerLevel !== undefined && onPowerLevelChange && (
+          <PowerLevelControl
+            level={powerLevel}
+            environmentTemperature={environmentTemperature}
+            onLevelChange={onPowerLevelChange}
+            loading={loading}
+          />
         )}
 
         {isAuto && (

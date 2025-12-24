@@ -428,7 +428,7 @@ describe("Home", () => {
     expect(stored).toEqual(["aabbccddeeff", "112233445566"]);
   });
 
-  it("should render responsive grid for multiple devices", async () => {
+  it("should render centered flex container for multiple devices", async () => {
     localStorage.setItem(
       "fireplaces",
       JSON.stringify(["aabbccddeeff", "112233445566"]),
@@ -442,11 +442,12 @@ describe("Home", () => {
       ).toBeInTheDocument();
     });
 
-    // Check for grid container
-    const grid = screen.getByTestId(
+    // Check for flex container with centering
+    const container = screen.getByTestId(
       "device-thermostat-aabbccddeeff",
     ).parentElement;
-    expect(grid?.className).toContain("grid");
+    expect(container?.className).toContain("flex");
+    expect(container?.className).toContain("justify-center");
   });
 
   describe("Bluetooth scanning", () => {

@@ -16,6 +16,7 @@ import AutoModeToggle from "../../components/AutoModeToggle";
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
 import FanSpeedControl from "../../components/FanSpeedControl";
+import PowerLevelSlider from "../../components/PowerLevelSlider";
 import RequireAuth from "../../components/RequireAuth";
 import { Thermostat } from "../../components/thermostat";
 
@@ -70,11 +71,7 @@ const Fireplace: NextPage = () => {
         onPowerLevelChange={onPowerLevelChange}
         isAuto={isAuto}
       >
-        <Accordion
-          type="single"
-          collapsible
-          className="mt-8 w-full max-w-[340px]"
-        >
+        <Accordion type="single" collapsible className="mt-8 w-[340px]">
           <AccordionItem value="device-details">
             <AccordionTrigger>{t("advanced")}</AccordionTrigger>
             <AccordionContent>
@@ -83,6 +80,16 @@ const Fireplace: NextPage = () => {
                 onToggle={onAutoModeToggle}
                 loading={loading}
               />
+              {powerLevel !== undefined && (
+                <div className="border-t border-border mt-3 pt-3">
+                  <PowerLevelSlider
+                    level={powerLevel}
+                    onLevelChange={onPowerLevelChange}
+                    loading={loading}
+                    readOnly={isAuto}
+                  />
+                </div>
+              )}
               {(() => {
                 type ExtendedNvm = {
                   installer_parameters?: { fans_number?: number };

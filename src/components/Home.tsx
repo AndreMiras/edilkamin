@@ -90,7 +90,7 @@ const Home = () => {
 
       {/* Device grid */}
       {fireplacesState.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           {fireplacesState.map((mac) => (
             <DeviceThermostat key={mac} mac={mac} />
           ))}

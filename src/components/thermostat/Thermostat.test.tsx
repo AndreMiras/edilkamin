@@ -169,4 +169,98 @@ describe("Thermostat", () => {
     const fireIcon = document.querySelector('[data-icon="fire"]');
     expect(fireIcon).not.toHaveClass("animate-flicker");
   });
+
+  describe("Conditional Controls based on Auto Mode", () => {
+    it("should show temperature controls when isAuto is true", () => {
+      render(<Thermostat {...defaultProps} isAuto={true} temperature={22.5} />);
+
+      expect(screen.getByText("22.5")).toBeInTheDocument();
+      expect(screen.getByText("°C")).toBeInTheDocument();
+      expect(screen.getByLabelText("Decrease temperature")).toBeInTheDocument();
+      expect(screen.getByLabelText("Increase temperature")).toBeInTheDocument();
+    });
+
+    it("should not show temperature controls when isAuto is false", () => {
+      const onPowerLevelChange = vi.fn();
+      render(
+        <Thermostat
+          {...defaultProps}
+          isAuto={false}
+          powerLevel={3}
+          onPowerLevelChange={onPowerLevelChange}
+        />,
+      );
+
+      expect(
+        screen.queryByLabelText("Decrease temperature"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText("Increase temperature"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should show power level controls when isAuto is false", () => {
+      const onPowerLevelChange = vi.fn();
+      render(
+        <Thermostat
+          {...defaultProps}
+          isAuto={false}
+          powerLevel={3}
+          onPowerLevelChange={onPowerLevelChange}
+        />,
+      );
+
+      expect(screen.getByText("3")).toBeInTheDocument();
+      expect(screen.getByText("/5")).toBeInTheDocument();
+      expect(screen.getByText("Heating Intensity")).toBeInTheDocument();
+      expect(screen.getByLabelText("Decrease intensity")).toBeInTheDocument();
+      expect(screen.getByLabelText("Increase intensity")).toBeInTheDocument();
+    });
+
+    it("should not show power level controls when isAuto is true", () => {
+      render(<Thermostat {...defaultProps} isAuto={true} powerLevel={3} />);
+
+      expect(
+        screen.queryByLabelText("Decrease intensity"),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByLabelText("Increase intensity"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should call onPowerLevelChange when power level buttons are clicked", async () => {
+      const onPowerLevelChange = vi.fn();
+      const user = userEvent.setup();
+
+      render(
+        <Thermostat
+          {...defaultProps}
+          isAuto={false}
+          powerLevel={3}
+          onPowerLevelChange={onPowerLevelChange}
+        />,
+      );
+
+      await user.click(screen.getByLabelText("Increase intensity"));
+      expect(onPowerLevelChange).toHaveBeenCalledWith(4);
+
+      await user.click(screen.getByLabelText("Decrease intensity"));
+      expect(onPowerLevelChange).toHaveBeenCalledWith(2);
+    });
+
+    it("should show environment temperature in power level control when available", () => {
+      const onPowerLevelChange = vi.fn();
+      render(
+        <Thermostat
+          {...defaultProps}
+          isAuto={false}
+          powerLevel={3}
+          onPowerLevelChange={onPowerLevelChange}
+          environmentTemperature={18.5}
+        />,
+      );
+
+      expect(screen.getByText("Current: 18.5°C")).toBeInTheDocument();
+    });
+  });
 });

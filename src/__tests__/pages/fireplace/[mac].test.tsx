@@ -648,6 +648,121 @@ describe("Fireplace Page", () => {
     });
   });
 
+  describe("Power Level Slider in Accordion", () => {
+    it("should render power level slider in accordion", async () => {
+      const user = userEvent.setup();
+      const mockDeviceInfo = vi
+        .fn()
+        .mockResolvedValue(createMockDeviceInfo(true, 22, true));
+      vi.mocked(configure).mockReturnValue({
+        deviceInfo: mockDeviceInfo,
+        setPower: vi.fn(),
+        setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
+      } as any);
+
+      render(<Fireplace />);
+
+      await waitFor(() => {
+        expect(mockDeviceInfo).toHaveBeenCalled();
+      });
+
+      // Open the advanced accordion
+      const advancedTrigger = screen.getByText(/advanced/i);
+      await user.click(advancedTrigger);
+
+      // Should show power level slider with label
+      await waitFor(() => {
+        expect(screen.getByText("Heating Intensity")).toBeInTheDocument();
+      });
+    });
+
+    it("should show readonly power level slider when auto mode is on", async () => {
+      const user = userEvent.setup();
+      const mockDeviceInfo = vi
+        .fn()
+        .mockResolvedValue(createMockDeviceInfo(true, 22, true));
+      vi.mocked(configure).mockReturnValue({
+        deviceInfo: mockDeviceInfo,
+        setPower: vi.fn(),
+        setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
+      } as any);
+
+      render(<Fireplace />);
+
+      await waitFor(() => {
+        expect(mockDeviceInfo).toHaveBeenCalled();
+      });
+
+      // Open the advanced accordion
+      const advancedTrigger = screen.getByText(/advanced/i);
+      await user.click(advancedTrigger);
+
+      // Should show "Auto" badge when isAuto is true
+      await waitFor(() => {
+        expect(screen.getByText("Auto")).toBeInTheDocument();
+      });
+
+      // Power level slider should be disabled (it's the one with min=1, max=5 for power levels)
+      const sliders = screen.getAllByRole("slider");
+      const powerLevelSlider = sliders.find(
+        (slider) =>
+          slider.getAttribute("min") === "1" &&
+          slider.getAttribute("max") === "5",
+      );
+      expect(powerLevelSlider).toBeDisabled();
+    });
+
+    it("should show editable power level slider when auto mode is off", async () => {
+      const user = userEvent.setup();
+      const mockDeviceInfo = vi
+        .fn()
+        .mockResolvedValue(createMockDeviceInfo(true, 22, false));
+      vi.mocked(configure).mockReturnValue({
+        deviceInfo: mockDeviceInfo,
+        setPower: vi.fn(),
+        setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
+      } as any);
+
+      render(<Fireplace />);
+
+      await waitFor(() => {
+        expect(mockDeviceInfo).toHaveBeenCalled();
+      });
+
+      // Open the advanced accordion
+      const advancedTrigger = screen.getByText(/advanced/i);
+      await user.click(advancedTrigger);
+
+      // When isAuto is off, there will be two "Heating Intensity" labels:
+      // one in main view (PowerLevelControl) and one in accordion (PowerLevelSlider)
+      await waitFor(() => {
+        const heatingIntensityLabels = screen.getAllByText("Heating Intensity");
+        expect(heatingIntensityLabels.length).toBeGreaterThanOrEqual(2);
+      });
+
+      // "Auto" badge should not be visible when isAuto is false
+      expect(screen.queryByText("Auto")).not.toBeInTheDocument();
+
+      // Power level slider in accordion should be enabled (it's the one with min=1, max=5 for power levels)
+      const sliders = screen.getAllByRole("slider");
+      const powerLevelSlider = sliders.find(
+        (slider) =>
+          slider.getAttribute("min") === "1" &&
+          slider.getAttribute("max") === "5",
+      );
+      expect(powerLevelSlider).not.toBeDisabled();
+    });
+  });
+
   describe("401 error handling", () => {
     it("should refresh token and retry on 401 error from deviceInfo", async () => {
       const newToken = "refreshed-token";
