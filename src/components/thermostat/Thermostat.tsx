@@ -65,7 +65,6 @@ const Thermostat = ({
             level={powerLevel}
             onLevelChange={onPowerLevelChange}
             loading={loading}
-            disabled={!powerState}
             readOnly={isAuto}
           />
         )}

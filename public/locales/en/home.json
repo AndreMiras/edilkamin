@@ -1,6 +1,8 @@
 {
   "title": "Fireplaces",
   "emptyState": "No registered fireplaces saved, add one below",
+  "manageDevices": "Manage Devices",
+  "loginRequired": "Please log in to control your fireplaces.",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Invalid MAC address.",

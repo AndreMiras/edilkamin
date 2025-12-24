@@ -1,36 +1,96 @@
 import userEvent from "@testing-library/user-event";
+import { getSession } from "edilkamin";
 import * as bluetoothWeb from "edilkamin/bluetooth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen, waitFor, within } from "../test/utils";
 import Home from "./Home";
 
+// Mock edilkamin's getSession to resolve immediately
+vi.mock("edilkamin", () => ({
+  getSession: vi.fn(),
+}));
+
+// Mock the DeviceThermostat component to avoid needing to mock the entire device control flow
+vi.mock("./DeviceThermostat", () => ({
+  default: ({ mac }: { mac: string }) => (
+    <div data-testid={`device-thermostat-${mac}`}>
+      <a href={`/fireplace/${mac}`}>{mac}</a>
+    </div>
+  ),
+}));
+
 describe("Home", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     localStorage.clear();
+    // Set a valid token so we see the authenticated state
+    localStorage.setItem("edilkamin-token", "test-token");
+    // Mock getSession to return the token immediately
+    vi.mocked(getSession).mockResolvedValue("test-token");
   });
 
-  it("should render empty state when no devices stored", () => {
+  const openManageDevicesModal = async (user: ReturnType<typeof userEvent.setup>) => {
+    // Wait for dashboard to load (authenticated state)
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /manage devices/i })).toBeInTheDocument();
+    });
+    const manageButton = screen.getByRole("button", { name: /manage devices/i });
+    await user.click(manageButton);
+    // Wait for dialog to open
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+  };
+
+  it("should render empty state when no devices stored", async () => {
     render(<Home />);
+
+    // Wait for authenticated state to render (manage button appears when authenticated)
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /manage devices/i })).toBeInTheDocument();
+    });
 
     // Should show empty state message
     expect(screen.getByText(/no registered fireplaces/i)).toBeInTheDocument();
   });
 
-  it("should load devices from localStorage on mount", () => {
+  it("should show login prompt when not authenticated", async () => {
+    localStorage.clear(); // No token
+    // getSession won't be called since there's no stored token
+
+    render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/please log in/i)).toBeInTheDocument();
+    });
+  });
+
+  it("should load devices from localStorage on mount", async () => {
     const mockDevices = ["aabbccddeeff", "112233445566"];
     localStorage.setItem("fireplaces", JSON.stringify(mockDevices));
 
     render(<Home />);
 
-    // Devices should be displayed
-    expect(screen.getByText("aabbccddeeff")).toBeInTheDocument();
-    expect(screen.getByText("112233445566")).toBeInTheDocument();
+    // Wait for authenticated state first
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /manage devices/i })).toBeInTheDocument();
+    });
+
+    // Devices should be displayed via DeviceThermostat components
+    expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+    expect(screen.getByTestId("device-thermostat-112233445566")).toBeInTheDocument();
   });
 
-  it("should add valid MAC address to list", async () => {
+  it("should add valid MAC address to list via modal", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
@@ -38,9 +98,9 @@ describe("Home", () => {
     await user.type(input, "aabbccddeeff");
     await user.click(addButton);
 
-    // Device should appear in list
+    // Device should appear in the grid
     await waitFor(() => {
-      expect(screen.getByText("aabbccddeeff")).toBeInTheDocument();
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
     });
 
     // Should be persisted to localStorage
@@ -51,6 +111,12 @@ describe("Home", () => {
   it("should accept colon-separated MAC address format", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
@@ -69,6 +135,12 @@ describe("Home", () => {
     const user = userEvent.setup();
     render(<Home />);
 
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
+
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
@@ -82,12 +154,12 @@ describe("Home", () => {
     // Button should be disabled
     expect(addButton).toBeDisabled();
 
-    // Should NOT be added to localStorage if button was clicked
+    // Should NOT be added to localStorage
     const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
     expect(stored).not.toContain("invalid-mac");
   });
 
-  it("should remove device from list", async () => {
+  it("should remove device from list via modal", async () => {
     const user = userEvent.setup();
     localStorage.setItem(
       "fireplaces",
@@ -96,20 +168,23 @@ describe("Home", () => {
 
     render(<Home />);
 
-    // Find all list items
-    const listItems = screen.getAllByRole("link");
-    expect(listItems).toHaveLength(2);
+    await waitFor(() => {
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+    });
 
-    // Find remove button for first device
-    const firstItem = screen.getByText("aabbccddeeff").closest("li");
-    expect(firstItem).toBeInTheDocument();
+    await openManageDevicesModal(user);
 
-    const removeButton = within(firstItem!).getByRole("button");
+    // Find remove button for first device in the modal
+    const dialog = screen.getByRole("dialog");
+    const firstDeviceItem = within(dialog).getByText("aabbccddeeff").closest("li");
+    expect(firstDeviceItem).toBeInTheDocument();
+
+    const removeButton = within(firstDeviceItem!).getByRole("button", { name: /remove/i });
     await user.click(removeButton);
 
-    // Device should be removed from list
+    // Device should be removed from grid
     await waitFor(() => {
-      expect(screen.queryByText("aabbccddeeff")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("device-thermostat-aabbccddeeff")).not.toBeInTheDocument();
     });
 
     // Should be removed from localStorage
@@ -121,6 +196,12 @@ describe("Home", () => {
   it("should clear input after successful add", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
@@ -140,6 +221,12 @@ describe("Home", () => {
 
     render(<Home />);
 
+    await waitFor(() => {
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
+
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
 
     await user.type(input, "aabbccddeeff");
@@ -155,13 +242,18 @@ describe("Home", () => {
 
     // Should not add duplicate
     const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored.filter((mac: string) => mac === "aabbccddeeff")).toHaveLength(
-      1,
-    );
+    expect(stored.filter((mac: string) => mac === "aabbccddeeff")).toHaveLength(1);
   });
 
-  it("should disable add button when input is empty", () => {
+  it("should disable add button when input is empty", async () => {
+    const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
     expect(addButton).toBeDisabled();
@@ -170,6 +262,12 @@ describe("Home", () => {
   it("should enable add button when valid MAC is entered", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
@@ -186,6 +284,12 @@ describe("Home", () => {
     const user = userEvent.setup();
     render(<Home />);
 
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
+
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
 
     await user.type(input, "aabbccddeeff");
@@ -193,14 +297,18 @@ describe("Home", () => {
 
     // Device should be added
     await waitFor(() => {
-      expect(screen.getByText("aabbccddeeff")).toBeInTheDocument();
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
     });
   });
 
-  it("should render links to device pages", () => {
+  it("should render links to device pages", async () => {
     localStorage.setItem("fireplaces", JSON.stringify(["aabbccddeeff"]));
 
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+    });
 
     const link = screen.getByRole("link", { name: "aabbccddeeff" });
     expect(link).toHaveAttribute("href", "/fireplace/aabbccddeeff");
@@ -209,6 +317,12 @@ describe("Home", () => {
   it("should show validation feedback for invalid input", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     await user.type(input, "xyz");
@@ -222,6 +336,12 @@ describe("Home", () => {
   it("should clear validation feedback when input is cleared", async () => {
     const user = userEvent.setup();
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
 
@@ -244,6 +364,12 @@ describe("Home", () => {
     const user = userEvent.setup();
     render(<Home />);
 
+    await waitFor(() => {
+      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+    });
+
+    await openManageDevicesModal(user);
+
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
 
@@ -255,10 +381,10 @@ describe("Home", () => {
     await user.type(input, "112233445566");
     await user.click(addButton);
 
-    // Both should be in the list
+    // Both should be in the grid
     await waitFor(() => {
-      expect(screen.getByText("aabbccddeeff")).toBeInTheDocument();
-      expect(screen.getByText("112233445566")).toBeInTheDocument();
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+      expect(screen.getByTestId("device-thermostat-112233445566")).toBeInTheDocument();
     });
 
     // Both should be in localStorage
@@ -266,13 +392,34 @@ describe("Home", () => {
     expect(stored).toEqual(["aabbccddeeff", "112233445566"]);
   });
 
+  it("should render responsive grid for multiple devices", async () => {
+    localStorage.setItem("fireplaces", JSON.stringify(["aabbccddeeff", "112233445566"]));
+
+    render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId("device-thermostat-aabbccddeeff")).toBeInTheDocument();
+    });
+
+    // Check for grid container
+    const grid = screen.getByTestId("device-thermostat-aabbccddeeff").parentElement;
+    expect(grid?.className).toContain("grid");
+  });
+
   describe("Bluetooth scanning", () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
-    it("should render scan button", () => {
+    it("should render scan button in modal", async () => {
+      const user = userEvent.setup();
       render(<Home />);
+
+      await waitFor(() => {
+        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      });
+
+      await openManageDevicesModal(user);
 
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,
@@ -280,9 +427,15 @@ describe("Home", () => {
       expect(scanButton).toBeInTheDocument();
     });
 
-    it("should show disabled scan button when bluetooth not supported", () => {
-      // By default, the mock returns false for isWebBluetoothSupported
+    it("should show disabled scan button when bluetooth not supported", async () => {
+      const user = userEvent.setup();
       render(<Home />);
+
+      await waitFor(() => {
+        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      });
+
+      await openManageDevicesModal(user);
 
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,
@@ -294,14 +447,18 @@ describe("Home", () => {
       const user = userEvent.setup();
       render(<Home />);
 
+      await waitFor(() => {
+        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      });
+
+      await openManageDevicesModal(user);
+
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,
       });
 
       await user.hover(scanButton);
 
-      // Radix Tooltip renders content in a Portal, wait for it to appear
-      // Query by role="tooltip" to get the accessible tooltip element
       await waitFor(() => {
         expect(screen.getByRole("tooltip")).toBeInTheDocument();
       });
@@ -318,7 +475,6 @@ describe("Home", () => {
         },
       ]);
 
-      // We need to mock the global navigator.bluetooth for the component's own check
       Object.defineProperty(global.navigator, "bluetooth", {
         value: {},
         configurable: true,
@@ -327,15 +483,21 @@ describe("Home", () => {
       const user = userEvent.setup();
       render(<Home />);
 
+      await waitFor(() => {
+        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      });
+
+      await openManageDevicesModal(user);
+
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,
       });
 
       await user.click(scanButton);
 
-      // Device should be added to the list
+      // Device should be added to the grid
       await waitFor(() => {
-        expect(screen.getByText("a8032afed508")).toBeInTheDocument();
+        expect(screen.getByTestId("device-thermostat-a8032afed508")).toBeInTheDocument();
       });
 
       // Should be persisted to localStorage
@@ -359,6 +521,12 @@ describe("Home", () => {
 
       const user = userEvent.setup();
       render(<Home />);
+
+      await waitFor(() => {
+        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      });
+
+      await openManageDevicesModal(user);
 
       const scanButton = screen.getByRole("button", {
         name: /scan for devices/i,

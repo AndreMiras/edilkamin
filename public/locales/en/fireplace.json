@@ -1,5 +1,6 @@
 {
   "title": "Fireplace: {{mac}}",
+  "backToHome": "Back to Dashboard",
   "auth": {
     "loginToControl": "Please log in to control this stove."
   },
