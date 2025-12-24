@@ -215,9 +215,7 @@ describe("Fireplace Page", () => {
       );
 
       // Error should be added to ErrorContext and displayed
-      await waitFor(() => {
-        expect(screen.getByRole("alert")).toBeInTheDocument();
-      });
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
       expect(
         screen.getByText(/device.*not found/i, { exact: false }),
       ).toBeInTheDocument();
@@ -395,12 +393,7 @@ describe("Fireplace Page", () => {
       await user.click(powerButton!);
 
       // Should show error (rollback happens, but closure captures old value)
-      await waitFor(
-        () => {
-          expect(screen.getByRole("alert")).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
       expect(
         screen.getByText(/power.*update.*failed/i, { exact: false }),
       ).toBeInTheDocument();
@@ -438,12 +431,7 @@ describe("Fireplace Page", () => {
       const powerButton = findPowerButton();
       await user.click(powerButton!);
 
-      await waitFor(
-        () => {
-          expect(screen.getByRole("alert")).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
     });
   });
 
@@ -463,8 +451,9 @@ describe("Fireplace Page", () => {
 
       render(<Fireplace />);
 
+      // Wait for UI to render with data before interacting
       await waitFor(() => {
-        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(screen.getByText("20.0")).toBeInTheDocument();
       });
 
       // Find temperature increase button (plus icon button)
@@ -497,8 +486,9 @@ describe("Fireplace Page", () => {
 
       render(<Fireplace />);
 
+      // Wait for UI to render with data before interacting
       await waitFor(() => {
-        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(screen.getByText("22.0")).toBeInTheDocument();
       });
 
       const decreaseButton = findDecreaseButton();
@@ -536,20 +526,16 @@ describe("Fireplace Page", () => {
         </>,
       );
 
+      // Wait for UI to render with data before interacting
       await waitFor(() => {
-        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(screen.getByText("23.0")).toBeInTheDocument();
       });
 
       const increaseButton = findIncreaseButton();
       await user.click(increaseButton!);
 
       // Should show error and rollback
-      await waitFor(
-        () => {
-          expect(screen.getByRole("alert")).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
       expect(
         screen.getByText(/temperature.*update.*failed/i, { exact: false }),
       ).toBeInTheDocument();
@@ -559,7 +545,7 @@ describe("Fireplace Page", () => {
       const user = userEvent.setup();
       const mockDeviceInfo = vi
         .fn()
-        .mockResolvedValue(createMockDeviceInfo(true, 25));
+        .mockResolvedValue(createMockDeviceInfo(true, 25, true));
       const mockSetTargetTemperature = vi
         .fn()
         .mockRejectedValue(new Error("Connection refused"));
@@ -568,6 +554,8 @@ describe("Fireplace Page", () => {
         setPower: vi.fn(),
         setTargetTemperature: mockSetTargetTemperature,
         setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -577,19 +565,15 @@ describe("Fireplace Page", () => {
         </>,
       );
 
+      // Wait for UI to render with data before interacting
       await waitFor(() => {
-        expect(mockDeviceInfo).toHaveBeenCalled();
+        expect(screen.getByText("25.0")).toBeInTheDocument();
       });
 
       const decreaseButton = findDecreaseButton();
       await user.click(decreaseButton!);
 
-      await waitFor(
-        () => {
-          expect(screen.getByRole("alert")).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+      expect(await screen.findByRole("alert")).toBeInTheDocument();
     });
   });
 
