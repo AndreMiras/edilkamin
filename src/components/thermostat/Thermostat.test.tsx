@@ -12,6 +12,7 @@ describe("Thermostat", () => {
     loading: false,
     onTemperatureChange: vi.fn(),
     onPowerChange: vi.fn(),
+    isAuto: true, // Temperature controls are only shown in auto mode
   };
 
   it("should render with the correct temperature", () => {

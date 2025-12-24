@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import PelletWarning from "../PelletWarning";
+import PowerLevelSlider from "../PowerLevelSlider";
 import { MAX_TEMP, MIN_TEMP, TEMP_STEP } from "./constants";
 
 interface ThermostatProps {
@@ -12,6 +14,11 @@ interface ThermostatProps {
   onTemperatureChange: (temp: number) => void;
   onPowerChange: (value: number) => void;
   children?: ReactNode;
+  isPelletInReserve?: boolean;
+  pelletAutonomyTime?: number;
+  powerLevel?: number;
+  onPowerLevelChange?: (level: number) => void;
+  isAuto?: boolean;
 }
 
 const Thermostat = ({
@@ -22,6 +29,11 @@ const Thermostat = ({
   onTemperatureChange,
   onPowerChange,
   children,
+  isPelletInReserve,
+  pelletAutonomyTime,
+  powerLevel,
+  onPowerLevelChange,
+  isAuto = false,
 }: ThermostatProps) => {
   const { t } = useTranslation("fireplace");
 
@@ -30,6 +42,9 @@ const Thermostat = ({
       className={`flex flex-col items-center justify-center flex-1 p-4 touch-manipulation ${loading ? "opacity-50 pointer-events-none" : ""}`}
     >
       <div className="w-full max-w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)]">
+        {isPelletInReserve && pelletAutonomyTime !== undefined && (
+          <PelletWarning autonomyTime={pelletAutonomyTime} />
+        )}
         <div className="flex justify-center mb-6">
           <button
             className={`px-8 py-3 rounded-full border-0 text-base font-medium cursor-pointer flex items-center gap-3 transition-all ${
@@ -45,6 +60,16 @@ const Thermostat = ({
           </button>
         </div>
 
+        {powerLevel !== undefined && onPowerLevelChange && (
+          <PowerLevelSlider
+            level={powerLevel}
+            onLevelChange={onPowerLevelChange}
+            loading={loading}
+            disabled={!powerState}
+            readOnly={isAuto}
+          />
+        )}
+
         <div className="flex items-center justify-center gap-2 font-medium mb-4">
           <FontAwesomeIcon
             icon="fire"
@@ -57,39 +82,54 @@ const Thermostat = ({
           <span>{powerState ? t("heating") : t("standby")}</span>
         </div>
 
-        <div className="text-center py-8">
-          <div className="text-[5rem] font-extralight leading-none">
-            {temperature.toFixed(1)}
-            <span className="text-[2rem] align-super opacity-50">°C</span>
+        {isAuto && (
+          <div className="text-center py-8">
+            <div className="text-[5rem] font-extralight leading-none">
+              {temperature.toFixed(1)}
+              <span className="text-[2rem] align-super opacity-50">°C</span>
+            </div>
+            {environmentTemperature !== undefined && (
+              <div className="mt-4 flex items-center justify-center gap-2 text-muted-foreground">
+                <FontAwesomeIcon icon="thermometer-half" className="text-lg" />
+                <span className="text-base">
+                  {t("currentTemp")}: {environmentTemperature.toFixed(1)}°C
+                </span>
+              </div>
+            )}
           </div>
-          {environmentTemperature !== undefined && (
-            <div className="mt-4 flex items-center justify-center gap-2 text-muted-foreground">
+        )}
+
+        {!isAuto && environmentTemperature !== undefined && (
+          <div className="text-center py-8">
+            <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <FontAwesomeIcon icon="thermometer-half" className="text-lg" />
               <span className="text-base">
                 {t("currentTemp")}: {environmentTemperature.toFixed(1)}°C
               </span>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">
-          <button
-            className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
-            onClick={() => onTemperatureChange(temperature - TEMP_STEP)}
-            disabled={loading || temperature <= MIN_TEMP}
-            aria-label={t("decreaseTemp")}
-          >
-            <FontAwesomeIcon icon="minus" />
-          </button>
-          <button
-            className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
-            onClick={() => onTemperatureChange(temperature + TEMP_STEP)}
-            disabled={loading || temperature >= MAX_TEMP}
-            aria-label={t("increaseTemp")}
-          >
-            <FontAwesomeIcon icon="plus" />
-          </button>
-        </div>
+        {isAuto && (
+          <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">
+            <button
+              className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              onClick={() => onTemperatureChange(temperature - TEMP_STEP)}
+              disabled={loading || temperature <= MIN_TEMP}
+              aria-label={t("decreaseTemp")}
+            >
+              <FontAwesomeIcon icon="minus" />
+            </button>
+            <button
+              className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              onClick={() => onTemperatureChange(temperature + TEMP_STEP)}
+              disabled={loading || temperature >= MAX_TEMP}
+              aria-label={t("increaseTemp")}
+            >
+              <FontAwesomeIcon icon="plus" />
+            </button>
+          </div>
+        )}
       </div>
       {children}
     </div>

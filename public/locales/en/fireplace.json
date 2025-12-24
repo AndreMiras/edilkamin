@@ -15,6 +15,24 @@
   "turnOff": "Turn Off",
   "increaseTemp": "Increase temperature",
   "decreaseTemp": "Decrease temperature",
+  "powerLevel": {
+    "label": "Heating Intensity",
+    "current": "Level: {{level}}",
+    "auto": "Auto"
+  },
+  "pellet": {
+    "lowWarning": "Pellet Reserve Low",
+    "autonomyRemaining": "Approximately {{hours}} hours remaining"
+  },
+  "autoMode": {
+    "label": "Auto Mode",
+    "description": "Automatically adjust power to maintain target temperature"
+  },
+  "fanSpeed": {
+    "label": "Fan {{number}} Speed",
+    "current": "Speed: {{speed}}",
+    "off": "Off"
+  },
   "errors": {
     "deviceNotFound": "Device not found",
     "deviceNotFoundBody": "The address provided (\"{{mac}}\") is invalid or the device is not registered.",
@@ -22,6 +40,12 @@
     "powerUpdateFailed": "Power State Update Failed",
     "powerUpdateBody": "Unable to change the power state. Please try again.",
     "temperatureUpdateFailed": "Temperature Update Failed",
-    "temperatureUpdateBody": "Unable to update the temperature. Please try again."
+    "temperatureUpdateBody": "Unable to update the temperature. Please try again.",
+    "powerLevelUpdateFailed": "Power Level Update Failed",
+    "powerLevelUpdateBody": "Unable to update the power level. Please try again.",
+    "autoModeUpdateFailed": "Auto Mode Update Failed",
+    "autoModeUpdateBody": "Unable to change auto mode setting. Please try again.",
+    "fanSpeedUpdateFailed": "Fan Speed Update Failed",
+    "fanSpeedUpdateBody": "Unable to update the fan speed. Please try again."
   }
 }

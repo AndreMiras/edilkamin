@@ -14,6 +14,12 @@ describe("DebugInfo Component", () => {
         board: 45,
         enviroment: 22,
       },
+      flags: {
+        is_pellet_in_reserve: false,
+      },
+      pellet: {
+        autonomy_time: 900,
+      },
     },
     nvm: {
       user_parameters: {
@@ -22,6 +28,14 @@ describe("DebugInfo Component", () => {
         enviroment_3_temperature: 24,
         is_auto: false,
         is_sound_active: true,
+        manual_power: 1,
+        fan_1_ventilation: 3,
+        fan_2_ventilation: 0,
+        fan_3_ventilation: 0,
+        is_standby_active: true,
+        standby_waiting_time: 300,
+        is_fahrenheit: false,
+        language: 1,
       },
     },
   };

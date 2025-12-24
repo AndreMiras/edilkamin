@@ -13,6 +13,9 @@ vi.mock("edilkamin", () => ({
     deviceInfo: vi.fn(),
     setPower: vi.fn(),
     setTargetTemperature: vi.fn(),
+    setPowerLevel: vi.fn(),
+    setAuto: vi.fn(),
+    setFanSpeed: vi.fn(),
   })),
   getSession: vi.fn(),
   NEW_API_URL: "https://api.edilkamin.com/",
@@ -52,6 +55,7 @@ describe("Fireplace Page", () => {
   const createMockDeviceInfo = (
     power: boolean = true,
     temperature: number = 22,
+    isAuto: boolean = true,
   ): DeviceInfoType =>
     ({
       status: {
@@ -62,14 +66,31 @@ describe("Fireplace Page", () => {
           board: 35,
           enviroment: 20,
         },
+        flags: {
+          is_pellet_in_reserve: false,
+        },
+        pellet: {
+          autonomy_time: 900,
+        },
       } as any,
       nvm: {
         user_parameters: {
           enviroment_1_temperature: temperature,
           enviroment_2_temperature: 18,
           enviroment_3_temperature: 16,
-          is_auto: false,
+          is_auto: isAuto,
           is_sound_active: true,
+          manual_power: 3,
+          fan_1_ventilation: 3,
+          fan_2_ventilation: 2,
+          fan_3_ventilation: 0,
+        },
+        installer_parameters: {
+          fans_number: 2,
+        },
+        oem_parameters: {
+          fan_1_max_level: 4,
+          fan_2_max_level: 5,
         },
       } as any,
     }) as DeviceInfoType;
@@ -115,20 +136,21 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
 
       // Wait for auth to resolve and thermostat to render
       await waitFor(() => {
-        expect(findIncreaseButton()).toBeInTheDocument();
+        expect(findPowerButton()).toBeInTheDocument();
       });
 
-      // Temperature control buttons should be disabled in loading state
-      const increaseButton = findIncreaseButton();
-      const decreaseButton = findDecreaseButton();
-      expect(increaseButton).toBeDisabled();
-      expect(decreaseButton).toBeDisabled();
+      // Power button should be disabled in loading state
+      const powerButton = findPowerButton();
+      expect(powerButton).toBeDisabled();
     });
 
     it("should fetch device info on mount with correct mac and token", async () => {
@@ -137,6 +159,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -154,6 +179,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -174,6 +202,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -205,6 +236,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -227,6 +261,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -248,6 +285,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -276,6 +316,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: mockSetPower,
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -303,6 +346,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: mockSetPower,
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -329,6 +375,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: mockSetPower,
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -369,6 +418,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: mockSetPower,
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(
@@ -406,6 +458,7 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: mockSetTargetTemperature,
+        setPowerLevel: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -423,6 +476,7 @@ describe("Fireplace Page", () => {
         expect(mockSetTargetTemperature).toHaveBeenCalledWith(
           mockToken,
           mockMac,
+          1,
           20.5,
         );
       });
@@ -438,6 +492,7 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: mockSetTargetTemperature,
+        setPowerLevel: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -453,6 +508,7 @@ describe("Fireplace Page", () => {
         expect(mockSetTargetTemperature).toHaveBeenCalledWith(
           mockToken,
           mockMac,
+          1,
           21.5,
         );
       });
@@ -470,6 +526,7 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: mockSetTargetTemperature,
+        setPowerLevel: vi.fn(),
       } as any);
 
       render(
@@ -510,6 +567,7 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: mockSetTargetTemperature,
+        setPowerLevel: vi.fn(),
       } as any);
 
       render(
@@ -544,6 +602,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -565,6 +626,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -585,6 +649,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       // Clear token
@@ -613,6 +680,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
@@ -638,6 +708,9 @@ describe("Fireplace Page", () => {
         deviceInfo: mockDeviceInfo,
         setPower: vi.fn(),
         setTargetTemperature: vi.fn(),
+        setPowerLevel: vi.fn(),
+        setAuto: vi.fn(),
+        setFanSpeed: vi.fn(),
       } as any);
 
       render(<Fireplace />);
