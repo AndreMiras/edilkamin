@@ -1,7 +1,9 @@
 {
   "title": "Fireplaces",
-  "emptyState": "No registered fireplaces saved, add one below",
+  "emptyState": "No registered fireplaces.",
+  "addFirstDevice": "Add your first device",
   "manageDevices": "Manage Devices",
+  "manageDevicesDescription": "Add or remove fireplace devices from your list",
   "loginRequired": "Please log in to control your fireplaces.",
   "macPlaceholder": "aabbccddeeff",
   "validation": {

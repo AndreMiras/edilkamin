@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -24,12 +25,16 @@ interface DeviceManagementProps {
   fireplaces: string[];
   onAdd: (mac: string) => void;
   onRemove: (index: number) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 const DeviceManagement = ({
   fireplaces,
   onAdd,
   onRemove,
+  open,
+  onOpenChange,
 }: DeviceManagementProps) => {
   const { t } = useTranslation("home");
   const { addError } = useContext(ErrorContext);
@@ -111,7 +116,7 @@ const DeviceManagement = ({
   const scanDisabled = bluetoothSupported !== true || isScanning;
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <button
           className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -123,6 +128,9 @@ const DeviceManagement = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{t("manageDevices")}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {t("manageDevicesDescription")}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           {/* Device list with remove buttons */}

@@ -1,6 +1,9 @@
 {
   "title": "Chimeneas",
-  "emptyState": "No hay chimeneas registradas, agregue una a continuación",
+  "emptyState": "No hay chimeneas registradas.",
+  "addFirstDevice": "Agregue su primer dispositivo",
+  "manageDevices": "Administrar dispositivos",
+  "manageDevicesDescription": "Agregar o eliminar dispositivos de su lista",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Dirección MAC no válida.",

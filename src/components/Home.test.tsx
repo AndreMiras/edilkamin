@@ -63,6 +63,29 @@ describe("Home", () => {
     expect(screen.getByText(/no registered fireplaces/i)).toBeInTheDocument();
   });
 
+  it("should open device management dialog when clicking add first device button", async () => {
+    const user = userEvent.setup();
+    render(<Home />);
+
+    // Wait for authenticated state
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /manage devices/i }),
+      ).toBeInTheDocument();
+    });
+
+    // Click the "Add your first device" button in empty state
+    const addFirstDeviceButton = screen.getByRole("button", {
+      name: /add your first device/i,
+    });
+    await user.click(addFirstDeviceButton);
+
+    // Dialog should be open
+    await waitFor(() => {
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
+  });
+
   it("should show login prompt when not authenticated", async () => {
     localStorage.clear(); // No token
     // getSession won't be called since there's no stored token

@@ -1,6 +1,9 @@
 {
   "title": "Cheminées",
-  "emptyState": "Aucune cheminée enregistrée, ajoutez-en une ci-dessous",
+  "emptyState": "Aucune cheminée enregistrée.",
+  "addFirstDevice": "Ajoutez votre premier appareil",
+  "manageDevices": "Gérer les appareils",
+  "manageDevicesDescription": "Ajouter ou supprimer des appareils de votre liste",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Adresse MAC invalide.",

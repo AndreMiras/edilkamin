@@ -13,6 +13,7 @@ const localStorageKey = "fireplaces";
 const Home = () => {
   const { t } = useTranslation("home");
   const { token } = useContext(TokenContext);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const getFireplacesLocalStorage = (): string[] =>
     JSON.parse(localStorage.getItem(localStorageKey) || "[]");
@@ -76,6 +77,8 @@ const Home = () => {
           fireplaces={fireplacesState}
           onAdd={onAdd}
           onRemove={onRemove}
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
         />
       </div>
 
@@ -83,7 +86,13 @@ const Home = () => {
       {fireplacesState.length === 0 && (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
-            {t("emptyState")}
+            {t("emptyState")}{" "}
+            <button
+              onClick={() => setDialogOpen(true)}
+              className="text-primary hover:underline font-medium"
+            >
+              {t("addFirstDevice")}
+            </button>
           </CardContent>
         </Card>
       )}
