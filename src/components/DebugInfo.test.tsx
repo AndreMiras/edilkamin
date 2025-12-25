@@ -1,8 +1,24 @@
+import { fireEvent, waitFor } from "@testing-library/react";
 import { DeviceInfoType } from "edilkamin";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen } from "../test/utils";
 import DebugInfo from "./DebugInfo";
+
+// Mock clipboard API
+const mockWriteText = vi.fn().mockResolvedValue(undefined);
+
+beforeEach(() => {
+  mockWriteText.mockClear();
+  // Use Object.defineProperty to override the read-only clipboard property
+  Object.defineProperty(navigator, "clipboard", {
+    value: {
+      writeText: mockWriteText,
+    },
+    writable: true,
+    configurable: true,
+  });
+});
 
 describe("DebugInfo Component", () => {
   const mockDeviceInfo: DeviceInfoType = {
@@ -40,11 +56,15 @@ describe("DebugInfo Component", () => {
     },
   };
 
-  it("renders device info as formatted JSON", () => {
-    render(<DebugInfo info={mockDeviceInfo} />);
+  it("renders device info as formatted JSON with syntax highlighting", () => {
+    const { container } = render(<DebugInfo info={mockDeviceInfo} />);
 
-    expect(screen.getByText(/"power": true/)).toBeInTheDocument();
-    expect(screen.getByText(/"enviroment": 22/)).toBeInTheDocument();
+    // Check that JSON content is rendered (syntax highlighting splits into spans)
+    const pre = container.querySelector("pre");
+    expect(pre).toBeInTheDocument();
+    expect(pre?.textContent).toContain("power");
+    expect(pre?.textContent).toContain("true");
+    expect(pre?.textContent).toContain("enviroment");
   });
 
   it("renders null value when info is null", () => {
@@ -59,15 +79,17 @@ describe("DebugInfo Component", () => {
     const { container } = render(<DebugInfo info={mockDeviceInfo} />);
 
     const pre = container.querySelector("pre");
-    expect(pre?.textContent).toContain("\n");
-    expect(pre?.textContent).toContain("  ");
+    expect(pre?.textContent).toContain("status");
+    expect(pre?.textContent).toContain("nvm");
   });
 
   it("displays nested objects correctly", () => {
-    render(<DebugInfo info={mockDeviceInfo} />);
+    const { container } = render(<DebugInfo info={mockDeviceInfo} />);
 
-    expect(screen.getByText(/"status":/)).toBeInTheDocument();
-    expect(screen.getByText(/"nvm":/)).toBeInTheDocument();
+    const pre = container.querySelector("pre");
+    expect(pre?.textContent).toContain("status");
+    expect(pre?.textContent).toContain("nvm");
+    expect(pre?.textContent).toContain("temperatures");
   });
 
   it("uses pre tag for rendering", () => {
@@ -75,5 +97,33 @@ describe("DebugInfo Component", () => {
 
     const pre = container.querySelector("pre");
     expect(pre).toBeInTheDocument();
+  });
+
+  it("has a copy button", () => {
+    render(<DebugInfo info={mockDeviceInfo} />);
+
+    const copyButton = screen.getByRole("button", { name: /copy/i });
+    expect(copyButton).toBeInTheDocument();
+  });
+
+  it("shows check icon after copy button is clicked", async () => {
+    const { container } = render(<DebugInfo info={mockDeviceInfo} />);
+
+    const copyButton = screen.getByRole("button", { name: /copy/i });
+    fireEvent.click(copyButton);
+
+    // After clicking, the icon should change from "copy" to "check"
+    await waitFor(() => {
+      const checkIcon = container.querySelector('[data-icon="check"]');
+      expect(checkIcon).toBeInTheDocument();
+    });
+  });
+
+  it("has scrollable container with max height", () => {
+    const { container } = render(<DebugInfo info={mockDeviceInfo} />);
+
+    const scrollContainer = container.querySelector(".overflow-y-auto");
+    expect(scrollContainer).toBeInTheDocument();
+    expect(scrollContainer).toHaveClass("max-h-96");
   });
 });

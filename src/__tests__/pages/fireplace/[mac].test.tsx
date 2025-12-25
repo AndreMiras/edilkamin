@@ -599,7 +599,7 @@ describe("Fireplace Page", () => {
 
       // Check accordion headers exist
       expect(screen.getByText(/advanced/i)).toBeInTheDocument();
-      expect(screen.getByText(/debug/i)).toBeInTheDocument();
+      expect(screen.getByText(/device info/i)).toBeInTheDocument();
     });
 
     it("should pass correct props to child components", async () => {

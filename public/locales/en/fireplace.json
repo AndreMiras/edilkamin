@@ -5,7 +5,11 @@
     "loginToControl": "Please log in to control this stove."
   },
   "advanced": "Advanced",
-  "debug": "Debug",
+  "deviceInfo": {
+    "label": "Device Info",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
   "heating": "Heating",
   "standby": "Standby",
   "targetTemp": "Target Temperature",

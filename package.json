@@ -28,6 +28,7 @@
     "lucide-react": "^0.562.0",
     "next": "^16",
     "next-i18next": "^15.4.3",
+    "prism-react-renderer": "^2.4.1",
     "react": "^19",
     "react-dom": "^19",
     "react-i18next": "^16.5.0",

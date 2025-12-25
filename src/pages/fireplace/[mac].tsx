@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
@@ -10,6 +11,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDeviceControl } from "@/hooks/useDeviceControl";
 
 import AutoModeToggle from "../../components/AutoModeToggle";
@@ -24,6 +31,15 @@ const Fireplace: NextPage = () => {
   const { t } = useTranslation("fireplace");
   const router = useRouter();
   const mac = router.query.mac as string;
+  const [headerCopied, setHeaderCopied] = useState(false);
+
+  const handleHeaderCopy = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const jsonString = JSON.stringify(info, null, 2);
+    await navigator.clipboard.writeText(jsonString);
+    setHeaderCopied(true);
+    setTimeout(() => setHeaderCopied(false), 2000);
+  };
 
   const {
     info,
@@ -146,7 +162,32 @@ const Fireplace: NextPage = () => {
             </AccordionContent>
           </AccordionItem>
           <AccordionItem value="debug-info">
-            <AccordionTrigger>{t("debug")}</AccordionTrigger>
+            <AccordionTrigger>
+              <div className="flex items-center gap-2">
+                <span>{t("deviceInfo.label")}</span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={handleHeaderCopy}
+                        className="p-1 rounded bg-muted hover:bg-muted/80 transition-colors"
+                        aria-label={t("deviceInfo.copy")}
+                      >
+                        <FontAwesomeIcon
+                          icon={headerCopied ? "check" : "copy"}
+                          className="h-3 w-3"
+                        />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {headerCopied
+                        ? t("deviceInfo.copied")
+                        : t("deviceInfo.copy")}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+            </AccordionTrigger>
             <AccordionContent>
               <DebugInfo info={info} />
             </AccordionContent>
