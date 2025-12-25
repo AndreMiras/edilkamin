@@ -29,3 +29,12 @@ Push everything including tags:
 git push
 git push --tags
 ```
+
+## Android Version Sync
+
+The Android `versionCode` and `versionName` are automatically derived from the `package.json` version.
+
+- `versionName`: Uses the version string directly (e.g., "2025.12.14")
+- `versionCode`: Converts to integer (e.g., 20251214)
+
+No manual updates to `android/app/build.gradle` are required.
