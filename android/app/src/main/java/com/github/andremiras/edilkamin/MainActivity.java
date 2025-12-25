@@ -1,4 +1,4 @@
-package com.edilkamin.open;
+package com.github.andremiras.edilkamin;
 
 import com.getcapacitor.BridgeActivity;
 

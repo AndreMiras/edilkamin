@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "com.edilkamin.open"
+    namespace = "com.github.andremiras.edilkamin"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.edilkamin.open"
+        applicationId "com.github.andremiras.edilkamin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
