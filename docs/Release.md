@@ -67,5 +67,5 @@ The following secrets must be configured in GitHub repository settings for autom
    - Create a service account in Google Cloud Console
    - Grant "Service Account User" role
    - Download JSON key
-   - In Play Console, invite the service account email with "Release Manager" permissions
    - Copy the entire JSON file contents as the secret value
+   - **Important**: In Play Console, invite the service account email with "Release Manager" permissions (requires approved developer account)
