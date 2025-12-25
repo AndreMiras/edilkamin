@@ -13,6 +13,19 @@ def versionCodeInt = (versionParts[0] + versionParts[1].padLeft(2, '0') + versio
 android {
     namespace = "com.github.andremiras.edilkamin"
     compileSdk = rootProject.ext.compileSdkVersion
+
+    // Signing configuration (via environment variables)
+    signingConfigs {
+        release {
+            if (System.getenv("KEYSTORE_FILE")) {
+                storeFile file(System.getenv("KEYSTORE_FILE"))
+                storePassword System.getenv("KEYSTORE_PASSWORD")
+                keyAlias System.getenv("KEY_ALIAS")
+                keyPassword System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.github.andremiras.edilkamin"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -30,6 +43,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // Only use signing config if available
+            if (System.getenv("KEYSTORE_FILE")) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
