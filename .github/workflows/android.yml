@@ -5,8 +5,8 @@ on:
   pull_request:
 
 jobs:
-  build:
-    name: Build
+  build-debug:
+    name: Build Debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -26,14 +26,62 @@ jobs:
         run: |
           cd android
           ./gradlew assembleDebug
-      - name: Verify APK created
+      - name: Verify debug APK created
         run: |
           test -f android/app/build/outputs/apk/debug/app-debug.apk || \
             (echo "APK not created" && exit 1)
-          echo "Android APK built successfully"
+          echo "Android debug APK built successfully"
       - name: Upload debug APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-${{ github.run_number }}
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
+
+  build-release:
+    name: Build Release AAB
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: ${{ github.event_name == 'push' }}
+    env:
+      HAS_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+      - run: yarn install
+      - run: yarn build:mobile
+      - run: yarn cap:sync
+      - name: Decode keystore
+        if: env.HAS_KEYSTORE == 'true'
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/open-edilkamin.keystore
+      - name: Build release AAB
+        if: env.HAS_KEYSTORE == 'true'
+        env:
+          KEYSTORE_FILE: open-edilkamin.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          cd android
+          ./gradlew bundleRelease
+      - name: Verify release AAB created
+        if: env.HAS_KEYSTORE == 'true'
+        run: |
+          test -f android/app/build/outputs/bundle/release/app-release.aab || \
+            (echo "AAB not created" && exit 1)
+          echo "Android release AAB built successfully"
+      - name: Upload release AAB artifact
+        if: env.HAS_KEYSTORE == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-${{ github.run_number }}
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 90
