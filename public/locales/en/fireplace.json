@@ -10,6 +10,17 @@
     "copy": "Copy",
     "copied": "Copied!"
   },
+  "statistics": {
+    "label": "Statistics",
+    "totalHours": "Total Operating Hours",
+    "powerDistribution": "Power Distribution",
+    "serviceDue": "Service Due",
+    "serviceOk": "Service OK",
+    "hoursSinceService": "{{hours}}h since service (threshold: {{threshold}}h)",
+    "powerOns": "Power Ons",
+    "blackouts": "Blackouts",
+    "alarms": "Alarms"
+  },
   "heating": "Heating",
   "standby": "Standby",
   "targetTemp": "Target Temperature",

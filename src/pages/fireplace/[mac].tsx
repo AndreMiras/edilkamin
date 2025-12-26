@@ -26,6 +26,7 @@ import FanSpeedControl from "../../components/FanSpeedControl";
 import PowerLevelSlider from "../../components/PowerLevelSlider";
 import RequireAuth from "../../components/RequireAuth";
 import { Thermostat } from "../../components/thermostat";
+import UsageStatistics from "../../components/UsageStatistics";
 
 const Fireplace: NextPage = () => {
   const { t } = useTranslation("fireplace");
@@ -190,6 +191,12 @@ const Fireplace: NextPage = () => {
             </AccordionTrigger>
             <AccordionContent>
               <DebugInfo info={info} />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="statistics">
+            <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
+            <AccordionContent>
+              {info && <UsageStatistics info={info} />}
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -18,5 +18,10 @@ export const API_URL = "https://api.edilkamin.com/";
 export const OLD_API_URL =
   "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/";
 
-// Re-export types (will use actual types from edilkamin)
-export * from "edilkamin";
+// Import and re-export the actual deriveUsageAnalytics implementation
+// This is needed because re-exporting types only works, not implementations
+export {
+  deriveUsageAnalytics,
+  type DeviceInfoType,
+  type UsageAnalyticsType,
+} from "../../../node_modules/edilkamin";

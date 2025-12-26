@@ -23,7 +23,7 @@
     "axios": "^1.13.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "edilkamin": "1.10.0",
+    "edilkamin": "1.10.2",
     "i18next": "^25.7.3",
     "lucide-react": "^0.562.0",
     "next": "^16",
@@ -32,6 +32,8 @@
     "react": "^19",
     "react-dom": "^19",
     "react-i18next": "^16.5.0",
+    "react-is": "^19.2.3",
+    "recharts": "^3.6.0",
     "tailwind-merge": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "web-vitals": "^5.1.0"

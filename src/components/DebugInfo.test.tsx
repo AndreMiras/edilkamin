@@ -36,6 +36,9 @@ describe("DebugInfo Component", () => {
       pellet: {
         autonomy_time: 900,
       },
+      counters: {
+        service_time: 50,
+      },
     },
     nvm: {
       user_parameters: {
@@ -52,6 +55,33 @@ describe("DebugInfo Component", () => {
         standby_waiting_time: 300,
         is_fahrenheit: false,
         language: 1,
+      },
+      total_counters: {
+        power_ons: 100,
+        p1_working_time: 10,
+        p2_working_time: 20,
+        p3_working_time: 30,
+        p4_working_time: 25,
+        p5_working_time: 15,
+      },
+      service_counters: {
+        p1_working_time: 5,
+        p2_working_time: 10,
+        p3_working_time: 15,
+        p4_working_time: 10,
+        p5_working_time: 5,
+      },
+      alarms_log: {
+        number: 0,
+        index: 0,
+        alarms: [],
+      },
+      regeneration: {
+        time: 0,
+        last_intervention: 0,
+        daylight_time_flag: 0,
+        blackout_counter: 0,
+        airkare_working_hours_counter: 0,
       },
     },
   };
