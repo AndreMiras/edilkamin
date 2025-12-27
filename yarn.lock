@@ -906,6 +906,11 @@
   dependencies:
     "@types/web-bluetooth" "^0.0.20"
 
+"@capacitor-community/safe-area@^8.0.1":
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/safe-area/-/safe-area-8.0.1.tgz#21553e2395a2e0140f4e41a0e1aafed3b6d747a9"
+  integrity sha512-zVVQ7k94DbOff1mHP8qrZGTJZWyhGZnKHD2eXdcobIoOBFW9CeVphLNZYDCop/DBsHXfv6r8k0/Ac8xMIlwT+A==
+
 "@capacitor/android@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-8.0.0.tgz#8cd63ed432460c70db0770dccd9234700152f31a"

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FF5722</color>
+    <color name="colorPrimaryDark">#E64A19</color>
+    <color name="colorAccent">#FF5722</color>
+    <!-- Status bar colors matching app theme -->
+    <color name="statusBarLight">#FFFFFF</color>
+    <color name="statusBarDark">#222831</color>
+    <color name="navigationBarLight">#FFFFFF</color>
+    <color name="navigationBarDark">#222831</color>
+</resources>

@@ -26,9 +26,12 @@ library.add(fab, far, fas);
 
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
   <I18nextProvider i18n={i18n}>
-    <div className="App flex flex-col min-h-screen">
+    <div className="App flex flex-col min-h-screen pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
         <title>Open Edilkamin</title>
       </Head>
       <LanguageInitializer />

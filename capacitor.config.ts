@@ -7,6 +7,16 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: "https",
   },
+  plugins: {
+    SafeArea: {
+      statusBarStyle: "DEFAULT",
+      navigationBarStyle: "DEFAULT",
+      initialViewportFitCover: true,
+    },
+    SystemBars: {
+      insetsHandling: "disable",
+    },
+  },
 };
 
 export default config;

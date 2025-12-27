@@ -15,7 +15,7 @@ const Header = () => {
   const isLoggedIn = useIsLoggedIn();
 
   return (
-    <nav className="bg-card border-b border-border">
+    <nav className="bg-card border-b border-border -mt-[env(safe-area-inset-top)] pt-[env(safe-area-inset-top)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
           {/* Brand */}
