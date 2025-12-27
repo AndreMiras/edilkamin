@@ -1,5 +1,10 @@
 {
   "title": "Chimenea: {{mac}}",
+  "backToHome": "Volver al Panel",
+  "refresh": "Actualizar",
+  "refreshing": "Actualizando...",
+  "lastUpdated": "Actualizado hace {{seconds}}s",
+  "justNow": "Justo ahora",
   "auth": {
     "loginToControl": "Por favor, inicia sesión para controlar esta estufa."
   },

@@ -2,8 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 import {
   Accordion,
@@ -55,12 +56,52 @@ const Fireplace: NextPage = () => {
     environmentTemperature,
     isPelletInReserve,
     pelletAutonomyTime,
+    lastUpdated,
     onPowerChange,
     onTemperatureChange,
     onPowerLevelChange,
     onAutoModeToggle,
     onFanSpeedChange,
+    refreshDeviceInfo,
   } = useDeviceControl(mac);
+
+  // Track seconds since last update for display
+  const [secondsSinceUpdate, setSecondsSinceUpdate] = useState<number>(0);
+
+  useEffect(() => {
+    if (!lastUpdated) return;
+
+    // Reset seconds when lastUpdated changes
+    setSecondsSinceUpdate(0);
+
+    const updateTimer = setInterval(() => {
+      const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+      setSecondsSinceUpdate(seconds);
+    }, 1000);
+
+    return () => clearInterval(updateTimer);
+  }, [lastUpdated]);
+
+  const getLastUpdatedText = () => {
+    if (!lastUpdated) return "";
+    if (secondsSinceUpdate < 5) return t("justNow");
+    return t("lastUpdated", { seconds: secondsSinceUpdate });
+  };
+
+  // Pull-to-refresh content components
+  const pullingContent = (
+    <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+      <FontAwesomeIcon icon="clock" className="text-xs" />
+      <span className="text-sm">{getLastUpdatedText()}</span>
+    </div>
+  );
+
+  const refreshingContent = (
+    <div className="flex items-center justify-center gap-2 py-4 text-muted-foreground">
+      <FontAwesomeIcon icon="arrows-rotate" className="animate-spin" />
+      <span className="text-sm">{t("refreshing")}</span>
+    </div>
+  );
 
   return (
     <RequireAuth message={t("auth.loginToControl")}>
@@ -75,132 +116,146 @@ const Fireplace: NextPage = () => {
         </Link>
       </div>
 
-      <Thermostat
-        temperature={temperature}
-        environmentTemperature={environmentTemperature}
-        powerState={powerState}
-        loading={loading}
-        onTemperatureChange={onTemperatureChange}
-        onPowerChange={onPowerChange}
-        isPelletInReserve={isPelletInReserve}
-        pelletAutonomyTime={pelletAutonomyTime}
-        powerLevel={powerLevel}
-        onPowerLevelChange={onPowerLevelChange}
-        isAuto={isAuto}
+      <PullToRefresh
+        onRefresh={refreshDeviceInfo}
+        pullingContent={pullingContent}
+        refreshingContent={refreshingContent}
+        pullDownThreshold={120}
+        maxPullDownDistance={200}
+        resistance={2.5}
+        isPullable={!loading}
       >
-        <Accordion type="single" collapsible className="mt-8 w-[340px]">
-          <AccordionItem value="device-details">
-            <AccordionTrigger>{t("advanced")}</AccordionTrigger>
-            <AccordionContent>
-              <AutoModeToggle
-                isAuto={isAuto}
-                onToggle={onAutoModeToggle}
-                loading={loading}
-              />
-              {powerLevel !== undefined && (
-                <div className="border-t border-border mt-3 pt-3">
-                  <PowerLevelSlider
-                    level={powerLevel}
-                    onLevelChange={onPowerLevelChange}
-                    loading={loading}
-                    readOnly={isAuto}
-                  />
-                </div>
-              )}
-              {(() => {
-                type ExtendedNvm = {
-                  installer_parameters?: { fans_number?: number };
-                  oem_parameters?: {
-                    fan_1_max_level?: number;
-                    fan_2_max_level?: number;
-                    fan_3_max_level?: number;
-                  };
-                };
-                const nvm = info?.nvm as ExtendedNvm | undefined;
-                const fansNumber = nvm?.installer_parameters?.fans_number ?? 0;
-                const fan1MaxLevel = nvm?.oem_parameters?.fan_1_max_level ?? 5;
-                const fan2MaxLevel = nvm?.oem_parameters?.fan_2_max_level ?? 5;
-                const fan3MaxLevel = nvm?.oem_parameters?.fan_3_max_level ?? 5;
-
-                if (fansNumber === 0) return null;
-
-                return (
+        <Thermostat
+          temperature={temperature}
+          environmentTemperature={environmentTemperature}
+          powerState={powerState}
+          loading={loading}
+          onTemperatureChange={onTemperatureChange}
+          onPowerChange={onPowerChange}
+          isPelletInReserve={isPelletInReserve}
+          pelletAutonomyTime={pelletAutonomyTime}
+          powerLevel={powerLevel}
+          onPowerLevelChange={onPowerLevelChange}
+          isAuto={isAuto}
+        >
+          <Accordion type="single" collapsible className="mt-8 w-[340px]">
+            <AccordionItem value="device-details">
+              <AccordionTrigger>{t("advanced")}</AccordionTrigger>
+              <AccordionContent>
+                <AutoModeToggle
+                  isAuto={isAuto}
+                  onToggle={onAutoModeToggle}
+                  loading={loading}
+                />
+                {powerLevel !== undefined && (
                   <div className="border-t border-border mt-3 pt-3">
-                    {fansNumber >= 1 && (
-                      <FanSpeedControl
-                        fanNumber={1}
-                        speed={fan1Speed}
-                        onSpeedChange={(speed) => onFanSpeedChange(1, speed)}
-                        loading={loading}
-                        disabled={isAuto}
-                        maxSpeed={fan1MaxLevel}
-                      />
-                    )}
-                    {fansNumber >= 2 && (
-                      <FanSpeedControl
-                        fanNumber={2}
-                        speed={fan2Speed}
-                        onSpeedChange={(speed) => onFanSpeedChange(2, speed)}
-                        loading={loading}
-                        disabled={isAuto}
-                        maxSpeed={fan2MaxLevel}
-                      />
-                    )}
-                    {fansNumber >= 3 && (
-                      <FanSpeedControl
-                        fanNumber={3}
-                        speed={fan3Speed}
-                        onSpeedChange={(speed) => onFanSpeedChange(3, speed)}
-                        loading={loading}
-                        disabled={isAuto}
-                        maxSpeed={fan3MaxLevel}
-                      />
-                    )}
+                    <PowerLevelSlider
+                      level={powerLevel}
+                      onLevelChange={onPowerLevelChange}
+                      loading={loading}
+                      readOnly={isAuto}
+                    />
                   </div>
-                );
-              })()}
-              {info && <DeviceDetails info={info} />}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="debug-info">
-            <AccordionTrigger>
-              <div className="flex items-center gap-2">
-                <span>{t("deviceInfo.label")}</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        onClick={handleHeaderCopy}
-                        className="p-1 rounded bg-muted hover:bg-muted/80 transition-colors"
-                        aria-label={t("deviceInfo.copy")}
-                      >
-                        <FontAwesomeIcon
-                          icon={headerCopied ? "check" : "copy"}
-                          className="h-3 w-3"
+                )}
+                {(() => {
+                  type ExtendedNvm = {
+                    installer_parameters?: { fans_number?: number };
+                    oem_parameters?: {
+                      fan_1_max_level?: number;
+                      fan_2_max_level?: number;
+                      fan_3_max_level?: number;
+                    };
+                  };
+                  const nvm = info?.nvm as ExtendedNvm | undefined;
+                  const fansNumber =
+                    nvm?.installer_parameters?.fans_number ?? 0;
+                  const fan1MaxLevel =
+                    nvm?.oem_parameters?.fan_1_max_level ?? 5;
+                  const fan2MaxLevel =
+                    nvm?.oem_parameters?.fan_2_max_level ?? 5;
+                  const fan3MaxLevel =
+                    nvm?.oem_parameters?.fan_3_max_level ?? 5;
+
+                  if (fansNumber === 0) return null;
+
+                  return (
+                    <div className="border-t border-border mt-3 pt-3">
+                      {fansNumber >= 1 && (
+                        <FanSpeedControl
+                          fanNumber={1}
+                          speed={fan1Speed}
+                          onSpeedChange={(speed) => onFanSpeedChange(1, speed)}
+                          loading={loading}
+                          disabled={isAuto}
+                          maxSpeed={fan1MaxLevel}
                         />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {headerCopied
-                        ? t("deviceInfo.copied")
-                        : t("deviceInfo.copy")}
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <DebugInfo info={info} />
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="statistics">
-            <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
-            <AccordionContent>
-              {info && <UsageStatistics info={info} />}
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </Thermostat>
+                      )}
+                      {fansNumber >= 2 && (
+                        <FanSpeedControl
+                          fanNumber={2}
+                          speed={fan2Speed}
+                          onSpeedChange={(speed) => onFanSpeedChange(2, speed)}
+                          loading={loading}
+                          disabled={isAuto}
+                          maxSpeed={fan2MaxLevel}
+                        />
+                      )}
+                      {fansNumber >= 3 && (
+                        <FanSpeedControl
+                          fanNumber={3}
+                          speed={fan3Speed}
+                          onSpeedChange={(speed) => onFanSpeedChange(3, speed)}
+                          loading={loading}
+                          disabled={isAuto}
+                          maxSpeed={fan3MaxLevel}
+                        />
+                      )}
+                    </div>
+                  );
+                })()}
+                {info && <DeviceDetails info={info} />}
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="debug-info">
+              <AccordionTrigger>
+                <div className="flex items-center gap-2">
+                  <span>{t("deviceInfo.label")}</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={handleHeaderCopy}
+                          className="p-1 rounded bg-muted hover:bg-muted/80 transition-colors"
+                          aria-label={t("deviceInfo.copy")}
+                        >
+                          <FontAwesomeIcon
+                            icon={headerCopied ? "check" : "copy"}
+                            className="h-3 w-3"
+                          />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {headerCopied
+                          ? t("deviceInfo.copied")
+                          : t("deviceInfo.copy")}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <DebugInfo info={info} />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="statistics">
+              <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
+              <AccordionContent>
+                {info && <UsageStatistics info={info} />}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </Thermostat>
+      </PullToRefresh>
     </RequireAuth>
   );
 };

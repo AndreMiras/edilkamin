@@ -1,6 +1,6 @@
 import axios from "axios";
 import { configure, DeviceInfoType, NEW_API_URL, OLD_API_URL } from "edilkamin";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ErrorContext } from "@/context/error";
@@ -21,6 +21,7 @@ export interface DeviceControlState {
   environmentTemperature: number | undefined;
   isPelletInReserve: boolean | undefined;
   pelletAutonomyTime: number | undefined;
+  lastUpdated: Date | null;
 }
 
 export interface DeviceControlHandlers {
@@ -29,6 +30,7 @@ export interface DeviceControlHandlers {
   onPowerLevelChange: (level: number) => Promise<void>;
   onAutoModeToggle: (enabled: boolean) => Promise<void>;
   onFanSpeedChange: (fanNumber: 1 | 2 | 3, speed: number) => Promise<void>;
+  refreshDeviceInfo: () => Promise<void>;
 }
 
 export function useDeviceControl(
@@ -44,6 +46,7 @@ export function useDeviceControl(
   const [fan2Speed, setFan2SpeedState] = useState<number>(0);
   const [fan3Speed, setFan3SpeedState] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
   const { withRetry } = useTokenRefresh();
@@ -54,6 +57,9 @@ export function useDeviceControl(
       : NEW_API_URL
     : "/api/proxy/";
 
+  // Memoize the API functions to prevent infinite re-renders
+  // baseUrl is derived from environment variables and won't change during component lifecycle
+  const api = useMemo(() => configure(baseUrl), [baseUrl]);
   const {
     deviceInfo,
     setPower,
@@ -61,51 +67,81 @@ export function useDeviceControl(
     setPowerLevel,
     setAuto,
     setFanSpeed,
-  } = configure(baseUrl);
+  } = api;
+
+  const fetchDeviceInfo = useCallback(async () => {
+    if (!mac || !token) return;
+
+    try {
+      const data = await withRetry(token, (t) => deviceInfo(t, mac));
+      setInfo(data);
+      setPowerState(data.status.commands.power);
+      setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
+      setPowerLevelState(data.nvm.user_parameters.manual_power);
+      setIsAutoState(data.nvm.user_parameters.is_auto);
+      setFan1SpeedState(data.nvm.user_parameters.fan_1_ventilation);
+      setFan2SpeedState(data.nvm.user_parameters.fan_2_ventilation);
+      setFan3SpeedState(data.nvm.user_parameters.fan_3_ventilation);
+      setLastUpdated(new Date());
+      setLoading(false);
+    } catch (error: unknown) {
+      console.error(error);
+      setLoading(false);
+      if (axios.isAxiosError(error) && error?.response?.status === 404) {
+        addError({
+          title: t("errors.deviceNotFound"),
+          body: t("errors.deviceNotFoundBody", { mac }),
+        });
+      } else if (
+        axios.isAxiosError(error) &&
+        error?.response?.data?.message !== undefined
+      ) {
+        addError({
+          title: t("errors.couldntFetchInfo"),
+          body: error.response.data.message,
+        });
+      } else if (error instanceof Error) {
+        addError({
+          title: t("errors.couldntFetchInfo"),
+          body: error.message,
+        });
+      } else {
+        addError({ body: t("errors.couldntFetchInfo") });
+      }
+    }
+  }, [mac, token, withRetry, deviceInfo, t, addError]);
 
   useEffect(() => {
     if (!mac || !token) return;
-    const fetch = async () => {
-      try {
-        const data = await withRetry(token, (t) => deviceInfo(t, mac));
-        setInfo(data);
-        setPowerState(data.status.commands.power);
-        setTemperature(data.nvm.user_parameters.enviroment_1_temperature);
-        setPowerLevelState(data.nvm.user_parameters.manual_power);
-        setIsAutoState(data.nvm.user_parameters.is_auto);
-        setFan1SpeedState(data.nvm.user_parameters.fan_1_ventilation);
-        setFan2SpeedState(data.nvm.user_parameters.fan_2_ventilation);
-        setFan3SpeedState(data.nvm.user_parameters.fan_3_ventilation);
-        setLoading(false);
-      } catch (error: unknown) {
-        console.error(error);
-        setLoading(false);
-        if (axios.isAxiosError(error) && error?.response?.status === 404) {
-          addError({
-            title: t("errors.deviceNotFound"),
-            body: t("errors.deviceNotFoundBody", { mac }),
-          });
-        } else if (
-          axios.isAxiosError(error) &&
-          error?.response?.data?.message !== undefined
-        ) {
-          addError({
-            title: t("errors.couldntFetchInfo"),
-            body: error.response.data.message,
-          });
-        } else if (error instanceof Error) {
-          addError({
-            title: t("errors.couldntFetchInfo"),
-            body: error.message,
-          });
-        } else {
-          addError({ body: t("errors.couldntFetchInfo") });
-        }
+
+    // Initial fetch
+    fetchDeviceInfo();
+
+    // Set up polling interval
+    const intervalId = setInterval(() => {
+      if (document.visibilityState === "visible") {
+        fetchDeviceInfo();
+      }
+    }, 10 * 1000);
+
+    // Handle visibility changes - refresh immediately when tab becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchDeviceInfo();
       }
     };
-    fetch();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mac, token, t]);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup on unmount
+    return () => {
+      clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [mac, token, fetchDeviceInfo]);
+
+  const refreshDeviceInfo = useCallback(async () => {
+    await fetchDeviceInfo();
+  }, [fetchDeviceInfo]);
 
   const onPowerChange = async (value: number) => {
     const previousState = powerState;
@@ -204,10 +240,12 @@ export function useDeviceControl(
     environmentTemperature: info?.status.temperatures.enviroment,
     isPelletInReserve: info?.status.flags.is_pellet_in_reserve,
     pelletAutonomyTime: info?.status.pellet.autonomy_time,
+    lastUpdated,
     onPowerChange,
     onTemperatureChange,
     onPowerLevelChange,
     onAutoModeToggle,
     onFanSpeedChange,
+    refreshDeviceInfo,
   };
 }

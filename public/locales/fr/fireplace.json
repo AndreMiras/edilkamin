@@ -1,5 +1,10 @@
 {
   "title": "Cheminée : {{mac}}",
+  "backToHome": "Retour au tableau de bord",
+  "refresh": "Actualiser",
+  "refreshing": "Actualisation...",
+  "lastUpdated": "Mis à jour il y a {{seconds}}s",
+  "justNow": "À l'instant",
   "auth": {
     "loginToControl": "Veuillez vous connecter pour contrôler ce poêle."
   },

@@ -215,10 +215,13 @@ describe("Fireplace Page", () => {
       );
 
       // Error should be added to ErrorContext and displayed
-      expect(await screen.findByRole("alert")).toBeInTheDocument();
+      // Multiple alerts may appear due to polling, so we check for at least one
+      await waitFor(() => {
+        expect(screen.getAllByRole("alert").length).toBeGreaterThanOrEqual(1);
+      });
       expect(
-        screen.getByText(/device.*not found/i, { exact: false }),
-      ).toBeInTheDocument();
+        screen.getAllByText(/device.*not found/i, { exact: false }).length,
+      ).toBeGreaterThanOrEqual(1);
     });
 
     it("should handle API error with message from response", async () => {
