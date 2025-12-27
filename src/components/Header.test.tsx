@@ -37,7 +37,7 @@ describe("Header", () => {
     expect(screen.getByRole("button", { name: "EN" })).toBeInTheDocument();
   });
 
-  it("should render Login component when not authenticated", () => {
+  it("should not render Login or Logout when not authenticated", () => {
     render(
       <TokenContext.Provider
         value={{
@@ -49,9 +49,12 @@ describe("Header", () => {
       </TokenContext.Provider>,
     );
 
-    // Login form should be present with username input
-    expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
+    // Login form should NOT be present (login is only on Home page)
+    expect(screen.queryByPlaceholderText("Username")).not.toBeInTheDocument();
+    // Logout should also not be present
+    expect(
+      screen.queryByRole("button", { name: /logout/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("should render Logout component when authenticated", () => {
@@ -70,7 +73,7 @@ describe("Header", () => {
     expect(screen.getByRole("button", { name: /logout/i })).toBeInTheDocument();
   });
 
-  it("should render Login component during loading state", () => {
+  it("should not render Login or Logout during loading state", () => {
     render(
       <TokenContext.Provider
         value={{
@@ -82,9 +85,9 @@ describe("Header", () => {
       </TokenContext.Provider>,
     );
 
-    // Login component should be present during loading (same as unauthenticated)
-    expect(screen.getByPlaceholderText("Username")).toBeInTheDocument();
-    // Logout should not be present
+    // Login form should NOT be present during loading (login is only on Home page)
+    expect(screen.queryByPlaceholderText("Username")).not.toBeInTheDocument();
+    // Logout should not be present either
     expect(
       screen.queryByRole("button", { name: /logout/i }),
     ).not.toBeInTheDocument();

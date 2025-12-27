@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 
 import { useIsLoggedIn } from "../utils/hooks";
 import LanguageSwitcher from "./LanguageSwitcher";
-import Login from "./Login";
 import Logout from "./Logout";
 import ThemeSwitcher from "./ThemeSwitcher";
 
@@ -41,7 +40,7 @@ const Header = () => {
             </a>
             <LanguageSwitcher />
             <ThemeSwitcher />
-            {isLoggedIn === true ? <Logout /> : <Login />}
+            {isLoggedIn && <Logout />}
           </div>
 
           {/* Mobile menu button */}
@@ -76,7 +75,11 @@ const Header = () => {
             <div>
               <ThemeSwitcher />
             </div>
-            <div>{isLoggedIn === true ? <Logout /> : <Login />}</div>
+            {isLoggedIn && (
+              <div>
+                <Logout />
+              </div>
+            )}
           </div>
         </div>
       )}
