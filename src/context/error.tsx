@@ -3,6 +3,10 @@ import { createContext, ReactNode, useState } from "react";
 interface ErrorType {
   title?: string;
   body: string;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
 }
 interface ErrorContextType {
   errors: ErrorType[];

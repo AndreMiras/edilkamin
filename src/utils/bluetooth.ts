@@ -29,6 +29,36 @@ export const isBluetoothSupported = (): boolean => {
 };
 
 /**
+ * Check if Bluetooth is enabled (turned on) on the device.
+ * - Native: Uses BleClient.isEnabled()
+ * - Web: Always returns true (cannot detect Bluetooth state in browser)
+ */
+export const isBluetoothEnabled = async (): Promise<boolean> => {
+  if (Capacitor.isNativePlatform()) {
+    const { BleClient } = await import("@capacitor-community/bluetooth-le");
+    // Must initialize before checking enabled state
+    await BleClient.initialize();
+    return BleClient.isEnabled();
+  }
+  return true; // Web: assume enabled (cannot detect)
+};
+
+/**
+ * Request user to enable Bluetooth via system dialog.
+ * Only works on Android. Returns true if request was shown.
+ */
+export const requestEnableBluetooth = async (): Promise<boolean> => {
+  if (Capacitor.getPlatform() === "android") {
+    const { BleClient } = await import("@capacitor-community/bluetooth-le");
+    // Must initialize before requesting enable
+    await BleClient.initialize();
+    await BleClient.requestEnable();
+    return true;
+  }
+  return false; // iOS/Web: not supported
+};
+
+/**
  * Scan for Edilkamin devices using platform-appropriate Bluetooth API.
  * - Web: Uses Web Bluetooth API via edilkamin/bluetooth
  * - Native: Uses @capacitor-community/bluetooth-le plugin

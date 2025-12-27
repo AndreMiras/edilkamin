@@ -1,3 +1,4 @@
+import { Capacitor } from "@capacitor/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { KeyboardEvent, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,7 +19,12 @@ import {
 } from "@/components/ui/tooltip";
 import { ErrorContext } from "@/context/error";
 
-import { isBluetoothSupported, scanForDevices } from "../utils/bluetooth";
+import {
+  isBluetoothEnabled,
+  isBluetoothSupported,
+  requestEnableBluetooth,
+  scanForDevices,
+} from "../utils/bluetooth";
 import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
 
 interface DeviceManagementProps {
@@ -73,6 +79,27 @@ const DeviceManagement = ({
 
   const onScan = async () => {
     if (!bluetoothSupported) return;
+
+    // Check if Bluetooth is enabled before scanning
+    const enabled = await isBluetoothEnabled();
+    if (!enabled) {
+      // Close modal so user can see the error
+      onOpenChange?.(false);
+      const isAndroid = Capacitor.getPlatform() === "android";
+      addError({
+        title: t("bluetooth.disabled"),
+        body: t("bluetooth.enablePrompt"),
+        ...(isAndroid && {
+          action: {
+            label: t("bluetooth.enableButton"),
+            onClick: async () => {
+              await requestEnableBluetooth();
+            },
+          },
+        }),
+      });
+      return;
+    }
 
     setIsScanning(true);
     try {

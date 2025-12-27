@@ -6,6 +6,9 @@ export const BleClient = {
     deviceId: "001122334455",
     name: "EDILKAMIN_EP",
   }),
+  // Bluetooth state methods
+  isEnabled: vi.fn().mockResolvedValue(true),
+  requestEnable: vi.fn().mockResolvedValue(undefined),
   // Additional methods that might be needed in future
   connect: vi.fn().mockResolvedValue(undefined),
   disconnect: vi.fn().mockResolvedValue(undefined),

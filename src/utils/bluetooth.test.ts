@@ -2,12 +2,18 @@ import { Capacitor } from "@capacitor/core";
 import { BleClient } from "@capacitor-community/bluetooth-le";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { isBluetoothSupported, scanForDevices } from "./bluetooth";
+import {
+  isBluetoothEnabled,
+  isBluetoothSupported,
+  requestEnableBluetooth,
+  scanForDevices,
+} from "./bluetooth";
 
 // Mock Capacitor
 vi.mock("@capacitor/core", () => ({
   Capacitor: {
     isNativePlatform: vi.fn(),
+    getPlatform: vi.fn(),
   },
 }));
 
@@ -52,6 +58,62 @@ describe("bluetooth utility", () => {
 
       const devices = await scanForDevices();
       expect(devices).toEqual([]);
+    });
+  });
+
+  describe("isBluetoothEnabled", () => {
+    it("returns true on web platform (cannot detect)", async () => {
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(false);
+
+      const result = await isBluetoothEnabled();
+      expect(result).toBe(true);
+      expect(BleClient.isEnabled).not.toHaveBeenCalled();
+    });
+
+    it("calls BleClient.isEnabled on native platform", async () => {
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true);
+      vi.mocked(BleClient.isEnabled).mockResolvedValue(true);
+
+      const result = await isBluetoothEnabled();
+      expect(result).toBe(true);
+      expect(BleClient.initialize).toHaveBeenCalled();
+      expect(BleClient.isEnabled).toHaveBeenCalled();
+    });
+
+    it("returns false when Bluetooth is disabled on native", async () => {
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true);
+      vi.mocked(BleClient.isEnabled).mockResolvedValue(false);
+
+      const result = await isBluetoothEnabled();
+      expect(result).toBe(false);
+      expect(BleClient.initialize).toHaveBeenCalled();
+    });
+  });
+
+  describe("requestEnableBluetooth", () => {
+    it("returns false on web platform", async () => {
+      vi.mocked(Capacitor.getPlatform).mockReturnValue("web");
+
+      const result = await requestEnableBluetooth();
+      expect(result).toBe(false);
+      expect(BleClient.requestEnable).not.toHaveBeenCalled();
+    });
+
+    it("returns false on iOS (not supported)", async () => {
+      vi.mocked(Capacitor.getPlatform).mockReturnValue("ios");
+
+      const result = await requestEnableBluetooth();
+      expect(result).toBe(false);
+      expect(BleClient.requestEnable).not.toHaveBeenCalled();
+    });
+
+    it("calls BleClient.requestEnable on Android", async () => {
+      vi.mocked(Capacitor.getPlatform).mockReturnValue("android");
+
+      const result = await requestEnableBluetooth();
+      expect(result).toBe(true);
+      expect(BleClient.initialize).toHaveBeenCalled();
+      expect(BleClient.requestEnable).toHaveBeenCalled();
     });
   });
 });

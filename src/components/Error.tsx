@@ -9,7 +9,7 @@ interface ErrorProps extends ErrorType {
   onClose: () => void;
 }
 
-const Error = ({ title, body, onClose }: ErrorProps) => {
+const Error = ({ title, body, action, onClose }: ErrorProps) => {
   const { t } = useTranslation("error");
 
   return (
@@ -17,6 +17,14 @@ const Error = ({ title, body, onClose }: ErrorProps) => {
       <FontAwesomeIcon icon="circle-exclamation" className="h-4 w-4" />
       <AlertTitle>{title || t("defaultTitle")}</AlertTitle>
       <AlertDescription>{body}</AlertDescription>
+      {action && (
+        <button
+          onClick={action.onClick}
+          className="mt-2 px-3 py-1.5 text-sm bg-destructive-foreground text-destructive rounded-md hover:opacity-90 transition-opacity"
+        >
+          {action.label}
+        </button>
+      )}
       <button
         onClick={onClose}
         className="absolute top-2 right-2 p-1 rounded-md opacity-70 hover:opacity-100 transition-opacity"
