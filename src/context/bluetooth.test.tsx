@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -322,7 +322,9 @@ describe("BluetoothContext", () => {
       });
 
       // Simulate unexpected disconnect
-      disconnectCallback();
+      act(() => {
+        disconnectCallback();
+      });
 
       await waitFor(() => {
         expect(screen.getByTestId("isConnected")).toHaveTextContent("false");
