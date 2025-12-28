@@ -55,6 +55,14 @@
     "current": "Speed: {{speed}}",
     "off": "Off"
   },
+  "connectionMode": {
+    "cloud": "Cloud",
+    "bluetooth": "Bluetooth",
+    "connecting": "Connecting...",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "error": "Connection failed"
+  },
   "errors": {
     "deviceNotFound": "Device not found",
     "deviceNotFoundBody": "The address provided (\"{{mac}}\") is invalid or the device is not registered.",

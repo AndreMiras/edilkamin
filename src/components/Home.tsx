@@ -3,39 +3,34 @@ import { useTranslation } from "react-i18next";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TokenContext } from "@/context/token";
+import {
+  addStoredDevice,
+  getStoredDevices,
+  removeStoredDevice,
+  StoredDevice,
+} from "@/utils/deviceStorage";
 
 import DeviceManagement from "./DeviceManagement";
 import DeviceThermostat from "./DeviceThermostat";
 import Login from "./Login";
 
-const localStorageKey = "fireplaces";
-
 const Home = () => {
   const { t } = useTranslation("home");
   const { token } = useContext(TokenContext);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [devices, setDevices] = useState<StoredDevice[]>([]);
 
-  const getFireplacesLocalStorage = (): string[] =>
-    JSON.parse(localStorage.getItem(localStorageKey) || "[]");
+  useEffect(() => setDevices(getStoredDevices()), []);
 
-  const setFireplacesLocalStorage = (newFireplaces: string[]) =>
-    localStorage.setItem(localStorageKey, JSON.stringify(newFireplaces));
-
-  const [fireplacesState, setFireplacesState] = useState<string[]>([]);
-
-  useEffect(() => setFireplacesState(getFireplacesLocalStorage()), []);
-
-  const setFireplaces = (newFireplaces: string[]) => {
-    setFireplacesState(newFireplaces);
-    setFireplacesLocalStorage(newFireplaces);
+  const onAdd = (device: StoredDevice) => {
+    const newDevices = addStoredDevice(device);
+    setDevices(newDevices);
   };
 
-  const onAdd = (mac: string) => {
-    setFireplaces([...fireplacesState, mac]);
+  const onRemove = (index: number) => {
+    const newDevices = removeStoredDevice(index);
+    setDevices(newDevices);
   };
-
-  const onRemove = (index: number) =>
-    setFireplaces(fireplacesState.filter((_, i) => i !== index));
 
   // Show login prompt if not authenticated
   if (token === null) {
@@ -74,7 +69,7 @@ const Home = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
         <DeviceManagement
-          fireplaces={fireplacesState}
+          devices={devices}
           onAdd={onAdd}
           onRemove={onRemove}
           open={dialogOpen}
@@ -83,7 +78,7 @@ const Home = () => {
       </div>
 
       {/* Empty state */}
-      {fireplacesState.length === 0 && (
+      {devices.length === 0 && (
         <Card>
           <CardContent className="py-8 text-center text-muted-foreground">
             {t("emptyState")}{" "}
@@ -98,10 +93,10 @@ const Home = () => {
       )}
 
       {/* Device grid */}
-      {fireplacesState.length > 0 && (
+      {devices.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
-          {fireplacesState.map((mac) => (
-            <DeviceThermostat key={mac} mac={mac} />
+          {devices.map((device) => (
+            <DeviceThermostat key={device.wifiMac} mac={device.wifiMac} />
           ))}
         </div>
       )}

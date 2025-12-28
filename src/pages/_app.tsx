@@ -14,6 +14,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LanguageInitializer from "../components/LanguageInitializer";
 import ThemeInitializer from "../components/ThemeInitializer";
+import { BluetoothProvider } from "../context/bluetooth";
 import { ErrorContextProvider } from "../context/error";
 import { ThemeContextProvider } from "../context/theme";
 import { TokenContextProvider } from "../context/token";
@@ -37,14 +38,16 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
       <LanguageInitializer />
       <ErrorContextProvider>
         <TokenContextProvider>
-          <ThemeContextProvider>
-            <ThemeInitializer />
-            <Header />
-            <div className="flex-1 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
-              <Errors />
-              <Component {...pageProps} />
-            </div>
-          </ThemeContextProvider>
+          <BluetoothProvider>
+            <ThemeContextProvider>
+              <ThemeInitializer />
+              <Header />
+              <div className="flex-1 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
+                <Errors />
+                <Component {...pageProps} />
+              </div>
+            </ThemeContextProvider>
+          </BluetoothProvider>
         </TokenContextProvider>
       </ErrorContextProvider>
       <Footer />

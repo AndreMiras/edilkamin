@@ -3,8 +3,19 @@ import { configure, DeviceInfoType, NEW_API_URL, OLD_API_URL } from "edilkamin";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useBluetooth } from "@/context/bluetooth";
 import { ErrorContext } from "@/context/error";
 import { TokenContext } from "@/context/token";
+import {
+  readFan1Speed,
+  readPowerLevel,
+  readPowerState,
+  readTemperature,
+  setFan1Speed as setBtFan1Speed,
+  setPower as setBtPower,
+  setPowerLevel as setBtPowerLevel,
+  setTemperature as setBtTemperature,
+} from "@/utils/bluetooth";
 import { useTokenRefresh } from "@/utils/hooks";
 import { isNativePlatform } from "@/utils/platform";
 
@@ -50,6 +61,7 @@ export function useDeviceControl(
   const { token } = useContext(TokenContext);
   const { addError } = useContext(ErrorContext);
   const { withRetry } = useTokenRefresh();
+  const { connectionMode, bleDeviceId, isConnected } = useBluetooth();
 
   const baseUrl = isNativePlatform()
     ? process.env.NEXT_PUBLIC_USE_LEGACY_API === "true"
@@ -111,23 +123,62 @@ export function useDeviceControl(
     }
   }, [mac, token, withRetry, deviceInfo, t, addError]);
 
-  useEffect(() => {
-    if (!mac || !token) return;
+  const fetchDeviceInfoBle = useCallback(async () => {
+    if (!bleDeviceId || !isConnected) return;
 
-    // Initial fetch
-    fetchDeviceInfo();
+    try {
+      const [power, temp, level, fan] = await Promise.all([
+        readPowerState(bleDeviceId),
+        readTemperature(bleDeviceId),
+        readPowerLevel(bleDeviceId),
+        readFan1Speed(bleDeviceId),
+      ]);
+
+      setPowerState(power);
+      setTemperature(temp);
+      setPowerLevelState(level);
+      setFan1SpeedState(fan);
+      setLastUpdated(new Date());
+      setLoading(false);
+    } catch (error) {
+      console.error("BLE fetch error:", error);
+      addError({
+        title: t("errors.couldntFetchInfo"),
+        body:
+          error instanceof Error ? error.message : t("errors.couldntFetchInfo"),
+      });
+      setLoading(false);
+    }
+  }, [bleDeviceId, isConnected, t, addError]);
+
+  useEffect(() => {
+    if (!mac) return;
+
+    // Choose fetch function and interval based on mode
+    const isBleMode = connectionMode === "ble" && isConnected && bleDeviceId;
+    const fetchFn = isBleMode ? fetchDeviceInfoBle : fetchDeviceInfo;
+    const pollInterval = isBleMode ? 30 * 1000 : 10 * 1000; // 30s BLE, 10s Cloud
+
+    // Skip if in BLE mode but not connected, or Cloud mode without token
+    if (isBleMode) {
+      fetchFn();
+    } else if (token) {
+      fetchFn();
+    } else {
+      return;
+    }
 
     // Set up polling interval
     const intervalId = setInterval(() => {
       if (document.visibilityState === "visible") {
-        fetchDeviceInfo();
+        fetchFn();
       }
-    }, 10 * 1000);
+    }, pollInterval);
 
     // Handle visibility changes - refresh immediately when tab becomes visible
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
-        fetchDeviceInfo();
+        fetchFn();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -137,17 +188,40 @@ export function useDeviceControl(
       clearInterval(intervalId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [mac, token, fetchDeviceInfo]);
+  }, [
+    mac,
+    token,
+    connectionMode,
+    isConnected,
+    bleDeviceId,
+    fetchDeviceInfo,
+    fetchDeviceInfoBle,
+  ]);
 
   const refreshDeviceInfo = useCallback(async () => {
-    await fetchDeviceInfo();
-  }, [fetchDeviceInfo]);
+    const isBleMode = connectionMode === "ble" && isConnected && bleDeviceId;
+    if (isBleMode) {
+      await fetchDeviceInfoBle();
+    } else {
+      await fetchDeviceInfo();
+    }
+  }, [
+    connectionMode,
+    isConnected,
+    bleDeviceId,
+    fetchDeviceInfo,
+    fetchDeviceInfoBle,
+  ]);
 
   const onPowerChange = async (value: number) => {
     const previousState = powerState;
     setPowerState(Boolean(value));
     try {
-      await withRetry(token!, (t) => setPower(t, mac!, value));
+      if (connectionMode === "ble" && bleDeviceId && isConnected) {
+        await setBtPower(bleDeviceId, Boolean(value));
+      } else {
+        await withRetry(token!, (t) => setPower(t, mac!, value));
+      }
     } catch (error) {
       console.error(error);
       addError({
@@ -162,9 +236,13 @@ export function useDeviceControl(
     const previousTemperature = temperature;
     setTemperature(newTemperature);
     try {
-      await withRetry(token!, (t) =>
-        setTargetTemperature(t, mac!, 1, newTemperature),
-      );
+      if (connectionMode === "ble" && bleDeviceId && isConnected) {
+        await setBtTemperature(bleDeviceId, newTemperature);
+      } else {
+        await withRetry(token!, (t) =>
+          setTargetTemperature(t, mac!, 1, newTemperature),
+        );
+      }
     } catch (error) {
       console.error(error);
       addError({
@@ -179,7 +257,11 @@ export function useDeviceControl(
     const previousLevel = powerLevel;
     setPowerLevelState(level);
     try {
-      await withRetry(token!, (t) => setPowerLevel(t, mac!, level));
+      if (connectionMode === "ble" && bleDeviceId && isConnected) {
+        await setBtPowerLevel(bleDeviceId, level);
+      } else {
+        await withRetry(token!, (t) => setPowerLevel(t, mac!, level));
+      }
     } catch (error) {
       console.error(error);
       addError({
@@ -216,7 +298,16 @@ export function useDeviceControl(
 
     setters[fanNumber](speed);
     try {
-      await withRetry(token!, (t) => setFanSpeed(t, mac!, fanNumber, speed));
+      if (connectionMode === "ble" && bleDeviceId && isConnected) {
+        // BLE only supports fan 1 control
+        if (fanNumber === 1) {
+          await setBtFan1Speed(bleDeviceId, speed);
+        } else {
+          throw new Error("BLE mode only supports fan 1 control");
+        }
+      } else {
+        await withRetry(token!, (t) => setFanSpeed(t, mac!, fanNumber, speed));
+      }
     } catch (error) {
       console.error(error);
       addError({

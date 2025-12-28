@@ -24,3 +24,22 @@ vi.mock("next/router", () => ({
     route: "/",
   }),
 }));
+
+// Mock bluetooth utilities globally (default to supported=true for UI tests)
+vi.mock("../utils/bluetooth", () => ({
+  isBluetoothSupported: vi.fn(() => true),
+  connectToDevice: vi.fn(),
+  disconnectFromDevice: vi.fn(),
+  readPowerState: vi.fn(),
+  readTemperature: vi.fn(),
+  readPowerLevel: vi.fn(),
+  readFan1Speed: vi.fn(),
+  setPower: vi.fn(),
+  setTemperature: vi.fn(),
+  setPowerLevel: vi.fn(),
+  setFan1Speed: vi.fn(),
+  isBluetoothEnabled: vi.fn().mockResolvedValue(true),
+  requestEnableBluetooth: vi.fn(),
+  // scanForDevices returns empty array by default; tests can spy and override
+  scanForDevices: vi.fn().mockResolvedValue([]),
+}));

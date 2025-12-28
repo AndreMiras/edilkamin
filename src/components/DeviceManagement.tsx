@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ErrorContext } from "@/context/error";
+import { StoredDevice } from "@/utils/deviceStorage";
 
 import {
   isBluetoothEnabled,
@@ -28,15 +29,15 @@ import {
 import { isValidFireplace, normalizeFireplace } from "../utils/helpers";
 
 interface DeviceManagementProps {
-  fireplaces: string[];
-  onAdd: (mac: string) => void;
+  devices: StoredDevice[];
+  onAdd: (device: StoredDevice) => void;
   onRemove: (index: number) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
 
 const DeviceManagement = ({
-  fireplaces,
+  devices,
   onAdd,
   onRemove,
   open,
@@ -51,6 +52,9 @@ const DeviceManagement = ({
   const [fireplace, setFireplace] = useState("");
   const [fireplaceFeedback, setFireplaceFeedback] = useState("");
 
+  // Extract WiFi MACs for duplicate checking
+  const wifiMacs = devices.map((d) => d.wifiMac);
+
   useEffect(() => {
     setBluetoothSupported(isBluetoothSupported());
   }, []);
@@ -58,16 +62,16 @@ const DeviceManagement = ({
   useEffect(() => {
     if (fireplace !== "" && !isValidFireplace(fireplace)) {
       setFireplaceFeedback(t("validation.invalidMac"));
-    } else if (fireplaces.includes(normalizeFireplace(fireplace))) {
+    } else if (wifiMacs.includes(normalizeFireplace(fireplace))) {
       setFireplaceFeedback(t("validation.alreadyAdded"));
     } else {
       setFireplaceFeedback("");
     }
-  }, [fireplace, fireplaces, t]);
+  }, [fireplace, wifiMacs, t]);
 
   const handleAdd = () => {
     const normalizedMac = normalizeFireplace(fireplace);
-    onAdd(normalizedMac);
+    onAdd({ wifiMac: normalizedMac });
     setFireplace("");
   };
 
@@ -103,13 +107,13 @@ const DeviceManagement = ({
 
     setIsScanning(true);
     try {
-      const devices = await scanForDevices();
+      const scannedDevices = await scanForDevices();
 
-      if (devices.length === 0) {
+      if (scannedDevices.length === 0) {
         return;
       }
 
-      const { wifiMac } = devices[0];
+      const { wifiMac, bleMac, name } = scannedDevices[0];
       if (!wifiMac) {
         addError({
           title: t("bluetooth.scanIncomplete"),
@@ -118,7 +122,7 @@ const DeviceManagement = ({
         return;
       }
 
-      if (fireplaces.includes(wifiMac)) {
+      if (wifiMacs.includes(wifiMac)) {
         addError({
           title: t("bluetooth.alreadyAdded"),
           body: t("bluetooth.deviceExists", { mac: wifiMac }),
@@ -126,7 +130,7 @@ const DeviceManagement = ({
         return;
       }
 
-      onAdd(wifiMac);
+      onAdd({ wifiMac, bleMac, name });
     } catch (error) {
       console.error(error);
       addError({
@@ -161,18 +165,25 @@ const DeviceManagement = ({
         </DialogHeader>
         <div className="space-y-4">
           {/* Device list with remove buttons */}
-          {fireplaces.length > 0 && (
+          {devices.length > 0 && (
             <ul className="divide-y divide-border">
-              {fireplaces.map((mac, index) => (
+              {devices.map((device, index) => (
                 <li
-                  key={mac}
+                  key={device.wifiMac}
                   className="flex justify-between items-center py-2"
                 >
-                  <span className="text-sm font-mono">{mac}</span>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-mono">{device.wifiMac}</span>
+                    {device.bleMac && (
+                      <span className="text-xs text-muted-foreground">
+                        BLE: {device.bleMac}
+                      </span>
+                    )}
+                  </div>
                   <button
                     onClick={() => onRemove(index)}
                     className="p-1.5 rounded-md hover:bg-muted transition-colors text-destructive"
-                    aria-label={`Remove ${mac}`}
+                    aria-label={`Remove ${device.wifiMac}`}
                   >
                     <FontAwesomeIcon icon={["fas", "trash"]} size="sm" />
                   </button>

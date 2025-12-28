@@ -18,9 +18,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useBluetooth } from "@/context/bluetooth";
 import { useDeviceControl } from "@/hooks/useDeviceControl";
+import { getDeviceByWifiMac } from "@/utils/deviceStorage";
 
 import AutoModeToggle from "../../components/AutoModeToggle";
+import ConnectionModeToggle from "../../components/ConnectionModeToggle";
 import DebugInfo from "../../components/DebugInfo";
 import DeviceDetails from "../../components/DeviceDetails";
 import FanSpeedControl from "../../components/FanSpeedControl";
@@ -34,6 +37,22 @@ const Fireplace: NextPage = () => {
   const router = useRouter();
   const mac = router.query.mac as string;
   const [headerCopied, setHeaderCopied] = useState(false);
+  const { setBleDeviceId, disconnect } = useBluetooth();
+
+  // Set BLE device ID from storage when page loads
+  useEffect(() => {
+    if (!mac) return;
+
+    const device = getDeviceByWifiMac(mac);
+    if (device?.bleMac) {
+      setBleDeviceId(device.bleMac);
+    }
+
+    // Disconnect BLE when leaving page
+    return () => {
+      disconnect();
+    };
+  }, [mac, setBleDeviceId, disconnect]);
 
   const handleHeaderCopy = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -105,8 +124,8 @@ const Fireplace: NextPage = () => {
 
   return (
     <RequireAuth message={t("auth.loginToControl")}>
-      {/* Back navigation */}
-      <div className="mb-4">
+      {/* Back navigation and connection mode toggle */}
+      <div className="mb-4 flex justify-between items-center">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -114,6 +133,7 @@ const Fireplace: NextPage = () => {
           <FontAwesomeIcon icon="arrow-left" />
           <span>{t("backToHome")}</span>
         </Link>
+        <ConnectionModeToggle />
       </div>
 
       <PullToRefresh

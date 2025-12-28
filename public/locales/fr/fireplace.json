@@ -20,6 +20,14 @@
   "turnOff": "Éteindre",
   "increaseTemp": "Augmenter la température",
   "decreaseTemp": "Diminuer la température",
+  "connectionMode": {
+    "cloud": "Cloud",
+    "bluetooth": "Bluetooth",
+    "connecting": "Connexion...",
+    "connected": "Connecté",
+    "disconnected": "Déconnecté",
+    "error": "Échec de connexion"
+  },
   "errors": {
     "deviceNotFound": "Appareil non trouvé",
     "deviceNotFoundBody": "L'adresse fournie (\"{{mac}}\") est invalide ou l'appareil n'est pas enregistré.",

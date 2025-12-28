@@ -4,6 +4,7 @@ import * as bluetoothWeb from "edilkamin/bluetooth";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { render, screen, waitFor, within } from "../test/utils";
+import * as bluetoothLocal from "../utils/bluetooth";
 import Home from "./Home";
 
 // Mock edilkamin's getSession to resolve immediately
@@ -23,6 +24,10 @@ vi.mock("./DeviceThermostat", () => ({
 describe("Home", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Restore default mock implementations
+    vi.mocked(bluetoothLocal.isBluetoothSupported).mockReturnValue(true);
+    vi.mocked(bluetoothLocal.isBluetoothEnabled).mockResolvedValue(true);
+    vi.mocked(bluetoothLocal.scanForDevices).mockResolvedValue([]);
     localStorage.clear();
     // Set a valid token so we see the authenticated state
     localStorage.setItem("edilkamin-token", "test-token");
@@ -142,9 +147,11 @@ describe("Home", () => {
       ).toBeInTheDocument();
     });
 
-    // Should be persisted to localStorage
-    const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored).toContain("aabbccddeeff");
+    // Should be persisted to localStorage (new format)
+    const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+    expect(stored.map((d: { wifiMac: string }) => d.wifiMac)).toContain(
+      "aabbccddeeff",
+    );
   });
 
   it("should accept colon-separated MAC address format", async () => {
@@ -163,10 +170,12 @@ describe("Home", () => {
     await user.type(input, "aa:bb:cc:dd:ee:ff");
     await user.click(addButton);
 
-    // Should be normalized and stored
+    // Should be normalized and stored (new format)
     await waitFor(() => {
-      const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-      expect(stored).toContain("aabbccddeeff");
+      const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+      expect(stored.map((d: { wifiMac: string }) => d.wifiMac)).toContain(
+        "aabbccddeeff",
+      );
     });
   });
 
@@ -193,16 +202,21 @@ describe("Home", () => {
     // Button should be disabled
     expect(addButton).toBeDisabled();
 
-    // Should NOT be added to localStorage
-    const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored).not.toContain("invalid-mac");
+    // Should NOT be added to localStorage (new format)
+    const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+    expect(stored.map((d: { wifiMac: string }) => d.wifiMac)).not.toContain(
+      "invalid-mac",
+    );
   });
 
   it("should remove device from list via modal", async () => {
     const user = userEvent.setup();
     localStorage.setItem(
-      "fireplaces",
-      JSON.stringify(["aabbccddeeff", "112233445566"]),
+      "fireplaces-v2",
+      JSON.stringify([
+        { wifiMac: "aabbccddeeff" },
+        { wifiMac: "112233445566" },
+      ]),
     );
 
     render(<Home />);
@@ -234,10 +248,11 @@ describe("Home", () => {
       ).not.toBeInTheDocument();
     });
 
-    // Should be removed from localStorage
-    const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored).not.toContain("aabbccddeeff");
-    expect(stored).toContain("112233445566");
+    // Should be removed from localStorage (new format)
+    const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+    const wifiMacs = stored.map((d: { wifiMac: string }) => d.wifiMac);
+    expect(wifiMacs).not.toContain("aabbccddeeff");
+    expect(wifiMacs).toContain("112233445566");
   });
 
   it("should clear input after successful add", async () => {
@@ -264,7 +279,10 @@ describe("Home", () => {
 
   it("should not add duplicate MAC addresses", async () => {
     const user = userEvent.setup();
-    localStorage.setItem("fireplaces", JSON.stringify(["aabbccddeeff"]));
+    localStorage.setItem(
+      "fireplaces-v2",
+      JSON.stringify([{ wifiMac: "aabbccddeeff" }]),
+    );
 
     render(<Home />);
 
@@ -289,11 +307,12 @@ describe("Home", () => {
     const addButton = screen.getByRole("button", { name: /add fireplace/i });
     expect(addButton).toBeDisabled();
 
-    // Should not add duplicate
-    const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored.filter((mac: string) => mac === "aabbccddeeff")).toHaveLength(
-      1,
-    );
+    // Should not add duplicate (new format)
+    const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+    const wifiMacs = stored.map((d: { wifiMac: string }) => d.wifiMac);
+    expect(
+      wifiMacs.filter((mac: string) => mac === "aabbccddeeff"),
+    ).toHaveLength(1);
   });
 
   it("should disable add button when input is empty", async () => {
@@ -446,15 +465,19 @@ describe("Home", () => {
       ).toBeInTheDocument();
     });
 
-    // Both should be in localStorage
-    const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-    expect(stored).toEqual(["aabbccddeeff", "112233445566"]);
+    // Both should be in localStorage (new format)
+    const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+    const wifiMacs = stored.map((d: { wifiMac: string }) => d.wifiMac);
+    expect(wifiMacs).toEqual(["aabbccddeeff", "112233445566"]);
   });
 
   it("should render centered flex container for multiple devices", async () => {
     localStorage.setItem(
-      "fireplaces",
-      JSON.stringify(["aabbccddeeff", "112233445566"]),
+      "fireplaces-v2",
+      JSON.stringify([
+        { wifiMac: "aabbccddeeff" },
+        { wifiMac: "112233445566" },
+      ]),
     );
 
     render(<Home />);
@@ -495,6 +518,9 @@ describe("Home", () => {
     });
 
     it("should show disabled scan button when bluetooth not supported", async () => {
+      // Mock bluetooth as not supported
+      vi.spyOn(bluetoothLocal, "isBluetoothSupported").mockReturnValue(false);
+
       const user = userEvent.setup();
       render(<Home />);
 
@@ -511,6 +537,9 @@ describe("Home", () => {
     });
 
     it("should show tooltip on hover when bluetooth not supported", async () => {
+      // Mock bluetooth as not supported
+      vi.spyOn(bluetoothLocal, "isBluetoothSupported").mockReturnValue(false);
+
       const user = userEvent.setup();
       render(<Home />);
 
@@ -532,20 +561,14 @@ describe("Home", () => {
     });
 
     it("should add device to list after successful scan", async () => {
-      // Mock bluetooth as supported
-      vi.spyOn(bluetoothWeb, "isWebBluetoothSupported").mockReturnValue(true);
-      vi.spyOn(bluetoothWeb, "scanForDevices").mockResolvedValue([
+      // Mock our local scanForDevices function to return a device
+      vi.mocked(bluetoothLocal.scanForDevices).mockResolvedValue([
         {
           bleMac: "a8032afed50a",
           wifiMac: "a8032afed508",
           name: "EDILKAMIN_EP",
         },
       ]);
-
-      Object.defineProperty(global.navigator, "bluetooth", {
-        value: {},
-        configurable: true,
-      });
 
       const user = userEvent.setup();
       render(<Home />);
@@ -569,24 +592,20 @@ describe("Home", () => {
         ).toBeInTheDocument();
       });
 
-      // Should be persisted to localStorage
-      const stored = JSON.parse(localStorage.getItem("fireplaces") || "[]");
-      expect(stored).toContain("a8032afed508");
-
-      // Cleanup
-      // @ts-expect-error - resetting navigator.bluetooth
-      delete global.navigator.bluetooth;
+      // Should be persisted to localStorage (new format, includes bleMac)
+      const stored = JSON.parse(localStorage.getItem("fireplaces-v2") || "[]");
+      expect(stored).toEqual([
+        {
+          wifiMac: "a8032afed508",
+          bleMac: "a8032afed50a",
+          name: "EDILKAMIN_EP",
+        },
+      ]);
     });
 
     it("should not show error when user cancels scan", async () => {
-      // Mock bluetooth as supported but user cancels (empty array)
-      vi.spyOn(bluetoothWeb, "isWebBluetoothSupported").mockReturnValue(true);
-      vi.spyOn(bluetoothWeb, "scanForDevices").mockResolvedValue([]);
-
-      Object.defineProperty(global.navigator, "bluetooth", {
-        value: {},
-        configurable: true,
-      });
+      // Mock our local scanForDevices to return empty array (user cancelled)
+      vi.mocked(bluetoothLocal.scanForDevices).mockResolvedValue([]);
 
       const user = userEvent.setup();
       render(<Home />);
@@ -609,10 +628,6 @@ describe("Home", () => {
       // No error message should be shown
       expect(screen.queryByText(/scan failed/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/scan incomplete/i)).not.toBeInTheDocument();
-
-      // Cleanup
-      // @ts-expect-error - resetting navigator.bluetooth
-      delete global.navigator.bluetooth;
     });
   });
 });

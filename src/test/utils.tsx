@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { ReactElement } from "react";
 import { I18nextProvider } from "react-i18next";
 
+import { BluetoothProvider } from "../context/bluetooth";
 import { ErrorContextProvider } from "../context/error";
 import { ThemeContextProvider } from "../context/theme";
 import { TokenContextProvider } from "../context/token";
@@ -13,9 +14,11 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <I18nextProvider i18n={i18n}>
       <TokenContextProvider>
-        <ThemeContextProvider>
-          <ErrorContextProvider>{children}</ErrorContextProvider>
-        </ThemeContextProvider>
+        <BluetoothProvider>
+          <ThemeContextProvider>
+            <ErrorContextProvider>{children}</ErrorContextProvider>
+          </ThemeContextProvider>
+        </BluetoothProvider>
       </TokenContextProvider>
     </I18nextProvider>
   );

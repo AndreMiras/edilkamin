@@ -2,6 +2,11 @@ import { Capacitor } from "@capacitor/core";
 import { BleClient } from "@capacitor-community/bluetooth-le";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+// Unmock the bluetooth module (overrides the global mock in setup.ts)
+vi.unmock("./bluetooth");
+vi.unmock("@/utils/bluetooth");
+vi.unmock("../utils/bluetooth");
+
 import {
   isBluetoothEnabled,
   isBluetoothSupported,

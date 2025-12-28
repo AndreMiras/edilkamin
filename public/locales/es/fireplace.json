@@ -20,6 +20,14 @@
   "turnOff": "Apagar",
   "increaseTemp": "Aumentar temperatura",
   "decreaseTemp": "Disminuir temperatura",
+  "connectionMode": {
+    "cloud": "Nube",
+    "bluetooth": "Bluetooth",
+    "connecting": "Conectando...",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "error": "Error de conexión"
+  },
   "errors": {
     "deviceNotFound": "Dispositivo no encontrado",
     "deviceNotFoundBody": "La dirección proporcionada (\"{{mac}}\") no es válida o el dispositivo no está registrado.",

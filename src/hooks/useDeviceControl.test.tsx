@@ -4,6 +4,7 @@ import { act, ReactNode } from "react";
 import { I18nextProvider } from "react-i18next";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { BluetoothProvider } from "../context/bluetooth";
 import { ErrorContextProvider } from "../context/error";
 import { TokenContextProvider } from "../context/token";
 import i18n from "../i18n";
@@ -22,6 +23,21 @@ vi.mock("edilkamin");
 // Mock platform utility
 vi.mock("../utils/platform", () => ({
   isNativePlatform: () => false,
+}));
+
+// Mock bluetooth utilities
+vi.mock("../utils/bluetooth", () => ({
+  isBluetoothSupported: () => false,
+  connectToDevice: vi.fn(),
+  disconnectFromDevice: vi.fn(),
+  readPowerState: vi.fn(),
+  readTemperature: vi.fn(),
+  readPowerLevel: vi.fn(),
+  readFan1Speed: vi.fn(),
+  setPower: vi.fn(),
+  setTemperature: vi.fn(),
+  setPowerLevel: vi.fn(),
+  setFan1Speed: vi.fn(),
 }));
 
 const mockDeviceInfo = vi.fn();
@@ -82,7 +98,9 @@ describe("useDeviceControl", () => {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <I18nextProvider i18n={i18n}>
       <TokenContextProvider>
-        <ErrorContextProvider>{children}</ErrorContextProvider>
+        <BluetoothProvider>
+          <ErrorContextProvider>{children}</ErrorContextProvider>
+        </BluetoothProvider>
       </TokenContextProvider>
     </I18nextProvider>
   );

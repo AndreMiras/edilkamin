@@ -1,5 +1,16 @@
 import { Capacitor } from "@capacitor/core";
 import { bleToWifiMac } from "edilkamin";
+import {
+  createPacket,
+  ModbusResponse,
+  NOTIFY_CHARACTERISTIC_UUID,
+  parseResponse,
+  parsers,
+  readCommands,
+  SERVICE_UUID,
+  WRITE_CHARACTERISTIC_UUID,
+  writeCommands,
+} from "edilkamin/bluetooth";
 
 /** Device name broadcast by Edilkamin stoves */
 const EDILKAMIN_DEVICE_NAME = "EDILKAMIN_EP";
@@ -126,3 +137,267 @@ const scanWithNativePlugin = async (): Promise<DiscoveredDevice[]> => {
     throw error;
   }
 };
+
+// =============================================================================
+// BLE Device Control (using edilkamin/bluetooth protocol layer)
+// =============================================================================
+
+/** Pending response resolver for notification-based responses */
+let pendingResponseResolve: ((data: DataView) => void) | null = null;
+let pendingResponseReject: ((error: Error) => void) | null = null;
+
+/**
+ * Connect to an Edilkamin device and set up notifications for responses.
+ * Must be called before sending commands.
+ *
+ * @param deviceId - BLE device ID (MAC address from scanning)
+ * @param onDisconnect - Optional callback when device disconnects
+ */
+export const connectToDevice = async (
+  deviceId: string,
+  onDisconnect?: (deviceId: string) => void,
+): Promise<void> => {
+  if (!Capacitor.isNativePlatform()) {
+    throw new Error("BLE device control is only supported on native platforms");
+  }
+
+  const { BleClient } = await import("@capacitor-community/bluetooth-le");
+
+  // Connect to device
+  await BleClient.connect(deviceId, (disconnectedId) => {
+    // Clear any pending response
+    if (pendingResponseReject) {
+      pendingResponseReject(new Error("Device disconnected"));
+      pendingResponseResolve = null;
+      pendingResponseReject = null;
+    }
+    onDisconnect?.(disconnectedId);
+  });
+
+  // Start notifications for responses
+  await BleClient.startNotifications(
+    deviceId,
+    SERVICE_UUID,
+    NOTIFY_CHARACTERISTIC_UUID,
+    (value: DataView) => {
+      // Resolve any pending response promise
+      if (pendingResponseResolve) {
+        pendingResponseResolve(value);
+        pendingResponseResolve = null;
+        pendingResponseReject = null;
+      }
+    },
+  );
+};
+
+/**
+ * Disconnect from an Edilkamin device.
+ *
+ * @param deviceId - BLE device ID
+ */
+export const disconnectFromDevice = async (deviceId: string): Promise<void> => {
+  if (!Capacitor.isNativePlatform()) {
+    return;
+  }
+
+  const { BleClient } = await import("@capacitor-community/bluetooth-le");
+
+  try {
+    await BleClient.stopNotifications(
+      deviceId,
+      SERVICE_UUID,
+      NOTIFY_CHARACTERISTIC_UUID,
+    );
+  } catch {
+    // Ignore errors stopping notifications
+  }
+
+  await BleClient.disconnect(deviceId);
+};
+
+/**
+ * Send a command to the device and wait for response.
+ *
+ * @param deviceId - BLE device ID
+ * @param command - 6-byte Modbus command
+ * @param timeout - Response timeout in ms (default 5000)
+ * @returns Parsed Modbus response
+ */
+export const sendCommand = async (
+  deviceId: string,
+  command: Uint8Array,
+  timeout: number = 5000,
+): Promise<ModbusResponse> => {
+  if (!Capacitor.isNativePlatform()) {
+    throw new Error("BLE device control is only supported on native platforms");
+  }
+
+  const { BleClient } = await import("@capacitor-community/bluetooth-le");
+
+  // Build encrypted packet using edilkamin protocol
+  const packet = await createPacket(command);
+
+  // Create promise for response with timeout
+  const responsePromise = new Promise<DataView>((resolve, reject) => {
+    pendingResponseResolve = resolve;
+    pendingResponseReject = reject;
+
+    setTimeout(() => {
+      if (pendingResponseReject) {
+        pendingResponseReject(new Error("Response timeout"));
+        pendingResponseResolve = null;
+        pendingResponseReject = null;
+      }
+    }, timeout);
+  });
+
+  // Send command
+  await BleClient.writeWithoutResponse(
+    deviceId,
+    SERVICE_UUID,
+    WRITE_CHARACTERISTIC_UUID,
+    new DataView(packet.buffer),
+  );
+
+  // Wait for response
+  const responseView = await responsePromise;
+
+  // Convert DataView to Uint8Array for parsing
+  const responseBytes = new Uint8Array(
+    responseView.buffer,
+    responseView.byteOffset,
+    responseView.byteLength,
+  );
+
+  // Parse response using edilkamin protocol
+  return parseResponse(responseBytes);
+};
+
+// =============================================================================
+// High-level device control functions
+// =============================================================================
+
+/**
+ * Read the current power state from the device.
+ *
+ * @param deviceId - BLE device ID
+ * @returns true if powered on, false if off
+ */
+export const readPowerState = async (deviceId: string): Promise<boolean> => {
+  const response = await sendCommand(deviceId, readCommands.power);
+  return parsers.boolean(response);
+};
+
+/**
+ * Set the power state of the device.
+ *
+ * @param deviceId - BLE device ID
+ * @param on - true to turn on, false to turn off
+ */
+export const setPower = async (
+  deviceId: string,
+  on: boolean,
+): Promise<void> => {
+  const response = await sendCommand(deviceId, writeCommands.setPower(on));
+  if (response.isError) {
+    throw new Error(`Failed to set power: error code ${response.data[0]}`);
+  }
+};
+
+/**
+ * Read the current temperature from the device.
+ *
+ * @param deviceId - BLE device ID
+ * @returns Temperature in Celsius
+ */
+export const readTemperature = async (deviceId: string): Promise<number> => {
+  const response = await sendCommand(deviceId, readCommands.temperature);
+  return parsers.temperature(response);
+};
+
+/**
+ * Set the target temperature.
+ *
+ * @param deviceId - BLE device ID
+ * @param tempCelsius - Target temperature in Celsius
+ */
+export const setTemperature = async (
+  deviceId: string,
+  tempCelsius: number,
+): Promise<void> => {
+  const response = await sendCommand(
+    deviceId,
+    writeCommands.setTemperature(tempCelsius),
+  );
+  if (response.isError) {
+    throw new Error(
+      `Failed to set temperature: error code ${response.data[0]}`,
+    );
+  }
+};
+
+/**
+ * Read the current power level (1-5).
+ *
+ * @param deviceId - BLE device ID
+ * @returns Power level 1-5
+ */
+export const readPowerLevel = async (deviceId: string): Promise<number> => {
+  const response = await sendCommand(deviceId, readCommands.powerLevel);
+  return parsers.number(response);
+};
+
+/**
+ * Set the power level.
+ *
+ * @param deviceId - BLE device ID
+ * @param level - Power level 1-5
+ */
+export const setPowerLevel = async (
+  deviceId: string,
+  level: number,
+): Promise<void> => {
+  const response = await sendCommand(
+    deviceId,
+    writeCommands.setPowerLevel(level),
+  );
+  if (response.isError) {
+    throw new Error(
+      `Failed to set power level: error code ${response.data[0]}`,
+    );
+  }
+};
+
+/**
+ * Read fan 1 speed (0=auto, 1-5=manual).
+ *
+ * @param deviceId - BLE device ID
+ * @returns Fan speed 0-5
+ */
+export const readFan1Speed = async (deviceId: string): Promise<number> => {
+  const response = await sendCommand(deviceId, readCommands.fan1Speed);
+  return parsers.number(response);
+};
+
+/**
+ * Set fan 1 speed.
+ *
+ * @param deviceId - BLE device ID
+ * @param speed - Fan speed 0-5 (0=auto)
+ */
+export const setFan1Speed = async (
+  deviceId: string,
+  speed: number,
+): Promise<void> => {
+  const response = await sendCommand(
+    deviceId,
+    writeCommands.setFan1Speed(speed),
+  );
+  if (response.isError) {
+    throw new Error(`Failed to set fan speed: error code ${response.data[0]}`);
+  }
+};
+
+// Re-export types and commands for convenience
+export type { ModbusResponse };
+export { parsers, readCommands, writeCommands };

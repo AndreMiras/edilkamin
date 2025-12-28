@@ -6,7 +6,7 @@ import DeviceManagement from "./DeviceManagement";
 
 describe("DeviceManagement", () => {
   const defaultProps = {
-    fireplaces: [],
+    devices: [],
     onAdd: vi.fn(),
     onRemove: vi.fn(),
   };
