@@ -163,6 +163,9 @@ export const connectToDevice = async (
 
   const { BleClient } = await import("@capacitor-community/bluetooth-le");
 
+  // Initialize BLE - idempotent, safe to call multiple times
+  await BleClient.initialize();
+
   // Connect to device
   await BleClient.connect(deviceId, (disconnectedId) => {
     // Clear any pending response
@@ -200,19 +203,24 @@ export const disconnectFromDevice = async (deviceId: string): Promise<void> => {
     return;
   }
 
-  const { BleClient } = await import("@capacitor-community/bluetooth-le");
-
   try {
-    await BleClient.stopNotifications(
-      deviceId,
-      SERVICE_UUID,
-      NOTIFY_CHARACTERISTIC_UUID,
-    );
-  } catch {
-    // Ignore errors stopping notifications
-  }
+    const { BleClient } = await import("@capacitor-community/bluetooth-le");
 
-  await BleClient.disconnect(deviceId);
+    try {
+      await BleClient.stopNotifications(
+        deviceId,
+        SERVICE_UUID,
+        NOTIFY_CHARACTERISTIC_UUID,
+      );
+    } catch {
+      // Ignore errors stopping notifications
+    }
+
+    await BleClient.disconnect(deviceId);
+  } catch {
+    // Ignore errors during disconnect - this is a cleanup operation
+    // and may fail if BleClient was never initialized or we were never connected
+  }
 };
 
 /**
@@ -233,6 +241,9 @@ export const sendCommand = async (
   }
 
   const { BleClient } = await import("@capacitor-community/bluetooth-le");
+
+  // Initialize BLE - idempotent, safe to call multiple times
+  await BleClient.initialize();
 
   // Build encrypted packet using edilkamin protocol
   const packet = await createPacket(command);
