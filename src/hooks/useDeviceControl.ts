@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 
 import { useBluetooth } from "@/context/bluetooth";
 import { ErrorContext } from "@/context/error";
+import { useNetwork } from "@/context/network";
 import { TokenContext } from "@/context/token";
 import {
   readFan1Speed,
@@ -62,6 +63,7 @@ export function useDeviceControl(
   const { addError } = useContext(ErrorContext);
   const { withRetry } = useTokenRefresh();
   const { connectionMode, bleDeviceId, isConnected } = useBluetooth();
+  const { isOnline, reportOnline, reportOffline } = useNetwork();
 
   const baseUrl = isNativePlatform()
     ? process.env.NEXT_PUBLIC_USE_LEGACY_API === "true"
@@ -96,9 +98,22 @@ export function useDeviceControl(
       setFan3SpeedState(data.nvm.user_parameters.fan_3_ventilation);
       setLastUpdated(new Date());
       setLoading(false);
+      // Successfully fetched - we're online
+      reportOnline();
     } catch (error: unknown) {
       console.error(error);
       setLoading(false);
+
+      // Detect network errors (no response received)
+      const isAxiosNetworkError =
+        axios.isAxiosError(error) && !error.response && error.request;
+      const isFetchError =
+        error instanceof TypeError &&
+        error.message.toLowerCase().includes("fetch");
+      if (isAxiosNetworkError || isFetchError) {
+        reportOffline();
+      }
+
       if (axios.isAxiosError(error) && error?.response?.status === 404) {
         addError({
           title: t("errors.deviceNotFound"),
@@ -121,7 +136,16 @@ export function useDeviceControl(
         addError({ body: t("errors.couldntFetchInfo") });
       }
     }
-  }, [mac, token, withRetry, deviceInfo, t, addError]);
+  }, [
+    mac,
+    token,
+    withRetry,
+    deviceInfo,
+    t,
+    addError,
+    reportOnline,
+    reportOffline,
+  ]);
 
   const fetchDeviceInfoBle = useCallback(async () => {
     if (!bleDeviceId || !isConnected) return;
@@ -159,18 +183,21 @@ export function useDeviceControl(
     const fetchFn = isBleMode ? fetchDeviceInfoBle : fetchDeviceInfo;
     const pollInterval = isBleMode ? 30 * 1000 : 10 * 1000; // 30s BLE, 10s Cloud
 
-    // Skip if in BLE mode but not connected, or Cloud mode without token
+    // Skip if in BLE mode but not connected, or Cloud mode without token or offline
     if (isBleMode) {
       fetchFn();
-    } else if (token) {
+    } else if (token && isOnline) {
       fetchFn();
     } else {
+      // Skip polling if no token or offline
       return;
     }
 
     // Set up polling interval
     const intervalId = setInterval(() => {
       if (document.visibilityState === "visible") {
+        // Skip cloud polling when offline
+        if (!isBleMode && !isOnline) return;
         fetchFn();
       }
     }, pollInterval);
@@ -196,6 +223,7 @@ export function useDeviceControl(
     bleDeviceId,
     fetchDeviceInfo,
     fetchDeviceInfoBle,
+    isOnline,
   ]);
 
   const refreshDeviceInfo = useCallback(async () => {

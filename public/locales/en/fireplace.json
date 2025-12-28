@@ -61,7 +61,9 @@
     "connecting": "Connecting...",
     "connected": "Connected",
     "disconnected": "Disconnected",
-    "error": "Connection failed"
+    "error": "Connection failed",
+    "offline": "Offline",
+    "offlineHint": "No internet connection"
   },
   "errors": {
     "deviceNotFound": "Device not found",

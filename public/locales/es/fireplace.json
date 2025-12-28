@@ -26,7 +26,9 @@
     "connecting": "Conectando...",
     "connected": "Conectado",
     "disconnected": "Desconectado",
-    "error": "Error de conexión"
+    "error": "Error de conexión",
+    "offline": "Sin conexión",
+    "offlineHint": "Sin conexión a internet"
   },
   "errors": {
     "deviceNotFound": "Dispositivo no encontrado",

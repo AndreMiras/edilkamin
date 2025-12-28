@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 
 import { useBluetooth } from "@/context/bluetooth";
+import { useNetwork } from "@/context/network";
 
 const ConnectionModeToggle = () => {
   const { t } = useTranslation("fireplace");
@@ -16,6 +17,7 @@ const ConnectionModeToggle = () => {
     disconnect,
     bleDeviceId,
   } = useBluetooth();
+  const { isOnline } = useNetwork();
 
   const handleModeChange = async (mode: "cloud" | "ble") => {
     if (mode === connectionMode) return;
@@ -42,15 +44,22 @@ const ConnectionModeToggle = () => {
     <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
       <button
         onClick={() => handleModeChange("cloud")}
+        disabled={!isOnline}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
           connectionMode === "cloud"
             ? "bg-background text-foreground shadow-sm"
             : "text-muted-foreground hover:text-foreground"
-        }`}
+        } ${!isOnline ? "opacity-50 cursor-not-allowed" : ""}`}
         aria-pressed={connectionMode === "cloud"}
+        title={!isOnline ? t("connectionMode.offlineHint") : undefined}
       >
         <FontAwesomeIcon icon={["fas", "cloud"]} className="h-3.5 w-3.5" />
-        <span>{t("connectionMode.cloud")}</span>
+        <span>
+          {isOnline ? t("connectionMode.cloud") : t("connectionMode.offline")}
+        </span>
+        {!isOnline && (
+          <span className="ml-1 w-2 h-2 bg-yellow-500 rounded-full" />
+        )}
       </button>
       <button
         onClick={() => handleModeChange("ble")}
