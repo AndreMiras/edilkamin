@@ -173,5 +173,39 @@ describe("ErrorContext", () => {
       );
       expect(screen.getByTestId("errors")).toHaveTextContent("No title");
     });
+
+    it("should maintain stable addError reference across renders", async () => {
+      const addErrorRefs: Array<(error: { body: string }) => void> = [];
+
+      const TestComponent = () => {
+        const { addError } = useContext(ErrorContext);
+        // Capture reference on each render
+        addErrorRefs.push(addError);
+        return (
+          <div>
+            <div data-testid="render-count">{addErrorRefs.length}</div>
+            <button onClick={() => addError({ body: "trigger re-render" })}>
+              Add Error
+            </button>
+          </div>
+        );
+      };
+
+      const { user } = render(
+        <ErrorContextProvider>
+          <TestComponent />
+        </ErrorContextProvider>,
+      );
+
+      // Initial render
+      expect(addErrorRefs.length).toBe(1);
+
+      // Trigger re-render by adding error
+      await user.click(screen.getByRole("button"));
+
+      // After re-render, addError reference should be the same
+      expect(addErrorRefs.length).toBeGreaterThan(1);
+      expect(addErrorRefs[0]).toBe(addErrorRefs[addErrorRefs.length - 1]);
+    });
   });
 });

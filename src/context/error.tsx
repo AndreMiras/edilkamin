@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useCallback, useState } from "react";
 
 interface ErrorType {
   title?: string;
@@ -25,7 +25,10 @@ const ErrorContext = createContext<ErrorContextType>(errorsContextDefault);
 
 const ErrorContextProvider = ({ children }: { children: ReactNode }) => {
   const [errors, setErrors] = useState<ErrorType[]>(defaultErrors);
-  const addError = (error: ErrorType) => setErrors([...errors, error]);
+  const addError = useCallback(
+    (error: ErrorType) => setErrors((prev) => [...prev, error]),
+    [],
+  );
   return (
     <ErrorContext.Provider value={{ errors, setErrors, addError }}>
       {children}
