@@ -177,6 +177,10 @@ export const connectToDevice = async (
     onDisconnect?.(disconnectedId);
   });
 
+  // Wait for service discovery to complete by requesting services
+  // This ensures GATT services are available before we try to use them
+  await BleClient.getServices(deviceId);
+
   // Start notifications for responses
   await BleClient.startNotifications(
     deviceId,
@@ -262,8 +266,9 @@ export const sendCommand = async (
     }, timeout);
   });
 
-  // Send command
-  await BleClient.writeWithoutResponse(
+  // Send command using write (with response) for better reliability
+  // Some devices require acknowledgment even if spec says "write no response"
+  await BleClient.write(
     deviceId,
     SERVICE_UUID,
     WRITE_CHARACTERISTIC_UUID,
