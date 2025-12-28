@@ -26,7 +26,13 @@ const ErrorContext = createContext<ErrorContextType>(errorsContextDefault);
 const ErrorContextProvider = ({ children }: { children: ReactNode }) => {
   const [errors, setErrors] = useState<ErrorType[]>(defaultErrors);
   const addError = useCallback(
-    (error: ErrorType) => setErrors((prev) => [...prev, error]),
+    (error: ErrorType) =>
+      setErrors((prev) => {
+        // Deduplicate by exact body match
+        const isDuplicate = prev.some((e) => e.body === error.body);
+        if (isDuplicate) return prev;
+        return [...prev, error];
+      }),
     [],
   );
   return (

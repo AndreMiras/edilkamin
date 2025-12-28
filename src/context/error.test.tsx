@@ -208,4 +208,101 @@ describe("ErrorContext", () => {
       expect(addErrorRefs[0]).toBe(addErrorRefs[addErrorRefs.length - 1]);
     });
   });
+
+  describe("error deduplication", () => {
+    it("should not add duplicate errors with same body", async () => {
+      const TestComponent = () => {
+        const { errors, addError } = useContext(ErrorContext);
+        return (
+          <div>
+            <div data-testid="error-count">{errors.length}</div>
+            <button onClick={() => addError({ body: "Same error message" })}>
+              Add Error
+            </button>
+          </div>
+        );
+      };
+
+      const { user } = render(
+        <ErrorContextProvider>
+          <TestComponent />
+        </ErrorContextProvider>,
+      );
+
+      // Add same error multiple times
+      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
+
+      // Should only have 1 error
+      expect(screen.getByTestId("error-count")).toHaveTextContent("1");
+    });
+
+    it("should add errors with different bodies", async () => {
+      let errorIndex = 0;
+      const TestComponent = () => {
+        const { errors, addError } = useContext(ErrorContext);
+        return (
+          <div>
+            <div data-testid="error-count">{errors.length}</div>
+            <button
+              onClick={() => {
+                errorIndex += 1;
+                addError({ body: `Error ${errorIndex}` });
+              }}
+            >
+              Add Error
+            </button>
+          </div>
+        );
+      };
+
+      const { user } = render(
+        <ErrorContextProvider>
+          <TestComponent />
+        </ErrorContextProvider>,
+      );
+
+      // Add different errors
+      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
+      await user.click(screen.getByRole("button"));
+
+      // Should have 3 different errors
+      expect(screen.getByTestId("error-count")).toHaveTextContent("3");
+    });
+
+    it("should deduplicate by body even with different titles", async () => {
+      const TestComponent = () => {
+        const { errors, addError } = useContext(ErrorContext);
+        return (
+          <div>
+            <div data-testid="error-count">{errors.length}</div>
+            <button
+              onClick={() => addError({ title: "Title A", body: "Same body" })}
+            >
+              Add A
+            </button>
+            <button
+              onClick={() => addError({ title: "Title B", body: "Same body" })}
+            >
+              Add B
+            </button>
+          </div>
+        );
+      };
+
+      const { user } = render(
+        <ErrorContextProvider>
+          <TestComponent />
+        </ErrorContextProvider>,
+      );
+
+      await user.click(screen.getByRole("button", { name: /Add A/i }));
+      await user.click(screen.getByRole("button", { name: /Add B/i }));
+
+      // Body-based deduplication: only 1 error (same body)
+      expect(screen.getByTestId("error-count")).toHaveTextContent("1");
+    });
+  });
 });
