@@ -16,6 +16,7 @@ import LanguageInitializer from "../components/LanguageInitializer";
 import ThemeInitializer from "../components/ThemeInitializer";
 import { BluetoothProvider } from "../context/bluetooth";
 import { ErrorContextProvider } from "../context/error";
+import { NetworkContextProvider } from "../context/network";
 import { ThemeContextProvider } from "../context/theme";
 import { TokenContextProvider } from "../context/token";
 import i18n from "../i18n";
@@ -37,18 +38,20 @@ const MyApp = ({ Component, pageProps }: AppProps): React.ReactElement => (
       </Head>
       <LanguageInitializer />
       <ErrorContextProvider>
-        <TokenContextProvider>
-          <BluetoothProvider>
-            <ThemeContextProvider>
-              <ThemeInitializer />
-              <Header />
-              <div className="flex-1 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
-                <Errors />
-                <Component {...pageProps} />
-              </div>
-            </ThemeContextProvider>
-          </BluetoothProvider>
-        </TokenContextProvider>
+        <NetworkContextProvider>
+          <TokenContextProvider>
+            <BluetoothProvider>
+              <ThemeContextProvider>
+                <ThemeInitializer />
+                <Header />
+                <div className="flex-1 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full">
+                  <Errors />
+                  <Component {...pageProps} />
+                </div>
+              </ThemeContextProvider>
+            </BluetoothProvider>
+          </TokenContextProvider>
+        </NetworkContextProvider>
       </ErrorContextProvider>
       <Footer />
     </div>
