@@ -2,6 +2,7 @@
 
 [![Tests](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml/badge.svg)](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/AndreMiras/edilkamin/branch/main/graph/badge.svg)](https://codecov.io/gh/AndreMiras/edilkamin)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <https://edilkamin.vercel.app/>
 
@@ -74,3 +75,7 @@ yarn build:mobile && yarn cap:sync
 ```
 
 Then rebuild from Android Studio.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

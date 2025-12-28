@@ -3,6 +3,7 @@
   "homepage": "https://andremiras.github.io/edilkamin/",
   "version": "2025.12.14",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@capacitor-community/bluetooth-le": "^7.3.0",
     "@capacitor-community/safe-area": "^8.0.1",
