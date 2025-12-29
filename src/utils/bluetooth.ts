@@ -147,6 +147,13 @@ let pendingResponseResolve: ((data: DataView) => void) | null = null;
 let pendingResponseReject: ((error: Error) => void) | null = null;
 
 /**
+ * Command chain to ensure sequential BLE command execution.
+ * BLE notifications use a single global resolver, so we must serialize commands
+ * to avoid race conditions when multiple commands are sent in parallel.
+ */
+let commandChain: Promise<void> = Promise.resolve();
+
+/**
  * Connect to an Edilkamin device and set up notifications for responses.
  * Must be called before sending commands.
  *
@@ -203,6 +210,9 @@ export const connectToDevice = async (
  * @param deviceId - BLE device ID
  */
 export const disconnectFromDevice = async (deviceId: string): Promise<void> => {
+  // Reset command chain for clean reconnection
+  commandChain = Promise.resolve();
+
   if (!Capacitor.isNativePlatform()) {
     return;
   }
@@ -228,22 +238,14 @@ export const disconnectFromDevice = async (deviceId: string): Promise<void> => {
 };
 
 /**
- * Send a command to the device and wait for response.
- *
- * @param deviceId - BLE device ID
- * @param command - 6-byte Modbus command
- * @param timeout - Response timeout in ms (default 5000)
- * @returns Parsed Modbus response
+ * Execute a single BLE command and wait for response.
+ * This is the internal implementation - use sendCommand for proper serialization.
  */
-export const sendCommand = async (
+const executeSingleCommand = async (
   deviceId: string,
   command: Uint8Array,
-  timeout: number = 5000,
+  timeout: number,
 ): Promise<ModbusResponse> => {
-  if (!Capacitor.isNativePlatform()) {
-    throw new Error("BLE device control is only supported on native platforms");
-  }
-
   const { BleClient } = await import("@capacitor-community/bluetooth-le");
 
   // Initialize BLE - idempotent, safe to call multiple times
@@ -287,6 +289,39 @@ export const sendCommand = async (
 
   // Parse response using edilkamin protocol
   return parseResponse(responseBytes);
+};
+
+/**
+ * Send a command to the device and wait for response.
+ * Commands are automatically serialized to avoid race conditions with BLE notifications.
+ *
+ * @param deviceId - BLE device ID
+ * @param command - 6-byte Modbus command
+ * @param timeout - Response timeout in ms (default 5000)
+ * @returns Parsed Modbus response
+ */
+export const sendCommand = async (
+  deviceId: string,
+  command: Uint8Array,
+  timeout: number = 5000,
+): Promise<ModbusResponse> => {
+  if (!Capacitor.isNativePlatform()) {
+    throw new Error("BLE device control is only supported on native platforms");
+  }
+
+  // Chain commands to ensure sequential execution
+  // This prevents race conditions where parallel calls overwrite pendingResponseResolve
+  const result = commandChain.then(() =>
+    executeSingleCommand(deviceId, command, timeout),
+  );
+
+  // Update chain - catch errors to prevent chain from breaking on failures
+  commandChain = result.then(
+    () => {},
+    () => {},
+  );
+
+  return result;
 };
 
 // =============================================================================
@@ -411,6 +446,36 @@ export const setFan1Speed = async (
   );
   if (response.isError) {
     throw new Error(`Failed to set fan speed: error code ${response.data[0]}`);
+  }
+};
+
+/**
+ * Read auto mode state from the device.
+ *
+ * @param deviceId - BLE device ID
+ * @returns true if auto mode is enabled, false if manual
+ */
+export const readAutoMode = async (deviceId: string): Promise<boolean> => {
+  const response = await sendCommand(deviceId, readCommands.autoMode);
+  return parsers.boolean(response);
+};
+
+/**
+ * Set auto mode state.
+ *
+ * @param deviceId - BLE device ID
+ * @param enabled - true to enable auto mode, false for manual
+ */
+export const setAutoMode = async (
+  deviceId: string,
+  enabled: boolean,
+): Promise<void> => {
+  const response = await sendCommand(
+    deviceId,
+    writeCommands.setAutoMode(enabled),
+  );
+  if (response.isError) {
+    throw new Error(`Failed to set auto mode: error code ${response.data[0]}`);
   }
 };
 

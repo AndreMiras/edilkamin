@@ -34,10 +34,12 @@ vi.mock("../utils/bluetooth", () => ({
   readTemperature: vi.fn(),
   readPowerLevel: vi.fn(),
   readFan1Speed: vi.fn(),
+  readAutoMode: vi.fn(),
   setPower: vi.fn(),
   setTemperature: vi.fn(),
   setPowerLevel: vi.fn(),
   setFan1Speed: vi.fn(),
+  setAutoMode: vi.fn(),
   isBluetoothEnabled: vi.fn().mockResolvedValue(true),
   requestEnableBluetooth: vi.fn(),
   // scanForDevices returns empty array by default; tests can spy and override

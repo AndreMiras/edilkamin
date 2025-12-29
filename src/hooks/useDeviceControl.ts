@@ -8,10 +8,12 @@ import { ErrorContext } from "@/context/error";
 import { useNetwork } from "@/context/network";
 import { TokenContext } from "@/context/token";
 import {
+  readAutoMode,
   readFan1Speed,
   readPowerLevel,
   readPowerState,
   readTemperature,
+  setAutoMode as setBtAutoMode,
   setFan1Speed as setBtFan1Speed,
   setPower as setBtPower,
   setPowerLevel as setBtPowerLevel,
@@ -151,17 +153,19 @@ export function useDeviceControl(
     if (!bleDeviceId || !isConnected) return;
 
     try {
-      const [power, temp, level, fan] = await Promise.all([
+      const [power, temp, level, fan, auto] = await Promise.all([
         readPowerState(bleDeviceId),
         readTemperature(bleDeviceId),
         readPowerLevel(bleDeviceId),
         readFan1Speed(bleDeviceId),
+        readAutoMode(bleDeviceId),
       ]);
 
       setPowerState(power);
       setTemperature(temp);
       setPowerLevelState(level);
       setFan1SpeedState(fan);
+      setIsAutoState(auto);
       setLastUpdated(new Date());
       setLoading(false);
     } catch (error) {
@@ -304,7 +308,11 @@ export function useDeviceControl(
     const previousAuto = isAuto;
     setIsAutoState(enabled);
     try {
-      await withRetry(token!, (t) => setAuto(t, mac!, enabled));
+      if (connectionMode === "ble" && bleDeviceId && isConnected) {
+        await setBtAutoMode(bleDeviceId, enabled);
+      } else {
+        await withRetry(token!, (t) => setAuto(t, mac!, enabled));
+      }
     } catch (error) {
       console.error(error);
       addError({

@@ -1,5 +1,11 @@
 import { Capacitor } from "@capacitor/core";
-import { BleClient } from "@capacitor-community/bluetooth-le";
+import {
+  BleClient,
+  // @ts-expect-error - Mock-only exports not in type definitions
+  resetNotificationCallback,
+  // @ts-expect-error - Mock-only exports not in type definitions
+  triggerNotification,
+} from "@capacitor-community/bluetooth-le";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Unmock the bluetooth module (overrides the global mock in setup.ts)
@@ -8,10 +14,13 @@ vi.unmock("@/utils/bluetooth");
 vi.unmock("../utils/bluetooth");
 
 import {
+  connectToDevice,
   isBluetoothEnabled,
   isBluetoothSupported,
+  readAutoMode,
   requestEnableBluetooth,
   scanForDevices,
+  setAutoMode,
 } from "./bluetooth";
 
 // Mock Capacitor
@@ -119,6 +128,89 @@ describe("bluetooth utility", () => {
       expect(result).toBe(true);
       expect(BleClient.initialize).toHaveBeenCalled();
       expect(BleClient.requestEnable).toHaveBeenCalled();
+    });
+  });
+
+  describe("readAutoMode", () => {
+    beforeEach(async () => {
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true);
+      resetNotificationCallback();
+      // Connect first to set up notification handler
+      await connectToDevice("test-device-id");
+    });
+
+    it("returns true when device is in auto mode", async () => {
+      // Mock BleClient.write to return auto mode enabled response
+      vi.mocked(BleClient.write).mockImplementationOnce(async () => {
+        // Response format: [slaveAddr, funcCode, byteCount, dataHigh, dataLow]
+        // For boolean true: data[0] = 1
+        const response = new Uint8Array([0x01, 0x03, 0x02, 0x00, 0x01]);
+        triggerNotification(response);
+      });
+
+      const result = await readAutoMode("test-device-id");
+
+      expect(BleClient.write).toHaveBeenCalled();
+      expect(result).toBe(true);
+    });
+
+    it("returns false when device is in manual mode", async () => {
+      // Mock BleClient.write to return auto mode disabled response
+      vi.mocked(BleClient.write).mockImplementationOnce(async () => {
+        // For boolean false: data[0] = 0
+        const response = new Uint8Array([0x01, 0x03, 0x02, 0x00, 0x00]);
+        triggerNotification(response);
+      });
+
+      const result = await readAutoMode("test-device-id");
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("setAutoMode", () => {
+    beforeEach(async () => {
+      vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true);
+      resetNotificationCallback();
+      // Connect first to set up notification handler
+      await connectToDevice("test-device-id");
+    });
+
+    it("sends correct command to enable auto mode", async () => {
+      // Mock successful write response
+      vi.mocked(BleClient.write).mockImplementationOnce(async () => {
+        const response = new Uint8Array([0x01, 0x06, 0x00, 0x10, 0x00, 0x01]);
+        triggerNotification(response);
+      });
+
+      await setAutoMode("test-device-id", true);
+
+      expect(BleClient.write).toHaveBeenCalled();
+    });
+
+    it("sends correct command to disable auto mode", async () => {
+      // Mock successful write response
+      vi.mocked(BleClient.write).mockImplementationOnce(async () => {
+        const response = new Uint8Array([0x01, 0x06, 0x00, 0x10, 0x00, 0x00]);
+        triggerNotification(response);
+      });
+
+      await setAutoMode("test-device-id", false);
+
+      expect(BleClient.write).toHaveBeenCalled();
+    });
+
+    it("throws error when command fails", async () => {
+      // Mock error response (isError = true when function code has high bit set)
+      vi.mocked(BleClient.write).mockImplementationOnce(async () => {
+        // Error response: function code 0x86 (0x06 | 0x80), error code 1
+        const response = new Uint8Array([0x01, 0x86, 0x01]);
+        triggerNotification(response);
+      });
+
+      await expect(setAutoMode("test-device-id", true)).rejects.toThrow(
+        "Failed to set auto mode: error code 1",
+      );
     });
   });
 });
