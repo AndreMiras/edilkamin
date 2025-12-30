@@ -233,6 +233,18 @@ const Fireplace: NextPage = () => {
                     </div>
                   );
                 })()}
+                {pelletAutonomyTime !== undefined && (
+                  <div className="border-t border-border mt-3 pt-3">
+                    <div className="text-sm font-medium mb-1">
+                      {t("pellet.levelLabel")}
+                    </div>
+                    <div className="text-muted-foreground">
+                      {t("pellet.hoursRemaining", {
+                        hours: Math.floor(pelletAutonomyTime / 60),
+                      })}
+                    </div>
+                  </div>
+                )}
                 {info && <DeviceDetails info={info} />}
               </AccordionContent>
             </AccordionItem>

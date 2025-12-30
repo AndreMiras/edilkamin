@@ -44,7 +44,9 @@
   },
   "pellet": {
     "lowWarning": "Pellet Reserve Low",
-    "autonomyRemaining": "Approximately {{hours}} hours remaining"
+    "autonomyRemaining": "Approximately {{hours}} hours remaining",
+    "levelLabel": "Pellet Autonomy",
+    "hoursRemaining": "{{hours}} hours remaining"
   },
   "autoMode": {
     "label": "Auto Mode",

@@ -36,5 +36,11 @@
     "powerUpdateBody": "Impossible de modifier l'état d'alimentation. Veuillez réessayer.",
     "temperatureUpdateFailed": "Échec de mise à jour de la température",
     "temperatureUpdateBody": "Impossible de mettre à jour la température. Veuillez réessayer."
+  },
+  "pellet": {
+    "lowWarning": "Réserve de granulés basse",
+    "autonomyRemaining": "Environ {{hours}} heures restantes",
+    "levelLabel": "Autonomie de granulés",
+    "hoursRemaining": "{{hours}} heures restantes"
   }
 }

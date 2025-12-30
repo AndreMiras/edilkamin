@@ -38,5 +38,11 @@
     "powerUpdateBody": "No se pudo cambiar el estado de encendido. Por favor, inténtelo de nuevo.",
     "temperatureUpdateFailed": "Error al actualizar la temperatura",
     "temperatureUpdateBody": "No se pudo actualizar la temperatura. Por favor, inténtelo de nuevo."
+  },
+  "pellet": {
+    "lowWarning": "Reserva de pellets baja",
+    "autonomyRemaining": "Aproximadamente {{hours}} horas restantes",
+    "levelLabel": "Autonomía de pellets",
+    "hoursRemaining": "{{hours}} horas restantes"
   }
 }
