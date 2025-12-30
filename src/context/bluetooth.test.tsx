@@ -1,7 +1,13 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  render as rawRender,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { render } from "@/test/utils";
 import {
   connectToDevice,
   disconnectFromDevice,
@@ -343,7 +349,7 @@ describe("BluetoothContext", () => {
         .mockImplementation(() => {});
 
       expect(() => {
-        render(<TestComponent />);
+        rawRender(<TestComponent />);
       }).toThrow("useBluetooth must be used within BluetoothProvider");
 
       consoleSpy.mockRestore();
