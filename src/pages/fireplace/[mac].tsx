@@ -25,6 +25,7 @@ import { getDeviceByWifiMac } from "@/utils/deviceStorage";
 import AutoModeToggle from "../../components/AutoModeToggle";
 import ConnectionModeToggle from "../../components/ConnectionModeToggle";
 import DebugInfo from "../../components/DebugInfo";
+import DetailRow from "../../components/DetailRow";
 import DeviceDetails from "../../components/DeviceDetails";
 import FanSpeedControl from "../../components/FanSpeedControl";
 import PowerLevelSlider from "../../components/PowerLevelSlider";
@@ -235,14 +236,12 @@ const Fireplace: NextPage = () => {
                 })()}
                 {pelletAutonomyTime !== undefined && (
                   <div className="border-t border-border mt-3 pt-3">
-                    <div className="text-sm font-medium mb-1">
-                      {t("pellet.levelLabel")}
-                    </div>
-                    <div className="text-muted-foreground">
-                      {t("pellet.hoursRemaining", {
+                    <DetailRow
+                      label={t("pellet.levelLabel")}
+                      value={t("pellet.hoursRemaining", {
                         hours: Math.floor(pelletAutonomyTime / 60),
                       })}
-                    </div>
+                    />
                   </div>
                 )}
                 {info && <DeviceDetails info={info} />}
