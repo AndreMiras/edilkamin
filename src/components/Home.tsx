@@ -1,14 +1,17 @@
-import { useContext, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TokenContext } from "@/context/token";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent } from "@/components/ui/card";
+import { useBluetooth } from "@/context/bluetooth";
 import {
   addStoredDevice,
   getStoredDevices,
   removeStoredDevice,
   StoredDevice,
 } from "@/utils/deviceStorage";
+import { useIsLoggedIn } from "@/utils/hooks";
 
 import DeviceManagement from "./DeviceManagement";
 import DeviceThermostat from "./DeviceThermostat";
@@ -16,9 +19,10 @@ import Login from "./Login";
 
 const Home = () => {
   const { t } = useTranslation("home");
-  const { token } = useContext(TokenContext);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [devices, setDevices] = useState<StoredDevice[]>([]);
+  const isLoggedIn = useIsLoggedIn();
+  const { isBleSupported } = useBluetooth();
 
   useEffect(() => setDevices(getStoredDevices()), []);
 
@@ -32,28 +36,10 @@ const Home = () => {
     setDevices(newDevices);
   };
 
-  // Show login prompt if not authenticated
-  if (token === null) {
+  // Show loading while checking auth state
+  if (isLoggedIn === undefined) {
     return (
       <Card>
-        <CardHeader>
-          <CardTitle>{t("title")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground mb-4">{t("loginRequired")}</p>
-          <Login />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Show loading while checking token
-  if (token === undefined) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("title")}</CardTitle>
-        </CardHeader>
         <CardContent>
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -62,6 +48,9 @@ const Home = () => {
       </Card>
     );
   }
+
+  // Show hint about Bluetooth when not logged in
+  const showLoginHint = isLoggedIn === false;
 
   return (
     <div className="space-y-4">
@@ -76,6 +65,30 @@ const Home = () => {
           onOpenChange={setDialogOpen}
         />
       </div>
+
+      {/* Login hint when not authenticated */}
+      {showLoginHint && (
+        <Alert>
+          {isBleSupported ? (
+            <>
+              <FontAwesomeIcon
+                icon={["fab", "bluetooth-b"]}
+                className="h-4 w-4"
+              />
+              <AlertTitle>{t("bluetoothAvailable")}</AlertTitle>
+              <AlertDescription>{t("bluetoothHint")}</AlertDescription>
+            </>
+          ) : (
+            <>
+              <FontAwesomeIcon icon="user" className="h-4 w-4" />
+              <AlertTitle>{t("loginRequired")}</AlertTitle>
+              <AlertDescription>
+                <Login />
+              </AlertDescription>
+            </>
+          )}
+        </Alert>
+      )}
 
       {/* Empty state */}
       {devices.length === 0 && (

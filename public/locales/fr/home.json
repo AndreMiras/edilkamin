@@ -4,6 +4,10 @@
   "addFirstDevice": "Ajoutez votre premier appareil",
   "manageDevices": "Gérer les appareils",
   "manageDevicesDescription": "Ajouter ou supprimer des appareils de votre liste",
+  "loginRequired": "Connexion requise",
+  "bluetoothAvailable": "Mode Bluetooth disponible",
+  "bluetoothHint": "Vous pouvez contrôler votre poêle via Bluetooth sans vous connecter. Ajoutez un appareil et utilisez le mode Bluetooth sur la page de l'appareil.",
+  "tapToControl": "Appuyez pour contrôler",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Adresse MAC invalide.",

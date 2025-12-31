@@ -12,6 +12,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Tooltip,
   TooltipContent,
@@ -21,6 +22,7 @@ import {
 import { useBluetooth } from "@/context/bluetooth";
 import { useDeviceControl } from "@/hooks/useDeviceControl";
 import { getDeviceByWifiMac } from "@/utils/deviceStorage";
+import { useIsLoggedIn } from "@/utils/hooks";
 
 import AutoModeToggle from "../../components/AutoModeToggle";
 import ConnectionModeToggle from "../../components/ConnectionModeToggle";
@@ -29,7 +31,6 @@ import DetailRow from "../../components/DetailRow";
 import DeviceDetails from "../../components/DeviceDetails";
 import FanSpeedControl from "../../components/FanSpeedControl";
 import PowerLevelSlider from "../../components/PowerLevelSlider";
-import RequireAuth from "../../components/RequireAuth";
 import { Thermostat } from "../../components/thermostat";
 import UsageStatistics from "../../components/UsageStatistics";
 
@@ -38,7 +39,17 @@ const Fireplace: NextPage = () => {
   const router = useRouter();
   const mac = router.query.mac as string;
   const [headerCopied, setHeaderCopied] = useState(false);
-  const { setBleDeviceId, disconnect } = useBluetooth();
+  const { setBleDeviceId, disconnect, connectionMode, isBleSupported } =
+    useBluetooth();
+  const isLoggedIn = useIsLoggedIn();
+
+  // Determine if the user can actually control the device
+  const canUseCloudMode = connectionMode === "cloud" && isLoggedIn === true;
+  const canUseBleMode = connectionMode === "ble"; // BLE doesn't need auth
+  const canControlDevice = canUseCloudMode || canUseBleMode;
+
+  // Show prominent message when logged out in Cloud mode
+  const showCloudAuthBlock = connectionMode === "cloud" && isLoggedIn === false;
 
   // Set BLE device ID from storage when page loads
   useEffect(() => {
@@ -124,7 +135,7 @@ const Fireplace: NextPage = () => {
   );
 
   return (
-    <RequireAuth message={t("auth.loginToControl")}>
+    <>
       {/* Back navigation and connection mode toggle */}
       <div className="mb-4 flex justify-between items-center">
         <Link
@@ -137,157 +148,187 @@ const Fireplace: NextPage = () => {
         <ConnectionModeToggle />
       </div>
 
-      <PullToRefresh
-        onRefresh={refreshDeviceInfo}
-        pullingContent={pullingContent}
-        refreshingContent={refreshingContent}
-        pullDownThreshold={120}
-        maxPullDownDistance={200}
-        resistance={2.5}
-        isPullable={!loading}
-      >
-        <Thermostat
-          temperature={temperature}
-          environmentTemperature={environmentTemperature}
-          powerState={powerState}
-          loading={loading}
-          onTemperatureChange={onTemperatureChange}
-          onPowerChange={onPowerChange}
-          isPelletInReserve={isPelletInReserve}
-          pelletAutonomyTime={pelletAutonomyTime}
-          powerLevel={powerLevel}
-          onPowerLevelChange={onPowerLevelChange}
-          isAuto={isAuto}
-        >
-          <Accordion type="single" collapsible className="mt-8 w-[340px]">
-            <AccordionItem value="device-details">
-              <AccordionTrigger>{t("advanced")}</AccordionTrigger>
-              <AccordionContent>
-                <AutoModeToggle
-                  isAuto={isAuto}
-                  onToggle={onAutoModeToggle}
-                  loading={loading}
+      {/* Show auth block when logged out in Cloud mode - don't show unusable Thermostat */}
+      {showCloudAuthBlock ? (
+        <div className="flex flex-col items-center justify-center flex-1 p-4">
+          <div className="w-full max-w-md space-y-4">
+            {isBleSupported ? (
+              <Alert>
+                <FontAwesomeIcon
+                  icon={["fab", "bluetooth-b"]}
+                  className="h-4 w-4"
                 />
-                {powerLevel !== undefined && (
-                  <div className="border-t border-border mt-3 pt-3">
-                    <PowerLevelSlider
-                      level={powerLevel}
-                      onLevelChange={onPowerLevelChange}
-                      loading={loading}
-                      readOnly={isAuto}
-                    />
-                  </div>
-                )}
-                {(() => {
-                  type ExtendedNvm = {
-                    installer_parameters?: { fans_number?: number };
-                    oem_parameters?: {
-                      fan_1_max_level?: number;
-                      fan_2_max_level?: number;
-                      fan_3_max_level?: number;
-                    };
-                  };
-                  const nvm = info?.nvm as ExtendedNvm | undefined;
-                  const fansNumber =
-                    nvm?.installer_parameters?.fans_number ?? 0;
-                  const fan1MaxLevel =
-                    nvm?.oem_parameters?.fan_1_max_level ?? 5;
-                  const fan2MaxLevel =
-                    nvm?.oem_parameters?.fan_2_max_level ?? 5;
-                  const fan3MaxLevel =
-                    nvm?.oem_parameters?.fan_3_max_level ?? 5;
-
-                  if (fansNumber === 0) return null;
-
-                  return (
+                <AlertTitle>{t("auth.bluetoothAvailable")}</AlertTitle>
+                <AlertDescription>{t("auth.bluetoothHint")}</AlertDescription>
+              </Alert>
+            ) : (
+              <Alert>
+                <FontAwesomeIcon icon="cloud" className="h-4 w-4" />
+                <AlertTitle>{t("auth.loginRequired")}</AlertTitle>
+                <AlertDescription>{t("auth.loginToControl")}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </div>
+      ) : (
+        <PullToRefresh
+          onRefresh={refreshDeviceInfo}
+          pullingContent={pullingContent}
+          refreshingContent={refreshingContent}
+          pullDownThreshold={120}
+          maxPullDownDistance={200}
+          resistance={2.5}
+          isPullable={!loading}
+        >
+          <Thermostat
+            temperature={temperature}
+            environmentTemperature={environmentTemperature}
+            powerState={powerState}
+            loading={loading}
+            onTemperatureChange={onTemperatureChange}
+            onPowerChange={onPowerChange}
+            isPelletInReserve={isPelletInReserve}
+            pelletAutonomyTime={pelletAutonomyTime}
+            powerLevel={powerLevel}
+            onPowerLevelChange={onPowerLevelChange}
+            isAuto={isAuto}
+          >
+            <Accordion type="single" collapsible className="mt-8 w-[340px]">
+              <AccordionItem value="device-details">
+                <AccordionTrigger>{t("advanced")}</AccordionTrigger>
+                <AccordionContent>
+                  <AutoModeToggle
+                    isAuto={isAuto}
+                    onToggle={onAutoModeToggle}
+                    loading={loading}
+                  />
+                  {powerLevel !== undefined && (
                     <div className="border-t border-border mt-3 pt-3">
-                      {fansNumber >= 1 && (
-                        <FanSpeedControl
-                          fanNumber={1}
-                          speed={fan1Speed}
-                          onSpeedChange={(speed) => onFanSpeedChange(1, speed)}
-                          loading={loading}
-                          disabled={isAuto}
-                          maxSpeed={fan1MaxLevel}
-                        />
-                      )}
-                      {fansNumber >= 2 && (
-                        <FanSpeedControl
-                          fanNumber={2}
-                          speed={fan2Speed}
-                          onSpeedChange={(speed) => onFanSpeedChange(2, speed)}
-                          loading={loading}
-                          disabled={isAuto}
-                          maxSpeed={fan2MaxLevel}
-                        />
-                      )}
-                      {fansNumber >= 3 && (
-                        <FanSpeedControl
-                          fanNumber={3}
-                          speed={fan3Speed}
-                          onSpeedChange={(speed) => onFanSpeedChange(3, speed)}
-                          loading={loading}
-                          disabled={isAuto}
-                          maxSpeed={fan3MaxLevel}
-                        />
-                      )}
+                      <PowerLevelSlider
+                        level={powerLevel}
+                        onLevelChange={onPowerLevelChange}
+                        loading={loading}
+                        readOnly={isAuto}
+                      />
                     </div>
-                  );
-                })()}
-                {pelletAutonomyTime !== undefined && (
-                  <div className="border-t border-border mt-3 pt-3">
-                    <DetailRow
-                      label={t("pellet.levelLabel")}
-                      value={t("pellet.hoursRemaining", {
-                        hours: Math.floor(pelletAutonomyTime / 60),
-                      })}
-                    />
-                  </div>
-                )}
-                {info && <DeviceDetails info={info} />}
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="debug-info">
-              <AccordionTrigger>
-                <div className="flex items-center gap-2">
-                  <span>{t("deviceInfo.label")}</span>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button
-                          onClick={handleHeaderCopy}
-                          className="p-1 rounded bg-muted hover:bg-muted/80 transition-colors"
-                          aria-label={t("deviceInfo.copy")}
-                        >
-                          <FontAwesomeIcon
-                            icon={headerCopied ? "check" : "copy"}
-                            className="h-3 w-3"
+                  )}
+                  {(() => {
+                    type ExtendedNvm = {
+                      installer_parameters?: { fans_number?: number };
+                      oem_parameters?: {
+                        fan_1_max_level?: number;
+                        fan_2_max_level?: number;
+                        fan_3_max_level?: number;
+                      };
+                    };
+                    const nvm = info?.nvm as ExtendedNvm | undefined;
+                    const fansNumber =
+                      nvm?.installer_parameters?.fans_number ?? 0;
+                    const fan1MaxLevel =
+                      nvm?.oem_parameters?.fan_1_max_level ?? 5;
+                    const fan2MaxLevel =
+                      nvm?.oem_parameters?.fan_2_max_level ?? 5;
+                    const fan3MaxLevel =
+                      nvm?.oem_parameters?.fan_3_max_level ?? 5;
+
+                    if (fansNumber === 0) return null;
+
+                    return (
+                      <div className="border-t border-border mt-3 pt-3">
+                        {fansNumber >= 1 && (
+                          <FanSpeedControl
+                            fanNumber={1}
+                            speed={fan1Speed}
+                            onSpeedChange={(speed) =>
+                              onFanSpeedChange(1, speed)
+                            }
+                            loading={loading}
+                            disabled={isAuto}
+                            maxSpeed={fan1MaxLevel}
                           />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {headerCopied
-                          ? t("deviceInfo.copied")
-                          : t("deviceInfo.copy")}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <DebugInfo info={info} />
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value="statistics">
-              <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
-              <AccordionContent>
-                {info && <UsageStatistics info={info} />}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </Thermostat>
-      </PullToRefresh>
-    </RequireAuth>
+                        )}
+                        {fansNumber >= 2 && (
+                          <FanSpeedControl
+                            fanNumber={2}
+                            speed={fan2Speed}
+                            onSpeedChange={(speed) =>
+                              onFanSpeedChange(2, speed)
+                            }
+                            loading={loading}
+                            disabled={isAuto}
+                            maxSpeed={fan2MaxLevel}
+                          />
+                        )}
+                        {fansNumber >= 3 && (
+                          <FanSpeedControl
+                            fanNumber={3}
+                            speed={fan3Speed}
+                            onSpeedChange={(speed) =>
+                              onFanSpeedChange(3, speed)
+                            }
+                            loading={loading}
+                            disabled={isAuto}
+                            maxSpeed={fan3MaxLevel}
+                          />
+                        )}
+                      </div>
+                    );
+                  })()}
+                  {pelletAutonomyTime !== undefined && (
+                    <div className="border-t border-border mt-3 pt-3">
+                      <DetailRow
+                        label={t("pellet.levelLabel")}
+                        value={t("pellet.hoursRemaining", {
+                          hours: Math.floor(pelletAutonomyTime / 60),
+                        })}
+                      />
+                    </div>
+                  )}
+                  {info && <DeviceDetails info={info} />}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="debug-info">
+                <AccordionTrigger>
+                  <div className="flex items-center gap-2">
+                    <span>{t("deviceInfo.label")}</span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={handleHeaderCopy}
+                            className="p-1 rounded bg-muted hover:bg-muted/80 transition-colors"
+                            aria-label={t("deviceInfo.copy")}
+                          >
+                            <FontAwesomeIcon
+                              icon={headerCopied ? "check" : "copy"}
+                              className="h-3 w-3"
+                            />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {headerCopied
+                            ? t("deviceInfo.copied")
+                            : t("deviceInfo.copy")}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <DebugInfo info={info} />
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="statistics">
+                <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
+                <AccordionContent>
+                  {info && <UsageStatistics info={info} />}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </Thermostat>
+        </PullToRefresh>
+      )}
+    </>
   );
 };
 

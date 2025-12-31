@@ -6,7 +6,10 @@
   "lastUpdated": "Mis à jour il y a {{seconds}}s",
   "justNow": "À l'instant",
   "auth": {
-    "loginToControl": "Veuillez vous connecter pour contrôler ce poêle."
+    "loginRequired": "Connexion requise",
+    "loginToControl": "Veuillez vous connecter pour contrôler ce poêle.",
+    "bluetoothAvailable": "Bluetooth disponible",
+    "bluetoothHint": "Connectez-vous pour utiliser le mode Cloud, ou passez en Bluetooth pour un contrôle hors ligne."
   },
   "advanced": "Avancé",
   "debug": "Débogage",

@@ -6,7 +6,10 @@
   "lastUpdated": "Updated {{seconds}}s ago",
   "justNow": "Just now",
   "auth": {
-    "loginToControl": "Please log in to control this stove."
+    "loginRequired": "Login Required",
+    "loginToControl": "Please log in to control this stove.",
+    "bluetoothAvailable": "Bluetooth Available",
+    "bluetoothHint": "Log in to use Cloud mode, or switch to Bluetooth for offline control."
   },
   "advanced": "Advanced",
   "deviceInfo": {

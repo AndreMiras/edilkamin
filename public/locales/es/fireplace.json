@@ -6,7 +6,10 @@
   "lastUpdated": "Actualizado hace {{seconds}}s",
   "justNow": "Justo ahora",
   "auth": {
-    "loginToControl": "Por favor, inicia sesión para controlar esta estufa."
+    "loginRequired": "Inicio de sesión requerido",
+    "loginToControl": "Por favor, inicia sesión para controlar esta estufa.",
+    "bluetoothAvailable": "Bluetooth disponible",
+    "bluetoothHint": "Inicia sesión para usar el modo Cloud, o cambia a Bluetooth para control sin conexión."
   },
   "advanced": "Avanzado",
   "debug": "Depuración",

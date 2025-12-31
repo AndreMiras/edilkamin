@@ -91,14 +91,34 @@ describe("Home", () => {
     });
   });
 
-  it("should show login prompt when not authenticated", async () => {
+  it("should show bluetooth hint when not authenticated and BLE is supported", async () => {
     localStorage.clear(); // No token
     // getSession won't be called since there's no stored token
+    // BLE is mocked as supported in beforeEach
 
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText(/please log in/i)).toBeInTheDocument();
+      expect(screen.getByText(/bluetooth mode available/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /control your stove via bluetooth without logging in/i,
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should show login form when not authenticated and BLE is not supported", async () => {
+    localStorage.clear(); // No token
+    vi.mocked(bluetoothLocal.isBluetoothSupported).mockReturnValue(false);
+
+    render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/login required/i)).toBeInTheDocument();
+      // Should show login form (aria-label is "Email" and "Password")
+      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     });
   });
 

@@ -4,6 +4,10 @@
   "addFirstDevice": "Agregue su primer dispositivo",
   "manageDevices": "Administrar dispositivos",
   "manageDevicesDescription": "Agregar o eliminar dispositivos de su lista",
+  "loginRequired": "Inicio de sesión requerido",
+  "bluetoothAvailable": "Modo Bluetooth disponible",
+  "bluetoothHint": "Puedes controlar tu estufa via Bluetooth sin iniciar sesion. Agrega un dispositivo y usa el modo Bluetooth en la pagina del dispositivo.",
+  "tapToControl": "Toca para controlar",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Dirección MAC no válida.",

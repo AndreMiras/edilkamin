@@ -4,7 +4,10 @@
   "addFirstDevice": "Add your first device",
   "manageDevices": "Manage Devices",
   "manageDevicesDescription": "Add or remove fireplace devices from your list",
-  "loginRequired": "Please log in to control your fireplaces.",
+  "loginRequired": "Login Required",
+  "bluetoothAvailable": "Bluetooth Mode Available",
+  "bluetoothHint": "You can control your stove via Bluetooth without logging in. Add a device and use Bluetooth mode on the device page.",
+  "tapToControl": "Tap to control",
   "macPlaceholder": "aabbccddeeff",
   "validation": {
     "invalidMac": "Invalid MAC address.",
