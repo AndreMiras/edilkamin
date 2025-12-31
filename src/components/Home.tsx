@@ -66,28 +66,27 @@ const Home = () => {
         />
       </div>
 
-      {/* Login hint when not authenticated */}
+      {/* Login section when not authenticated */}
       {showLoginHint && (
-        <Alert>
-          {isBleSupported ? (
-            <>
+        <div className="space-y-4">
+          {/* Bluetooth hint if supported */}
+          {isBleSupported && (
+            <Alert>
               <FontAwesomeIcon
                 icon={["fab", "bluetooth-b"]}
                 className="h-4 w-4"
               />
               <AlertTitle>{t("bluetoothAvailable")}</AlertTitle>
               <AlertDescription>{t("bluetoothHint")}</AlertDescription>
-            </>
-          ) : (
-            <>
-              <FontAwesomeIcon icon="user" className="h-4 w-4" />
-              <AlertTitle>{t("loginRequired")}</AlertTitle>
-              <AlertDescription>
-                <Login />
-              </AlertDescription>
-            </>
+            </Alert>
           )}
-        </Alert>
+          {/* Login form - always show when not logged in */}
+          <Card>
+            <CardContent className="pt-6">
+              <Login />
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Empty state */}
