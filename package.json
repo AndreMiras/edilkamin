@@ -1,7 +1,7 @@
 {
   "name": "edilkamin",
   "homepage": "https://edilkamin.vercel.app/",
-  "version": "2025.12.29",
+  "version": "2025.12.31",
   "private": true,
   "license": "MIT",
   "dependencies": {
