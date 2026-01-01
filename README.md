@@ -3,8 +3,9 @@
 [![Tests](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml/badge.svg)](https://github.com/AndreMiras/edilkamin/actions/workflows/tests.yml)
 [![codecov](https://codecov.io/gh/AndreMiras/edilkamin/branch/main/graph/badge.svg)](https://codecov.io/gh/AndreMiras/edilkamin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Get it on Google Play](https://img.shields.io/badge/Google_Play-414141?style=flat&logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.github.andremiras.edilkamin)
 
-<https://edilkamin.vercel.app/>
+<https://edilkamin.vercel.app/> | [Android App](https://play.google.com/store/apps/details?id=com.github.andremiras.edilkamin)
 
 This is an open alternative to the
 [Edilkamin The Mind](https://play.google.com/store/apps/details?id=com.edilkamin.stufe) application
