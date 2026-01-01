@@ -45,7 +45,7 @@
     "dev": "next dev",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always) next build",
-    "build:mobile": "BUILD_TARGET=mobile next build",
+    "build:mobile": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always 2>/dev/null || node -p \"require('./package.json').version\") BUILD_TARGET=mobile next build",
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
