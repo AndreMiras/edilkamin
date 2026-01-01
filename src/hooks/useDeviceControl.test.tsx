@@ -1,5 +1,10 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { configure, getSession } from "edilkamin";
+import {
+  configure,
+  getSession,
+  IgnitionSubPhase,
+  OperationalPhase,
+} from "edilkamin";
 import { act, ReactNode } from "react";
 import { I18nextProvider } from "react-i18next";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -17,8 +22,32 @@ vi.mock("next/router", () => ({
   }),
 }));
 
-// Mock edilkamin library
-vi.mock("edilkamin");
+// Mock edilkamin library with required constants and enums
+vi.mock("edilkamin", () => ({
+  configure: vi.fn(),
+  getSession: vi.fn(),
+  NEW_API_URL: "https://api.edilkamin.com/",
+  OLD_API_URL:
+    "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
+  OperationalPhase: {
+    OFF: 0,
+    IGNITION: 1,
+    ON: 2,
+    SHUTTING_DOWN: 3,
+    COOLING: 4,
+    FINAL_CLEANING: 5,
+  },
+  IgnitionSubPhase: {
+    HOT_STOVE_CLEANING: 0,
+    CLEANING_WITHOUT_CLEANER: 1,
+    CLEANING_WITH_CLEANER: 2,
+    PELLET_LOAD: 3,
+    LOADING_BREAK: 4,
+    SMOKE_TEMP_CHECK: 5,
+    THRESHOLD_CHECK: 6,
+    WARMUP: 7,
+  },
+}));
 
 // Mock platform utility
 vi.mock("../utils/platform", () => ({
@@ -65,8 +94,8 @@ const mockDeviceData = {
     flags: { is_pellet_in_reserve: false },
     pellet: { autonomy_time: 24 },
     state: {
-      operational_phase: 6,
-      sub_operational_phase: 0,
+      operational_phase: OperationalPhase.ON,
+      sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
     },
   },
   nvm: {
@@ -246,12 +275,15 @@ describe("useDeviceControl", () => {
   });
 
   describe("phaseKey", () => {
-    it("should return phase.on when operational_phase is 6", async () => {
+    it("should return phase.on when operational_phase is ON", async () => {
       mockDeviceInfo.mockResolvedValue({
         ...mockDeviceData,
         status: {
           ...mockDeviceData.status,
-          state: { operational_phase: 6, sub_operational_phase: 0 },
+          state: {
+            operational_phase: OperationalPhase.ON,
+            sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
+          },
         },
       });
 
@@ -266,12 +298,15 @@ describe("useDeviceControl", () => {
       expect(result.current.phaseKey).toBe("phase.on");
     });
 
-    it("should return phase.off when operational_phase is 0", async () => {
+    it("should return phase.off when operational_phase is OFF", async () => {
       mockDeviceInfo.mockResolvedValue({
         ...mockDeviceData,
         status: {
           ...mockDeviceData.status,
-          state: { operational_phase: 0, sub_operational_phase: 0 },
+          state: {
+            operational_phase: OperationalPhase.OFF,
+            sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
+          },
         },
       });
 
@@ -286,32 +321,15 @@ describe("useDeviceControl", () => {
       expect(result.current.phaseKey).toBe("phase.off");
     });
 
-    it("should return phase.standby when operational_phase is 1", async () => {
+    it("should return ignition sub-phase key when operational_phase is IGNITION", async () => {
       mockDeviceInfo.mockResolvedValue({
         ...mockDeviceData,
         status: {
           ...mockDeviceData.status,
-          state: { operational_phase: 1, sub_operational_phase: 0 },
-        },
-      });
-
-      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
-        wrapper,
-      });
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
-
-      expect(result.current.phaseKey).toBe("phase.standby");
-    });
-
-    it("should return ignition sub-phase key when operational_phase is 2", async () => {
-      mockDeviceInfo.mockResolvedValue({
-        ...mockDeviceData,
-        status: {
-          ...mockDeviceData.status,
-          state: { operational_phase: 2, sub_operational_phase: 1 },
+          state: {
+            operational_phase: OperationalPhase.IGNITION,
+            sub_operational_phase: IgnitionSubPhase.PELLET_LOAD,
+          },
         },
       });
 
@@ -326,12 +344,38 @@ describe("useDeviceControl", () => {
       expect(result.current.phaseKey).toBe("phase.ignitionPelletLoad");
     });
 
-    it("should return phase.cooling when operational_phase is 7", async () => {
+    it("should return phase.shuttingDown when operational_phase is SHUTTING_DOWN", async () => {
       mockDeviceInfo.mockResolvedValue({
         ...mockDeviceData,
         status: {
           ...mockDeviceData.status,
-          state: { operational_phase: 7, sub_operational_phase: 0 },
+          state: {
+            operational_phase: OperationalPhase.SHUTTING_DOWN,
+            sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
+          },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.shuttingDown");
+    });
+
+    it("should return phase.cooling when operational_phase is COOLING", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: {
+            operational_phase: OperationalPhase.COOLING,
+            sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
+          },
         },
       });
 
@@ -346,12 +390,15 @@ describe("useDeviceControl", () => {
       expect(result.current.phaseKey).toBe("phase.cooling");
     });
 
-    it("should return phase.alarm when operational_phase is 8", async () => {
+    it("should return phase.finalCleaning when operational_phase is FINAL_CLEANING", async () => {
       mockDeviceInfo.mockResolvedValue({
         ...mockDeviceData,
         status: {
           ...mockDeviceData.status,
-          state: { operational_phase: 8, sub_operational_phase: 0 },
+          state: {
+            operational_phase: OperationalPhase.FINAL_CLEANING,
+            sub_operational_phase: IgnitionSubPhase.HOT_STOVE_CLEANING,
+          },
         },
       });
 
@@ -363,7 +410,7 @@ describe("useDeviceControl", () => {
         expect(result.current.loading).toBe(false);
       });
 
-      expect(result.current.phaseKey).toBe("phase.alarm");
+      expect(result.current.phaseKey).toBe("phase.finalCleaning");
     });
 
     it("should return undefined when state is not available", async () => {

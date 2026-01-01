@@ -1,5 +1,12 @@
 import axios from "axios";
-import { configure, DeviceInfoType, NEW_API_URL, OLD_API_URL } from "edilkamin";
+import {
+  configure,
+  DeviceInfoType,
+  IgnitionSubPhase,
+  NEW_API_URL,
+  OLD_API_URL,
+  OperationalPhase,
+} from "edilkamin";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,26 +29,9 @@ import {
 import { useTokenRefresh } from "@/utils/hooks";
 import { isNativePlatform } from "@/utils/platform";
 
-const PHASE_KEYS: Record<number, string> = {
-  0: "phase.off",
-  1: "phase.standby",
-  6: "phase.on",
-  7: "phase.cooling",
-  8: "phase.alarm",
-};
-
-const IGNITION_SUB_PHASE_KEYS: Record<number, string> = {
-  0: "phase.ignitionStartingCleaning",
-  1: "phase.ignitionPelletLoad",
-  2: "phase.ignitionLoadingBreak",
-  3: "phase.ignitionSmokeCheck",
-  4: "phase.ignitionThresholdCheck",
-  5: "phase.ignitionWarmup",
-  6: "phase.ignitionTransition",
-};
-
 /**
  * Maps library phase values to i18n translation keys.
+ * Uses lazy evaluation to ensure enums are available at runtime.
  */
 const getPhaseTranslationKey = (
   info: DeviceInfoType | null,
@@ -50,11 +40,38 @@ const getPhaseTranslationKey = (
 
   const { operational_phase, sub_operational_phase } = info.status.state;
 
-  if (operational_phase === 2) {
-    return IGNITION_SUB_PHASE_KEYS[sub_operational_phase] ?? "phase.ignition";
+  // Maps operational phase values to i18n translation keys
+  const phaseKeys: Record<OperationalPhase, string> = {
+    [OperationalPhase.OFF]: "phase.off",
+    [OperationalPhase.IGNITION]: "phase.ignition",
+    [OperationalPhase.ON]: "phase.on",
+    [OperationalPhase.SHUTTING_DOWN]: "phase.shuttingDown",
+    [OperationalPhase.COOLING]: "phase.cooling",
+    [OperationalPhase.FINAL_CLEANING]: "phase.finalCleaning",
+  };
+
+  // Maps ignition sub-phase values to i18n translation keys
+  const ignitionSubPhaseKeys: Record<IgnitionSubPhase, string> = {
+    [IgnitionSubPhase.HOT_STOVE_CLEANING]: "phase.ignitionHotStoveCleaning",
+    [IgnitionSubPhase.CLEANING_WITHOUT_CLEANER]:
+      "phase.ignitionCleaningWithoutCleaner",
+    [IgnitionSubPhase.CLEANING_WITH_CLEANER]:
+      "phase.ignitionCleaningWithCleaner",
+    [IgnitionSubPhase.PELLET_LOAD]: "phase.ignitionPelletLoad",
+    [IgnitionSubPhase.LOADING_BREAK]: "phase.ignitionLoadingBreak",
+    [IgnitionSubPhase.SMOKE_TEMP_CHECK]: "phase.ignitionSmokeCheck",
+    [IgnitionSubPhase.THRESHOLD_CHECK]: "phase.ignitionThresholdCheck",
+    [IgnitionSubPhase.WARMUP]: "phase.ignitionWarmup",
+  };
+
+  if (operational_phase === OperationalPhase.IGNITION) {
+    return (
+      ignitionSubPhaseKeys[sub_operational_phase as IgnitionSubPhase] ??
+      "phase.ignition"
+    );
   }
 
-  return PHASE_KEYS[operational_phase] ?? "phase.unknown";
+  return phaseKeys[operational_phase as OperationalPhase] ?? "phase.unknown";
 };
 
 export interface DeviceControlState {

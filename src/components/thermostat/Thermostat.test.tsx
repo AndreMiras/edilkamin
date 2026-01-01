@@ -48,7 +48,7 @@ describe("Thermostat", () => {
     it("should display phase.on text when phaseKey is phase.on", () => {
       render(<Thermostat {...defaultProps} phaseKey="phase.on" />);
 
-      expect(screen.getByText("On")).toBeInTheDocument();
+      expect(screen.getByText("Heating")).toBeInTheDocument();
     });
 
     it("should display phase.off text when phaseKey is phase.off", () => {

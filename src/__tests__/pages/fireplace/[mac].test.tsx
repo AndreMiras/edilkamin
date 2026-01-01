@@ -8,20 +8,21 @@ import Errors from "../../../components/Errors";
 import Fireplace from "../../../pages/fireplace/[mac]";
 import { render, screen } from "../../../test/utils";
 
-vi.mock("edilkamin", () => ({
-  configure: vi.fn(() => ({
-    deviceInfo: vi.fn(),
-    setPower: vi.fn(),
-    setTargetTemperature: vi.fn(),
-    setPowerLevel: vi.fn(),
-    setAuto: vi.fn(),
-    setFanSpeed: vi.fn(),
-  })),
-  getSession: vi.fn(),
-  NEW_API_URL: "https://api.edilkamin.com/",
-  OLD_API_URL:
-    "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/",
-}));
+vi.mock("edilkamin", async () => {
+  const actual = await vi.importActual<typeof import("edilkamin")>("edilkamin");
+  return {
+    ...actual,
+    configure: vi.fn(() => ({
+      deviceInfo: vi.fn(),
+      setPower: vi.fn(),
+      setTargetTemperature: vi.fn(),
+      setPowerLevel: vi.fn(),
+      setAuto: vi.fn(),
+      setFanSpeed: vi.fn(),
+    })),
+    getSession: vi.fn(),
+  };
+});
 
 vi.mock("../../../utils/platform", () => ({
   isNativePlatform: vi.fn(() => false),
