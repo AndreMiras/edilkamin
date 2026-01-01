@@ -1,5 +1,10 @@
 {
   "about": "Acerca de",
+  "menu": "Menú",
+  "language": "Idioma",
+  "darkMode": "Modo oscuro",
+  "lightMode": "Modo claro",
+  "logout": "Cerrar sesión",
   "languageSwitcher": {
     "languages": {
       "en": "English",
