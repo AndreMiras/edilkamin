@@ -22,6 +22,41 @@ import {
 import { useTokenRefresh } from "@/utils/hooks";
 import { isNativePlatform } from "@/utils/platform";
 
+const PHASE_KEYS: Record<number, string> = {
+  0: "phase.off",
+  1: "phase.standby",
+  6: "phase.on",
+  7: "phase.cooling",
+  8: "phase.alarm",
+};
+
+const IGNITION_SUB_PHASE_KEYS: Record<number, string> = {
+  0: "phase.ignitionStartingCleaning",
+  1: "phase.ignitionPelletLoad",
+  2: "phase.ignitionLoadingBreak",
+  3: "phase.ignitionSmokeCheck",
+  4: "phase.ignitionThresholdCheck",
+  5: "phase.ignitionWarmup",
+  6: "phase.ignitionTransition",
+};
+
+/**
+ * Maps library phase values to i18n translation keys.
+ */
+const getPhaseTranslationKey = (
+  info: DeviceInfoType | null,
+): string | undefined => {
+  if (!info?.status?.state) return undefined;
+
+  const { operational_phase, sub_operational_phase } = info.status.state;
+
+  if (operational_phase === 2) {
+    return IGNITION_SUB_PHASE_KEYS[sub_operational_phase] ?? "phase.ignition";
+  }
+
+  return PHASE_KEYS[operational_phase] ?? "phase.unknown";
+};
+
 export interface DeviceControlState {
   info: DeviceInfoType | null;
   powerState: boolean;
@@ -36,6 +71,7 @@ export interface DeviceControlState {
   isPelletInReserve: boolean | undefined;
   pelletAutonomyTime: number | undefined;
   lastUpdated: Date | null;
+  phaseKey: string | undefined;
 }
 
 export interface DeviceControlHandlers {
@@ -367,6 +403,7 @@ export function useDeviceControl(
     environmentTemperature: info?.status.temperatures.enviroment,
     isPelletInReserve: info?.status.flags.is_pellet_in_reserve,
     pelletAutonomyTime: info?.status.pellet.autonomy_time,
+    phaseKey: getPhaseTranslationKey(info),
     lastUpdated,
     onPowerChange,
     onTemperatureChange,

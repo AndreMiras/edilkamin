@@ -70,6 +70,22 @@
     "offline": "Offline",
     "offlineHint": "No internet connection"
   },
+  "phase": {
+    "off": "Off",
+    "standby": "Standby",
+    "on": "On",
+    "ignition": "Ignition",
+    "ignitionStartingCleaning": "Ignition - Starting cleaning",
+    "ignitionPelletLoad": "Ignition - Pellet load",
+    "ignitionLoadingBreak": "Ignition - Loading break",
+    "ignitionSmokeCheck": "Ignition - Smoke temperature check",
+    "ignitionThresholdCheck": "Ignition - Threshold check",
+    "ignitionWarmup": "Ignition - Warmup",
+    "ignitionTransition": "Ignition - Starting up",
+    "cooling": "Cooling",
+    "alarm": "Alarm",
+    "unknown": "Unknown"
+  },
   "errors": {
     "deviceNotFound": "Device not found",
     "deviceNotFoundBody": "The address provided (\"{{mac}}\") is invalid or the device is not registered.",

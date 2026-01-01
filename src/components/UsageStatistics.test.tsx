@@ -84,6 +84,8 @@ describe("UsageStatistics", () => {
       temperatures: {} as DeviceInfoType["status"]["temperatures"],
       flags: {} as DeviceInfoType["status"]["flags"],
       pellet: {} as DeviceInfoType["status"]["pellet"],
+      state: {} as DeviceInfoType["status"]["state"],
+      fans: {} as DeviceInfoType["status"]["fans"],
     },
   };
 

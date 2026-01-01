@@ -39,6 +39,18 @@ describe("DebugInfo Component", () => {
       counters: {
         service_time: 50,
       },
+      state: {
+        operational_phase: 6,
+        sub_operational_phase: 0,
+        stove_state: 6,
+        alarm_type: 0,
+        actual_power: 3,
+      },
+      fans: {
+        fan_1_speed: 3,
+        fan_2_speed: 0,
+        fan_3_speed: 0,
+      },
     },
     nvm: {
       user_parameters: {

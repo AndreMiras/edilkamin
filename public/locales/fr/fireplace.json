@@ -31,6 +31,22 @@
     "disconnected": "Déconnecté",
     "error": "Échec de connexion"
   },
+  "phase": {
+    "off": "Arrêt",
+    "standby": "Veille",
+    "on": "En marche",
+    "ignition": "Allumage",
+    "ignitionStartingCleaning": "Allumage - Nettoyage initial",
+    "ignitionPelletLoad": "Allumage - Chargement granulés",
+    "ignitionLoadingBreak": "Allumage - Pause chargement",
+    "ignitionSmokeCheck": "Allumage - Contrôle température fumée",
+    "ignitionThresholdCheck": "Allumage - Contrôle seuil",
+    "ignitionWarmup": "Allumage - Préchauffage",
+    "ignitionTransition": "Allumage - Démarrage",
+    "cooling": "Refroidissement",
+    "alarm": "Alarme",
+    "unknown": "Inconnu"
+  },
   "errors": {
     "deviceNotFound": "Appareil non trouvé",
     "deviceNotFoundBody": "L'adresse fournie (\"{{mac}}\") est invalide ou l'appareil n'est pas enregistré.",

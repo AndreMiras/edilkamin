@@ -36,6 +36,48 @@ describe("Thermostat", () => {
     expect(screen.getByText("Heating")).toBeInTheDocument();
   });
 
+  describe("phaseKey display", () => {
+    it("should display phase text when phaseKey is provided", () => {
+      render(
+        <Thermostat {...defaultProps} phaseKey="phase.ignitionPelletLoad" />,
+      );
+
+      expect(screen.getByText("Ignition - Pellet load")).toBeInTheDocument();
+    });
+
+    it("should display phase.on text when phaseKey is phase.on", () => {
+      render(<Thermostat {...defaultProps} phaseKey="phase.on" />);
+
+      expect(screen.getByText("On")).toBeInTheDocument();
+    });
+
+    it("should display phase.off text when phaseKey is phase.off", () => {
+      render(<Thermostat {...defaultProps} phaseKey="phase.off" />);
+
+      expect(screen.getByText("Off")).toBeInTheDocument();
+    });
+
+    it("should fall back to Heating when phaseKey is undefined and power is on", () => {
+      render(
+        <Thermostat {...defaultProps} powerState={true} phaseKey={undefined} />,
+      );
+
+      expect(screen.getByText("Heating")).toBeInTheDocument();
+    });
+
+    it("should fall back to Standby when phaseKey is undefined and power is off", () => {
+      render(
+        <Thermostat
+          {...defaultProps}
+          powerState={false}
+          phaseKey={undefined}
+        />,
+      );
+
+      expect(screen.getByText("Standby")).toBeInTheDocument();
+    });
+  });
+
   it("should call onPowerChange with 1 when power button is clicked while off", async () => {
     const onPowerChange = vi.fn();
     const user = userEvent.setup();

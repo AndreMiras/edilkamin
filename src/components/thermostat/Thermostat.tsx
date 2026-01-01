@@ -19,6 +19,7 @@ interface ThermostatProps {
   powerLevel?: number;
   onPowerLevelChange?: (level: number) => void;
   isAuto?: boolean;
+  phaseKey?: string;
 }
 
 const Thermostat = ({
@@ -34,6 +35,7 @@ const Thermostat = ({
   powerLevel,
   onPowerLevelChange,
   isAuto = false,
+  phaseKey,
 }: ThermostatProps) => {
   const { t } = useTranslation("fireplace");
 
@@ -69,7 +71,9 @@ const Thermostat = ({
                 : "text-muted-foreground"
             }`}
           />
-          <span>{powerState ? t("heating") : t("standby")}</span>
+          <span>
+            {phaseKey ? t(phaseKey) : powerState ? t("heating") : t("standby")}
+          </span>
         </div>
 
         {/* Temperature controls when auto mode is ON */}

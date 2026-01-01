@@ -87,6 +87,7 @@ const Fireplace: NextPage = () => {
     environmentTemperature,
     isPelletInReserve,
     pelletAutonomyTime,
+    phaseKey,
     lastUpdated,
     onPowerChange,
     onTemperatureChange,
@@ -192,6 +193,7 @@ const Fireplace: NextPage = () => {
             powerLevel={powerLevel}
             onPowerLevelChange={onPowerLevelChange}
             isAuto={isAuto}
+            phaseKey={phaseKey}
           >
             <Accordion type="single" collapsible className="mt-8 w-[340px]">
               <AccordionItem value="device-details">

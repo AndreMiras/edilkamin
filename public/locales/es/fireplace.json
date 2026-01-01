@@ -33,6 +33,22 @@
     "offline": "Sin conexión",
     "offlineHint": "Sin conexión a internet"
   },
+  "phase": {
+    "off": "Apagado",
+    "standby": "En espera",
+    "on": "Encendido",
+    "ignition": "Encendido",
+    "ignitionStartingCleaning": "Encendido - Limpieza inicial",
+    "ignitionPelletLoad": "Encendido - Carga de pellets",
+    "ignitionLoadingBreak": "Encendido - Pausa de carga",
+    "ignitionSmokeCheck": "Encendido - Control temp. humos",
+    "ignitionThresholdCheck": "Encendido - Control umbral",
+    "ignitionWarmup": "Encendido - Precalentamiento",
+    "ignitionTransition": "Encendido - Iniciando",
+    "cooling": "Enfriamiento",
+    "alarm": "Alarma",
+    "unknown": "Desconocido"
+  },
   "errors": {
     "deviceNotFound": "Dispositivo no encontrado",
     "deviceNotFoundBody": "La dirección proporcionada (\"{{mac}}\") no es válida o el dispositivo no está registrado.",

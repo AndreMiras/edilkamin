@@ -64,6 +64,10 @@ const mockDeviceData = {
     temperatures: { enviroment: 22.5 },
     flags: { is_pellet_in_reserve: false },
     pellet: { autonomy_time: 24 },
+    state: {
+      operational_phase: 6,
+      sub_operational_phase: 0,
+    },
   },
   nvm: {
     user_parameters: {
@@ -238,6 +242,148 @@ describe("useDeviceControl", () => {
         "visibilitychange",
         expect.any(Function),
       );
+    });
+  });
+
+  describe("phaseKey", () => {
+    it("should return phase.on when operational_phase is 6", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 6, sub_operational_phase: 0 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.on");
+    });
+
+    it("should return phase.off when operational_phase is 0", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 0, sub_operational_phase: 0 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.off");
+    });
+
+    it("should return phase.standby when operational_phase is 1", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 1, sub_operational_phase: 0 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.standby");
+    });
+
+    it("should return ignition sub-phase key when operational_phase is 2", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 2, sub_operational_phase: 1 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.ignitionPelletLoad");
+    });
+
+    it("should return phase.cooling when operational_phase is 7", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 7, sub_operational_phase: 0 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.cooling");
+    });
+
+    it("should return phase.alarm when operational_phase is 8", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: { operational_phase: 8, sub_operational_phase: 0 },
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBe("phase.alarm");
+    });
+
+    it("should return undefined when state is not available", async () => {
+      mockDeviceInfo.mockResolvedValue({
+        ...mockDeviceData,
+        status: {
+          ...mockDeviceData.status,
+          state: undefined,
+        },
+      });
+
+      const { result } = renderHook(() => useDeviceControl("ABC123456789"), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.phaseKey).toBeUndefined();
     });
   });
 });
