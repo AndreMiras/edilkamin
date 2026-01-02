@@ -32,7 +32,13 @@ describe("DebugInfo Component", () => {
       },
       flags: {
         is_pellet_in_reserve: false,
+        is_relax_active: false,
+        is_airkare_active: false,
+        is_crono_active: false,
+        is_easytimer_active: false,
+        is_cochlea_in_continuous_mode: false,
       },
+      easytimer: { time: 0 },
       pellet: {
         autonomy_time: 900,
       },

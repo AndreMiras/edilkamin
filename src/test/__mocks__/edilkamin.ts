@@ -18,9 +18,13 @@ export const API_URL = "https://api.edilkamin.com/";
 export const OLD_API_URL =
   "https://fxtj7xkgc6.execute-api.eu-central-1.amazonaws.com/prod/";
 
-// Import and re-export the actual deriveUsageAnalytics implementation
+// Import and re-export actual implementations from edilkamin
 // This is needed because re-exporting types only works, not implementations
 export {
+  AlarmCode,
+  AlarmDescriptions,
+  type AlarmsLogType,
+  deriveAlarmHistory,
   deriveUsageAnalytics,
   type DeviceInfoType,
   type UsageAnalyticsType,

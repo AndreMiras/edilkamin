@@ -4784,10 +4784,10 @@ dunder-proto@^1.0.0, dunder-proto@^1.0.1:
     es-errors "^1.3.0"
     gopd "^1.2.0"
 
-edilkamin@1.12.1:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.12.1.tgz#35706b3fc20be5ef0467f9ff508f0664d9f03891"
-  integrity sha512-J8SMSmAMCYN8gKUddgBOblQ907LzB0QYVP22YPWzY8YQnKaF2UdoHjftbVJljnG6s6aHmprXN1CFZg76ru+WFg==
+edilkamin@1.13.0:
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/edilkamin/-/edilkamin-1.13.0.tgz#0dbcdcc0fbd037ee083ab4428ffa465501242766"
+  integrity sha512-NWH/FrCtP/ecALejfLKcjcjJJG5kLyGzEx00egOYLD9tV2si9FLskt1IhUm2bqRqHQ69dooggPDy90Bp2FrWOQ==
   dependencies:
     aws-amplify "^6.10.0"
     pako "^2.1.0"

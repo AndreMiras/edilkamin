@@ -18,6 +18,7 @@ import { useDeviceControl } from "@/hooks/useDeviceControl";
 import { getDeviceByWifiMac } from "@/utils/deviceStorage";
 import { useIsLoggedIn } from "@/utils/hooks";
 
+import AlarmHistory from "../../components/AlarmHistory";
 import AutoModeToggle from "../../components/AutoModeToggle";
 import ConnectionModeToggle from "../../components/ConnectionModeToggle";
 import DebugInfo from "../../components/DebugInfo";
@@ -284,6 +285,12 @@ const Stove: NextPage = () => {
                 <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
                 <AccordionContent>
                   {info && <UsageStatistics info={info} />}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="alarm-history">
+                <AccordionTrigger>{t("alarmHistory.label")}</AccordionTrigger>
+                <AccordionContent>
+                  {info && <AlarmHistory info={info} />}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

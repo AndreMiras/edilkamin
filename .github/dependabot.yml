@@ -11,7 +11,7 @@ updates:
     reviewers:
       - "andremiras"
     commit-message:
-      prefix: "⬆️"
+      prefix: ":arrow_up:"
       include: "scope"
     # Ignore non-LTS Node.js versions for @types/node
     # Update this when bumping to the next LTS (e.g., 26.x -> ignore 27.x)

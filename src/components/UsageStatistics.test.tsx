@@ -82,10 +82,18 @@ describe("UsageStatistics", () => {
       },
       commands: {} as DeviceInfoType["status"]["commands"],
       temperatures: {} as DeviceInfoType["status"]["temperatures"],
-      flags: {} as DeviceInfoType["status"]["flags"],
+      flags: {
+        is_pellet_in_reserve: false,
+        is_relax_active: false,
+        is_airkare_active: false,
+        is_crono_active: false,
+        is_easytimer_active: false,
+        is_cochlea_in_continuous_mode: false,
+      },
       pellet: {} as DeviceInfoType["status"]["pellet"],
       state: {} as DeviceInfoType["status"]["state"],
       fans: {} as DeviceInfoType["status"]["fans"],
+      easytimer: { time: 0 },
     },
   };
 
