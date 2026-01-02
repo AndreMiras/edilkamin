@@ -1,9 +1,9 @@
 {
-  "title": "Fireplaces",
-  "emptyState": "No registered fireplaces.",
+  "title": "Stoves",
+  "emptyState": "No registered stoves.",
   "addFirstDevice": "Add your first device",
   "manageDevices": "Manage Devices",
-  "manageDevicesDescription": "Add or remove fireplace devices from your list",
+  "manageDevicesDescription": "Add or remove stove devices from your list",
   "loginRequired": "Login Required",
   "bluetoothAvailable": "Bluetooth Mode Available",
   "bluetoothHint": "You can control your stove via Bluetooth without logging in. Add a device and use Bluetooth mode on the device page.",

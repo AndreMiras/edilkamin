@@ -103,7 +103,7 @@ export interface DeviceControlHandlers {
 export function useDeviceControl(
   mac: string | undefined,
 ): DeviceControlState & DeviceControlHandlers {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const [info, setInfo] = useState<DeviceInfoType | null>(null);
   const [powerState, setPowerState] = useState(false);
   const [temperature, setTemperature] = useState<number>(0);

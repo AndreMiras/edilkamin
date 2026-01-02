@@ -5,7 +5,7 @@ import { configure, DeviceInfoType, getSession } from "edilkamin";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import Errors from "../../../components/Errors";
-import Fireplace from "../../../pages/fireplace/[mac]";
+import Stove from "../../../pages/stove/[mac]";
 import { render, screen } from "../../../test/utils";
 
 vi.mock("edilkamin", async () => {
@@ -42,13 +42,13 @@ vi.mock("next/router", () => ({
   useRouter: () => ({
     query: { mac: "aabbccddeeff" },
     push: mockRouterPush,
-    pathname: "/fireplace/[mac]",
-    route: "/fireplace/[mac]",
-    asPath: "/fireplace/aabbccddeeff",
+    pathname: "/stove/[mac]",
+    route: "/stove/[mac]",
+    asPath: "/stove/aabbccddeeff",
   }),
 }));
 
-describe("Fireplace Page", () => {
+describe("Stove Page", () => {
   const mockMac = "aabbccddeeff";
   const mockToken = "test-token-12345";
 
@@ -142,7 +142,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for auth to resolve and thermostat to render
       await waitFor(() => {
@@ -165,7 +165,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalledWith(mockToken, mockMac);
@@ -185,7 +185,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for data to load and check that temperature is displayed
       await waitFor(() => {
@@ -210,7 +210,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -245,7 +245,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -270,7 +270,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -294,7 +294,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -323,7 +323,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for initial load
       await waitFor(() => {
@@ -353,7 +353,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalled();
@@ -384,7 +384,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -422,7 +422,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -453,7 +453,7 @@ describe("Fireplace Page", () => {
         setPowerLevel: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for UI to render with data before interacting
       await waitFor(() => {
@@ -488,7 +488,7 @@ describe("Fireplace Page", () => {
         setPowerLevel: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for UI to render with data before interacting
       await waitFor(() => {
@@ -525,7 +525,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -564,7 +564,7 @@ describe("Fireplace Page", () => {
 
       render(
         <>
-          <Fireplace />
+          <Stove />
           <Errors />
         </>,
       );
@@ -595,7 +595,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalled();
@@ -619,7 +619,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for data to load and temperature to display
       await waitFor(() => {
@@ -645,7 +645,7 @@ describe("Fireplace Page", () => {
       // Clear token
       localStorage.clear();
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Should not call deviceInfo when token is missing
       expect(mockDeviceInfo).not.toHaveBeenCalled();
@@ -667,7 +667,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalled();
@@ -697,7 +697,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalled();
@@ -736,7 +736,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         expect(mockDeviceInfo).toHaveBeenCalled();
@@ -788,7 +788,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       await waitFor(() => {
         // getSession called at least twice: once for initial load, once for refresh
@@ -816,7 +816,7 @@ describe("Fireplace Page", () => {
         setFanSpeed: vi.fn(),
       } as any);
 
-      render(<Fireplace />);
+      render(<Stove />);
 
       // Wait for the error flow to complete - when refresh fails, localStorage is cleared
       await waitFor(() => {

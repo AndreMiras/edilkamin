@@ -1,5 +1,5 @@
 {
-  "title": "Cheminée : {{mac}}",
+  "title": "Poêle : {{mac}}",
   "backToHome": "Retour au tableau de bord",
   "refresh": "Actualiser",
   "refreshing": "Actualisation...",
@@ -13,6 +13,22 @@
   },
   "advanced": "Avancé",
   "debug": "Débogage",
+  "deviceInfo": {
+    "label": "Informations de l'appareil",
+    "copy": "Copier",
+    "copied": "Copié !"
+  },
+  "statistics": {
+    "label": "Statistiques",
+    "totalHours": "Heures de fonctionnement totales",
+    "powerDistribution": "Répartition de puissance",
+    "serviceDue": "Entretien requis",
+    "serviceOk": "Entretien OK",
+    "hoursSinceService": "{{hours}}h depuis l'entretien (seuil : {{threshold}}h)",
+    "powerOns": "Allumages",
+    "blackouts": "Coupures de courant",
+    "alarms": "Alarmes"
+  },
   "heating": "Chauffage",
   "standby": "Veille",
   "targetTemp": "Température cible",
@@ -23,13 +39,31 @@
   "turnOff": "Éteindre",
   "increaseTemp": "Augmenter la température",
   "decreaseTemp": "Diminuer la température",
+  "powerLevel": {
+    "label": "Intensité de chauffage",
+    "current": "Niveau : {{level}}",
+    "auto": "Auto",
+    "increase": "Augmenter l'intensité",
+    "decrease": "Diminuer l'intensité"
+  },
+  "autoMode": {
+    "label": "Mode automatique",
+    "description": "Ajuste automatiquement la puissance pour maintenir la température cible"
+  },
+  "fanSpeed": {
+    "label": "Vitesse ventilateur {{number}}",
+    "current": "Vitesse : {{speed}}",
+    "off": "Arrêt"
+  },
   "connectionMode": {
     "cloud": "Cloud",
     "bluetooth": "Bluetooth",
     "connecting": "Connexion...",
     "connected": "Connecté",
     "disconnected": "Déconnecté",
-    "error": "Échec de connexion"
+    "error": "Échec de connexion",
+    "offline": "Hors ligne",
+    "offlineHint": "Pas de connexion internet"
   },
   "phase": {
     "off": "Arrêt",
@@ -44,6 +78,11 @@
     "ignitionWarmup": "Allumage - Préchauffage",
     "ignitionTransition": "Allumage - Démarrage",
     "cooling": "Refroidissement",
+    "shuttingDown": "Arrêt en cours",
+    "finalCleaning": "Nettoyage final",
+    "ignitionHotStoveCleaning": "Allumage - Nettoyage poêle chaud",
+    "ignitionCleaningWithoutCleaner": "Allumage - Nettoyage sans nettoyeur",
+    "ignitionCleaningWithCleaner": "Allumage - Nettoyage avec nettoyeur",
     "alarm": "Alarme",
     "unknown": "Inconnu"
   },
@@ -54,7 +93,13 @@
     "powerUpdateFailed": "Échec de mise à jour de l'alimentation",
     "powerUpdateBody": "Impossible de modifier l'état d'alimentation. Veuillez réessayer.",
     "temperatureUpdateFailed": "Échec de mise à jour de la température",
-    "temperatureUpdateBody": "Impossible de mettre à jour la température. Veuillez réessayer."
+    "temperatureUpdateBody": "Impossible de mettre à jour la température. Veuillez réessayer.",
+    "powerLevelUpdateFailed": "Échec de mise à jour du niveau de puissance",
+    "powerLevelUpdateBody": "Impossible de mettre à jour le niveau de puissance. Veuillez réessayer.",
+    "autoModeUpdateFailed": "Échec de mise à jour du mode automatique",
+    "autoModeUpdateBody": "Impossible de changer le mode automatique. Veuillez réessayer.",
+    "fanSpeedUpdateFailed": "Échec de mise à jour de la vitesse du ventilateur",
+    "fanSpeedUpdateBody": "Impossible de mettre à jour la vitesse du ventilateur. Veuillez réessayer."
   },
   "pellet": {
     "lowWarning": "Réserve de granulés basse",

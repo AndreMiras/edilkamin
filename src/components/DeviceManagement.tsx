@@ -217,7 +217,7 @@ const DeviceManagement = ({
               onClick={handleAdd}
               disabled={addDisabled}
               className="p-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              aria-label="Add fireplace"
+              aria-label="Add stove"
             >
               <FontAwesomeIcon icon={["fas", "plus"]} />
             </button>

@@ -20,7 +20,7 @@ const PowerLevelControl = ({
   onLevelChange,
   loading,
 }: PowerLevelControlProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
 
   return (
     <>

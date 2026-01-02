@@ -17,7 +17,7 @@ const FanSpeedControl = ({
   disabled = false,
   maxSpeed = 5,
 }: FanSpeedControlProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
 
   return (
     <div className="py-2">

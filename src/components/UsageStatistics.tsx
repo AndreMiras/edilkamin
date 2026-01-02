@@ -9,7 +9,7 @@ interface UsageStatisticsProps {
 }
 
 const UsageStatistics = ({ info }: UsageStatisticsProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const analytics = deriveUsageAnalytics(info);
 
   return (

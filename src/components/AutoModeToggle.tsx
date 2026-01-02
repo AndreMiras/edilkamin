@@ -13,7 +13,7 @@ const AutoModeToggle = ({
   loading,
   disabled = false,
 }: AutoModeToggleProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
 
   return (
     <div className="flex items-center justify-between py-2">

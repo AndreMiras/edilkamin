@@ -1,5 +1,5 @@
 {
-  "title": "Chimenea: {{mac}}",
+  "title": "Estufa: {{mac}}",
   "backToHome": "Volver al Panel",
   "refresh": "Actualizar",
   "refreshing": "Actualizando...",
@@ -13,6 +13,22 @@
   },
   "advanced": "Avanzado",
   "debug": "Depuración",
+  "deviceInfo": {
+    "label": "Información del dispositivo",
+    "copy": "Copiar",
+    "copied": "¡Copiado!"
+  },
+  "statistics": {
+    "label": "Estadísticas",
+    "totalHours": "Horas totales de funcionamiento",
+    "powerDistribution": "Distribución de potencia",
+    "serviceDue": "Mantenimiento requerido",
+    "serviceOk": "Mantenimiento OK",
+    "hoursSinceService": "{{hours}}h desde el mantenimiento (umbral: {{threshold}}h)",
+    "powerOns": "Encendidos",
+    "blackouts": "Apagones",
+    "alarms": "Alarmas"
+  },
   "heating": "Calentando",
   "standby": "En espera",
   "targetTemp": "Temperatura objetivo",
@@ -23,6 +39,22 @@
   "turnOff": "Apagar",
   "increaseTemp": "Aumentar temperatura",
   "decreaseTemp": "Disminuir temperatura",
+  "powerLevel": {
+    "label": "Intensidad de calefacción",
+    "current": "Nivel: {{level}}",
+    "auto": "Auto",
+    "increase": "Aumentar intensidad",
+    "decrease": "Disminuir intensidad"
+  },
+  "autoMode": {
+    "label": "Modo automático",
+    "description": "Ajusta automáticamente la potencia para mantener la temperatura objetivo"
+  },
+  "fanSpeed": {
+    "label": "Velocidad del ventilador {{number}}",
+    "current": "Velocidad: {{speed}}",
+    "off": "Apagado"
+  },
   "connectionMode": {
     "cloud": "Nube",
     "bluetooth": "Bluetooth",
@@ -46,6 +78,11 @@
     "ignitionWarmup": "Encendido - Precalentamiento",
     "ignitionTransition": "Encendido - Iniciando",
     "cooling": "Enfriamiento",
+    "shuttingDown": "Apagando",
+    "finalCleaning": "Limpieza final",
+    "ignitionHotStoveCleaning": "Encendido - Limpieza estufa caliente",
+    "ignitionCleaningWithoutCleaner": "Encendido - Limpieza sin limpiador",
+    "ignitionCleaningWithCleaner": "Encendido - Limpieza con limpiador",
     "alarm": "Alarma",
     "unknown": "Desconocido"
   },
@@ -56,7 +93,13 @@
     "powerUpdateFailed": "Error al actualizar el estado de encendido",
     "powerUpdateBody": "No se pudo cambiar el estado de encendido. Por favor, inténtelo de nuevo.",
     "temperatureUpdateFailed": "Error al actualizar la temperatura",
-    "temperatureUpdateBody": "No se pudo actualizar la temperatura. Por favor, inténtelo de nuevo."
+    "temperatureUpdateBody": "No se pudo actualizar la temperatura. Por favor, inténtelo de nuevo.",
+    "powerLevelUpdateFailed": "Error al actualizar el nivel de potencia",
+    "powerLevelUpdateBody": "No se pudo actualizar el nivel de potencia. Por favor, inténtelo de nuevo.",
+    "autoModeUpdateFailed": "Error al actualizar el modo automático",
+    "autoModeUpdateBody": "No se pudo cambiar el modo automático. Por favor, inténtelo de nuevo.",
+    "fanSpeedUpdateFailed": "Error al actualizar la velocidad del ventilador",
+    "fanSpeedUpdateBody": "No se pudo actualizar la velocidad del ventilador. Por favor, inténtelo de nuevo."
   },
   "pellet": {
     "lowWarning": "Reserva de pellets baja",

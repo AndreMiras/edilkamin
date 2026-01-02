@@ -6,7 +6,7 @@ interface PelletWarningProps {
 }
 
 const PelletWarning = ({ autonomyTime }: PelletWarningProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const hours = Math.floor(autonomyTime / 60);
 
   return (

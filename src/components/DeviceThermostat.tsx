@@ -40,7 +40,7 @@ const DeviceThermostat = ({ mac }: DeviceThermostatProps) => {
   if (cannotLoadData) {
     return (
       <div className="flex flex-col">
-        <Link href={`/fireplace/${mac}`} className="block">
+        <Link href={`/stove/${mac}`} className="block">
           <div className="w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_50px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
             <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
               <FontAwesomeIcon
@@ -79,7 +79,7 @@ const DeviceThermostat = ({ mac }: DeviceThermostatProps) => {
       />
       <div className="text-center mt-2">
         <Link
-          href={`/fireplace/${mac}`}
+          href={`/stove/${mac}`}
           className="text-sm text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
         >
           {mac}

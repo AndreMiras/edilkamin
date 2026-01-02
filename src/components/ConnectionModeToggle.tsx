@@ -5,7 +5,7 @@ import { useBluetooth } from "@/context/bluetooth";
 import { useNetwork } from "@/context/network";
 
 const ConnectionModeToggle = () => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const {
     connectionMode,
     setConnectionMode,

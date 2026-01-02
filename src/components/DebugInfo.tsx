@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 
 const DebugInfo = ({ info }: { info: DeviceInfoType | null }) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const [copied, setCopied] = useState(false);
   const jsonString = JSON.stringify(info, null, 2);
 

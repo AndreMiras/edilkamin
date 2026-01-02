@@ -39,7 +39,7 @@ interface BluetoothContextValue {
 const BluetoothContext = createContext<BluetoothContextValue | null>(null);
 
 export const BluetoothProvider = ({ children }: { children: ReactNode }) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
   const { addError } = useContext(ErrorContext);
   const [connectionMode, setConnectionMode] = useState<ConnectionMode>("cloud");
   const [bleDeviceId, setBleDeviceId] = useState<string | null>(null);

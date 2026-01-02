@@ -37,7 +37,7 @@ const Thermostat = ({
   isAuto = false,
   phaseKey,
 }: ThermostatProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
 
   return (
     <div

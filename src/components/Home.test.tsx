@@ -16,7 +16,7 @@ vi.mock("edilkamin", () => ({
 vi.mock("./DeviceThermostat", () => ({
   default: ({ mac }: { mac: string }) => (
     <div data-testid={`device-thermostat-${mac}`}>
-      <a href={`/fireplace/${mac}`}>{mac}</a>
+      <a href={`/stove/${mac}`}>{mac}</a>
     </div>
   ),
 }));
@@ -65,7 +65,7 @@ describe("Home", () => {
     });
 
     // Should show empty state message
-    expect(screen.getByText(/no registered fireplaces/i)).toBeInTheDocument();
+    expect(screen.getByText(/no registered stoves/i)).toBeInTheDocument();
   });
 
   it("should open device management dialog when clicking add first device button", async () => {
@@ -156,13 +156,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     await user.type(input, "aabbccddeeff");
     await user.click(addButton);
@@ -186,13 +186,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     await user.type(input, "aa:bb:cc:dd:ee:ff");
     await user.click(addButton);
@@ -211,13 +211,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     await user.type(input, "invalid-mac");
 
@@ -287,13 +287,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     await user.type(input, "aabbccddeeff");
     await user.click(addButton);
@@ -331,7 +331,7 @@ describe("Home", () => {
     });
 
     // Add button should be disabled
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
     expect(addButton).toBeDisabled();
 
     // Should not add duplicate (new format)
@@ -347,12 +347,12 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
     expect(addButton).toBeDisabled();
   });
 
@@ -361,13 +361,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     await user.type(input, "aabbccddeeff");
 
@@ -382,7 +382,7 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
@@ -412,7 +412,7 @@ describe("Home", () => {
     });
 
     const link = screen.getByRole("link", { name: "aabbccddeeff" });
-    expect(link).toHaveAttribute("href", "/fireplace/aabbccddeeff");
+    expect(link).toHaveAttribute("href", "/stove/aabbccddeeff");
   });
 
   it("should show validation feedback for invalid input", async () => {
@@ -420,7 +420,7 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
@@ -439,7 +439,7 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
@@ -466,13 +466,13 @@ describe("Home", () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+      expect(screen.getByText("Stoves")).toBeInTheDocument();
     });
 
     await openManageDevicesModal(user);
 
     const input = screen.getByPlaceholderText(/aabbccddeeff/i);
-    const addButton = screen.getByRole("button", { name: /add fireplace/i });
+    const addButton = screen.getByRole("button", { name: /add stove/i });
 
     // Add first device
     await user.type(input, "aabbccddeeff");
@@ -533,7 +533,7 @@ describe("Home", () => {
       render(<Home />);
 
       await waitFor(() => {
-        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+        expect(screen.getByText("Stoves")).toBeInTheDocument();
       });
 
       await openManageDevicesModal(user);
@@ -552,7 +552,7 @@ describe("Home", () => {
       render(<Home />);
 
       await waitFor(() => {
-        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+        expect(screen.getByText("Stoves")).toBeInTheDocument();
       });
 
       await openManageDevicesModal(user);
@@ -571,7 +571,7 @@ describe("Home", () => {
       render(<Home />);
 
       await waitFor(() => {
-        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+        expect(screen.getByText("Stoves")).toBeInTheDocument();
       });
 
       await openManageDevicesModal(user);
@@ -601,7 +601,7 @@ describe("Home", () => {
       render(<Home />);
 
       await waitFor(() => {
-        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+        expect(screen.getByText("Stoves")).toBeInTheDocument();
       });
 
       await openManageDevicesModal(user);
@@ -638,7 +638,7 @@ describe("Home", () => {
       render(<Home />);
 
       await waitFor(() => {
-        expect(screen.getByText("Fireplaces")).toBeInTheDocument();
+        expect(screen.getByText("Stoves")).toBeInTheDocument();
       });
 
       await openManageDevicesModal(user);

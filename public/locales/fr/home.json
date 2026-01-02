@@ -1,6 +1,6 @@
 {
-  "title": "Cheminées",
-  "emptyState": "Aucune cheminée enregistrée.",
+  "title": "Poêles",
+  "emptyState": "Aucun poêle enregistré.",
   "addFirstDevice": "Ajoutez votre premier appareil",
   "manageDevices": "Gérer les appareils",
   "manageDevicesDescription": "Ajouter ou supprimer des appareils de votre liste",

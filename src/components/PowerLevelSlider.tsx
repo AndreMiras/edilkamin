@@ -15,7 +15,7 @@ const PowerLevelSlider = ({
   disabled = false,
   readOnly = false,
 }: PowerLevelSliderProps) => {
-  const { t } = useTranslation("fireplace");
+  const { t } = useTranslation("stove");
 
   return (
     <div className="w-full px-4 py-2">
