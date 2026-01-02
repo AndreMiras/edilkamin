@@ -1,15 +1,21 @@
-import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-const FireplaceRedirect = () => null;
+/**
+ * Redirect from old /fireplace/[mac] URLs to new /stove/[mac] URLs.
+ * Uses client-side redirect to remain compatible with static export (mobile builds).
+ */
+const FireplaceRedirect = () => {
+  const router = useRouter();
+  const mac = router.query.mac as string;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const mac = params?.mac as string;
-  return {
-    redirect: {
-      destination: `/stove/${mac}`,
-      permanent: true, // 301 redirect for SEO
-    },
-  };
+  useEffect(() => {
+    if (mac) {
+      router.replace(`/stove/${mac}`);
+    }
+  }, [mac, router]);
+
+  return null;
 };
 
 export default FireplaceRedirect;
