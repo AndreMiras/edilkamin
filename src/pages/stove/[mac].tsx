@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PullToRefresh from "react-simple-pull-to-refresh";
 
@@ -85,6 +85,16 @@ const Stove: NextPage = () => {
 
   // Track seconds since last update for display
   const [secondsSinceUpdate, setSecondsSinceUpdate] = useState<number>(0);
+
+  // Track which accordion item is open
+  const [openAccordion, setOpenAccordion] = useState<string | undefined>(
+    undefined,
+  );
+
+  // Callback to open alarm history accordion from statistics
+  const handleOpenAlarmHistory = useCallback(() => {
+    setOpenAccordion("alarm-history");
+  }, []);
 
   useEffect(() => {
     if (!lastUpdated) return;
@@ -181,7 +191,13 @@ const Stove: NextPage = () => {
             isAuto={isAuto}
             phaseKey={phaseKey}
           >
-            <Accordion type="single" collapsible className="mt-8 w-[340px]">
+            <Accordion
+              type="single"
+              collapsible
+              className="mt-8 w-[340px]"
+              value={openAccordion}
+              onValueChange={setOpenAccordion}
+            >
               <AccordionItem value="device-details">
                 <AccordionTrigger>{t("advanced")}</AccordionTrigger>
                 <AccordionContent>
@@ -275,22 +291,27 @@ const Stove: NextPage = () => {
                   {info && <DeviceDetails info={info} />}
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="debug-info">
-                <AccordionTrigger>{t("deviceInfo.label")}</AccordionTrigger>
-                <AccordionContent>
-                  <DebugInfo info={info} />
-                </AccordionContent>
-              </AccordionItem>
               <AccordionItem value="statistics">
                 <AccordionTrigger>{t("statistics.label")}</AccordionTrigger>
                 <AccordionContent>
-                  {info && <UsageStatistics info={info} />}
+                  {info && (
+                    <UsageStatistics
+                      info={info}
+                      onAlarmClick={handleOpenAlarmHistory}
+                    />
+                  )}
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="alarm-history">
                 <AccordionTrigger>{t("alarmHistory.label")}</AccordionTrigger>
                 <AccordionContent>
                   {info && <AlarmHistory info={info} />}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="debug-info">
+                <AccordionTrigger>{t("deviceInfo.label")}</AccordionTrigger>
+                <AccordionContent>
+                  <DebugInfo info={info} />
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

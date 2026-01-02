@@ -6,9 +6,10 @@ import PowerDistributionChart from "./PowerDistributionChart";
 
 interface UsageStatisticsProps {
   info: DeviceInfoType;
+  onAlarmClick?: () => void;
 }
 
-const UsageStatistics = ({ info }: UsageStatisticsProps) => {
+const UsageStatistics = ({ info, onAlarmClick }: UsageStatisticsProps) => {
   const { t } = useTranslation("stove");
   const analytics = deriveUsageAnalytics(info);
 
@@ -76,12 +77,15 @@ const UsageStatistics = ({ info }: UsageStatisticsProps) => {
             {t("statistics.blackouts")}
           </div>
         </div>
-        <div className="p-2 bg-muted rounded">
+        <button
+          onClick={onAlarmClick}
+          className="p-2 bg-muted rounded w-full hover:bg-muted/80 transition-colors cursor-pointer"
+        >
           <div className="text-lg font-semibold">{analytics.alarmCount}</div>
           <div className="text-xs text-muted-foreground">
             {t("statistics.alarms")}
           </div>
-        </div>
+        </button>
       </div>
     </div>
   );
