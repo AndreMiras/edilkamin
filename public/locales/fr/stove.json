@@ -29,6 +29,17 @@
     "blackouts": "Coupures de courant",
     "alarms": "Alarmes"
   },
+  "software": {
+    "label": "Logiciel",
+    "notAvailable": "Informations logicielles non disponibles",
+    "motherboard": "Carte mère",
+    "emergencyPanel": "Panneau d'urgence",
+    "radioControl": "Télécommande",
+    "idroPanel": "Panneau Idro",
+    "boardName": "Carte",
+    "application": "Application",
+    "bootloader": "Bootloader"
+  },
   "alarmHistory": {
     "label": "Historique des alarmes",
     "noAlarms": "Aucune alarme enregistrée",

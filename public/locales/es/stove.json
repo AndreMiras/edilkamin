@@ -29,6 +29,17 @@
     "blackouts": "Apagones",
     "alarms": "Alarmas"
   },
+  "software": {
+    "label": "Software",
+    "notAvailable": "Información de software no disponible",
+    "motherboard": "Placa base",
+    "emergencyPanel": "Panel de emergencia",
+    "radioControl": "Control remoto",
+    "idroPanel": "Panel Idro",
+    "boardName": "Placa",
+    "application": "Aplicación",
+    "bootloader": "Bootloader"
+  },
   "alarmHistory": {
     "label": "Historial de alarmas",
     "noAlarms": "No hay alarmas registradas",

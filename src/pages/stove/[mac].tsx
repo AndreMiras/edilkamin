@@ -26,6 +26,7 @@ import DetailRow from "../../components/DetailRow";
 import DeviceDetails from "../../components/DeviceDetails";
 import FanSpeedControl from "../../components/FanSpeedControl";
 import PowerLevelSlider from "../../components/PowerLevelSlider";
+import SoftwareInfo from "../../components/SoftwareInfo";
 import { Thermostat } from "../../components/thermostat";
 import UsageStatistics from "../../components/UsageStatistics";
 
@@ -300,6 +301,12 @@ const Stove: NextPage = () => {
                       onAlarmClick={handleOpenAlarmHistory}
                     />
                   )}
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="software">
+                <AccordionTrigger>{t("software.label")}</AccordionTrigger>
+                <AccordionContent>
+                  <SoftwareInfo componentInfo={info?.component_info} />
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="alarm-history">

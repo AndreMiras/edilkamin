@@ -28,6 +28,17 @@
     "blackouts": "Blackouts",
     "alarms": "Alarms"
   },
+  "software": {
+    "label": "Software",
+    "notAvailable": "Software information not available",
+    "motherboard": "Motherboard",
+    "emergencyPanel": "Emergency Panel",
+    "radioControl": "Radio Control",
+    "idroPanel": "Idro Panel",
+    "boardName": "Board",
+    "application": "Application",
+    "bootloader": "Bootloader"
+  },
   "alarmHistory": {
     "label": "Alarm History",
     "noAlarms": "No alarms recorded",
