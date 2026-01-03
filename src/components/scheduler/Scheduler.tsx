@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { EasyTimerSection } from "./EasyTimerSection";
 import { QuickPresets } from "./QuickPresets";
+import { TemperatureCardsSection } from "./TemperatureCardsSection";
 import type { SchedulerProps, ScheduleValue } from "./types";
 import { WeeklyScheduleGrid } from "./WeeklyScheduleGrid";
 
@@ -70,73 +71,6 @@ function TabButton({
       {icon}
       {children}
     </button>
-  );
-}
-
-function TemperatureStepper({
-  value,
-  onChange,
-  min = 10,
-  max = 30,
-  step = 0.5,
-  label,
-  color,
-  disabled = false,
-  unit = "C",
-}: {
-  value: number;
-  onChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-  label: string;
-  color: string;
-  disabled?: boolean;
-  unit?: "C" | "F";
-}) {
-  const decrease = () => {
-    if (value > min) onChange(Math.max(min, value - step));
-  };
-
-  const increase = () => {
-    if (value < max) onChange(Math.min(max, value + step));
-  };
-
-  return (
-    <div className="flex items-center justify-between py-3">
-      <div className="flex items-center gap-3">
-        <div
-          className="w-3 h-3 rounded-full"
-          style={{ backgroundColor: color }}
-        />
-        <span className="text-zinc-300 font-medium">{label}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={decrease}
-          disabled={disabled || value <= min}
-          className="w-8 h-8 rounded-lg bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40
-                     disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-          aria-label={`Decrease ${label}`}
-        >
-          <FontAwesomeIcon icon="minus" className="w-3 h-3 text-zinc-300" />
-        </button>
-        <span className="w-16 text-center text-lg font-mono text-white">
-          {value.toFixed(1)}&deg;{unit}
-        </span>
-        <button
-          type="button"
-          onClick={increase}
-          disabled={disabled || value >= max}
-          className="w-8 h-8 rounded-lg bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40
-                     disabled:cursor-not-allowed flex items-center justify-center transition-colors"
-          aria-label={`Increase ${label}`}
-        >
-          <FontAwesomeIcon icon="plus" className="w-3 h-3 text-zinc-300" />
-        </button>
-      </div>
-    </div>
   );
 }
 
@@ -233,28 +167,14 @@ export function Scheduler({
             {chronoSettings.enabled && (
               <div className="space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
                 {/* Temperature Settings */}
-                <div className="p-4 bg-zinc-800/50 rounded-xl border border-zinc-700/50">
-                  <h4 className="text-sm font-medium text-zinc-400 mb-3">
-                    {t("chrono.targetTemperatures")}
-                  </h4>
-                  <TemperatureStepper
-                    value={chronoSettings.comfortTemperature}
-                    onChange={handleComfortTemperatureChange}
-                    label={t("chrono.comfort")}
-                    color="#f97316"
-                    unit={temperatureUnit}
-                    disabled={isDisabled}
-                  />
-                  <div className="border-t border-zinc-700/50 my-1" />
-                  <TemperatureStepper
-                    value={chronoSettings.economyTemperature}
-                    onChange={handleEconomyTemperatureChange}
-                    label={t("chrono.economy")}
-                    color="#059669"
-                    unit={temperatureUnit}
-                    disabled={isDisabled}
-                  />
-                </div>
+                <TemperatureCardsSection
+                  comfortTemperature={chronoSettings.comfortTemperature}
+                  economyTemperature={chronoSettings.economyTemperature}
+                  onComfortChange={handleComfortTemperatureChange}
+                  onEconomyChange={handleEconomyTemperatureChange}
+                  disabled={isDisabled}
+                  unit={temperatureUnit}
+                />
 
                 {/* Quick Presets */}
                 <QuickPresets
