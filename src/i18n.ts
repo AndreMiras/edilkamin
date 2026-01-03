@@ -10,6 +10,7 @@ import homeEn from "../public/locales/en/home.json";
 import loginEn from "../public/locales/en/login.json";
 import logoutEn from "../public/locales/en/logout.json";
 import powerEn from "../public/locales/en/power.json";
+import schedulerEn from "../public/locales/en/scheduler.json";
 import stoveEn from "../public/locales/en/stove.json";
 import authEs from "../public/locales/es/auth.json";
 import commonEs from "../public/locales/es/common.json";
@@ -20,6 +21,7 @@ import homeEs from "../public/locales/es/home.json";
 import loginEs from "../public/locales/es/login.json";
 import logoutEs from "../public/locales/es/logout.json";
 import powerEs from "../public/locales/es/power.json";
+import schedulerEs from "../public/locales/es/scheduler.json";
 import stoveEs from "../public/locales/es/stove.json";
 import authFr from "../public/locales/fr/auth.json";
 import commonFr from "../public/locales/fr/common.json";
@@ -30,6 +32,7 @@ import homeFr from "../public/locales/fr/home.json";
 import loginFr from "../public/locales/fr/login.json";
 import logoutFr from "../public/locales/fr/logout.json";
 import powerFr from "../public/locales/fr/power.json";
+import schedulerFr from "../public/locales/fr/scheduler.json";
 import stoveFr from "../public/locales/fr/stove.json";
 
 const resources = {
@@ -44,6 +47,7 @@ const resources = {
     login: loginEn,
     logout: logoutEn,
     power: powerEn,
+    scheduler: schedulerEn,
   },
   fr: {
     auth: authFr,
@@ -56,6 +60,7 @@ const resources = {
     login: loginFr,
     logout: logoutFr,
     power: powerFr,
+    scheduler: schedulerFr,
   },
   es: {
     auth: authEs,
@@ -68,6 +73,7 @@ const resources = {
     login: loginEs,
     logout: logoutEs,
     power: powerEs,
+    scheduler: schedulerEs,
   },
 };
 

@@ -130,6 +130,10 @@
     "alarm": "Alarma",
     "unknown": "Desconocido"
   },
+  "scheduler": {
+    "title": "Programación",
+    "description": "Gestionar programaciones de calefacción"
+  },
   "errors": {
     "deviceNotFound": "Dispositivo no encontrado",
     "deviceNotFoundBody": "La dirección proporcionada (\"{{mac}}\") no es válida o el dispositivo no está registrado.",

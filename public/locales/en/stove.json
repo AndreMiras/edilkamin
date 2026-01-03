@@ -131,6 +131,10 @@
     "ignitionWarmup": "Ignition - Warmup",
     "unknown": "Unknown"
   },
+  "scheduler": {
+    "title": "Schedule & Timer",
+    "description": "Manage heating schedules and timers"
+  },
   "errors": {
     "deviceNotFound": "Device not found",
     "deviceNotFoundBody": "The address provided (\"{{mac}}\") is invalid or the device is not registered.",

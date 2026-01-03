@@ -130,6 +130,10 @@
     "alarm": "Alarme",
     "unknown": "Inconnu"
   },
+  "scheduler": {
+    "title": "Programmation",
+    "description": "Gérer les programmations de chauffage"
+  },
   "errors": {
     "deviceNotFound": "Appareil non trouvé",
     "deviceNotFoundBody": "L'adresse fournie (\"{{mac}}\") est invalide ou l'appareil n'est pas enregistré.",

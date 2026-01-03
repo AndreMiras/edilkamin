@@ -1,0 +1,87 @@
+{
+  "title": "Schedule & Timer",
+  "description": "Manage heating schedules and timers",
+  "navigation": {
+    "backToStove": "Back to Stove"
+  },
+  "tabs": {
+    "weeklySchedule": "Weekly Schedule",
+    "easyTimer": "Easy Timer"
+  },
+  "chrono": {
+    "title": "Weekly Schedule",
+    "description": "Set automatic heating schedules for each day",
+    "targetTemperatures": "Target Temperatures",
+    "comfort": "Comfort",
+    "economy": "Economy",
+    "weeklySchedule": "Weekly Schedule",
+    "slotDescription": "Click and drag to paint schedule slots. Each slot is 30 minutes.",
+    "paintMode": "Paint mode"
+  },
+  "scheduleValues": {
+    "off": "Off",
+    "eco": "Eco",
+    "comfort": "Comfort"
+  },
+  "days": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  },
+  "daysFull": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "presets": {
+    "title": "Quick Presets",
+    "clearAll": "Clear All",
+    "clearAllDesc": "Set all slots to Off",
+    "workWeek": "Work Week",
+    "workWeekDesc": "Morning & evening on weekdays",
+    "earlyBird": "Early Bird",
+    "earlyBirdDesc": "Early morning schedule",
+    "allComfort": "Always Comfort",
+    "allComfortDesc": "Comfort temperature 24/7"
+  },
+  "easyTimer": {
+    "title": "Easy Timer",
+    "description": "Set a timer to automatically turn off the stove",
+    "untilShutoff": "until automatic shutoff",
+    "minutes": "min",
+    "hours": "hours",
+    "hour": "hour",
+    "customDuration": "Custom duration",
+    "cancelTimer": "Cancel Timer"
+  },
+  "auth": {
+    "loginRequired": "Login Required",
+    "loginToSchedule": "Please log in to manage schedules.",
+    "cloudRequired": "Cloud Mode Required",
+    "schedulerCloudOnly": "Scheduling features require Cloud mode. Please switch to Cloud mode in settings."
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "saving": "Enregistrement...",
+    "discard": "Annuler",
+    "unsavedChanges": "Modifications non enregistrées",
+    "noChanges": "Toutes les modifications sont enregistrées"
+  },
+  "errors": {
+    "fetchFailed": "Failed to load schedule settings",
+    "saveFailed": "Échec de l'enregistrement",
+    "saveFailedBody": "Impossible d'enregistrer les paramètres. Veuillez réessayer.",
+    "chronoUpdateFailed": "Schedule Update Failed",
+    "chronoUpdateBody": "Unable to update the schedule. Please try again.",
+    "timerUpdateFailed": "Timer Update Failed",
+    "timerUpdateBody": "Unable to update the timer. Please try again."
+  }
+}

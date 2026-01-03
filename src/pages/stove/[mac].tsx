@@ -192,10 +192,33 @@ const Stove: NextPage = () => {
             isAuto={isAuto}
             phaseKey={phaseKey}
           >
+            {/* Scheduler link */}
+            <Link
+              href={`/stove/${mac}/scheduler`}
+              className="mt-6 w-[340px] flex items-center justify-between p-4 bg-card border border-border rounded-lg hover:bg-accent transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <FontAwesomeIcon
+                  icon="clock"
+                  className="text-primary text-lg"
+                />
+                <div>
+                  <div className="font-medium">{t("scheduler.title")}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {t("scheduler.description")}
+                  </div>
+                </div>
+              </div>
+              <FontAwesomeIcon
+                icon="chevron-right"
+                className="text-muted-foreground"
+              />
+            </Link>
+
             <Accordion
               type="single"
               collapsible
-              className="mt-8 w-[340px]"
+              className="mt-4 w-[340px]"
               value={openAccordion}
               onValueChange={setOpenAccordion}
             >
