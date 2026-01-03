@@ -2,6 +2,7 @@ import { indexToTime } from "edilkamin";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "../../utils/colors";
 import { useIsMobile } from "../../utils/hooks";
 import { MobileGridAccordion } from "./MobileGridAccordion";
 import type { ScheduleValue, WeeklyScheduleGridProps } from "./types";
@@ -11,13 +12,29 @@ const SLOTS_PER_DAY = 48;
 interface ScheduleValueOption {
   value: ScheduleValue;
   labelKey: string;
-  color: string;
+  bg: string;
+  ring: string;
 }
 
 const SCHEDULE_VALUES: ScheduleValueOption[] = [
-  { value: 0, labelKey: "scheduleValues.off", color: "#374151" },
-  { value: 1, labelKey: "scheduleValues.eco", color: "#059669" },
-  { value: 2, labelKey: "scheduleValues.comfort", color: "#f97316" },
+  {
+    value: 0,
+    labelKey: "scheduleValues.off",
+    bg: COLORS.modes.off.bg,
+    ring: COLORS.modes.off.ring,
+  },
+  {
+    value: 1,
+    labelKey: "scheduleValues.eco",
+    bg: COLORS.modes.economy.bg,
+    ring: COLORS.modes.economy.ring,
+  },
+  {
+    value: 2,
+    labelKey: "scheduleValues.comfort",
+    bg: COLORS.modes.comfort.bg,
+    ring: COLORS.modes.comfort.ring,
+  },
 ];
 
 function formatTime(hour: number, minute: number = 0): string {
@@ -35,7 +52,7 @@ function ScheduleValueSelector({
 
   return (
     <div className="flex gap-1 p-1 bg-zinc-800 rounded-lg">
-      {SCHEDULE_VALUES.map(({ value, labelKey, color }) => (
+      {SCHEDULE_VALUES.map(({ value, labelKey, bg, ring }) => (
         <button
           key={value}
           type="button"
@@ -46,13 +63,7 @@ function ScheduleValueSelector({
           `}
         >
           <div
-            className={`w-3 h-3 rounded-full ${selectedValue === value ? "ring-2 ring-offset-1 ring-offset-zinc-800" : ""}`}
-            style={{
-              backgroundColor: color,
-              ...(selectedValue === value
-                ? ({ "--tw-ring-color": color } as React.CSSProperties)
-                : {}),
-            }}
+            className={`w-3 h-3 rounded-full ${bg} ${selectedValue === value ? `ring-2 ring-offset-1 ring-offset-zinc-800 ${ring}` : ""}`}
           />
           <span
             className={`text-sm font-medium ${selectedValue === value ? "text-white" : "text-zinc-400"}`}
@@ -143,9 +154,11 @@ function DesktopGrid({
     return labels;
   }, []);
 
-  // Get color for schedule value
-  const getSlotColor = (value: ScheduleValue) => {
-    return SCHEDULE_VALUES.find((v) => v.value === value)?.color || "#374151";
+  // Get background class for schedule value
+  const getSlotBgClass = (value: ScheduleValue) => {
+    return (
+      SCHEDULE_VALUES.find((v) => v.value === value)?.bg || COLORS.modes.off.bg
+    );
   };
 
   // Tooltip content
@@ -221,8 +234,8 @@ function DesktopGrid({
                         ${isHourBoundary ? "rounded-l-sm" : "rounded-r-sm"}
                         ${hoveredSlot === index ? "ring-2 ring-white ring-offset-1 ring-offset-zinc-900 z-10" : ""}
                         ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:brightness-110"}
+                        ${getSlotBgClass(value)}
                       `}
-                      style={{ backgroundColor: getSlotColor(value) }}
                       aria-label={`${daysFull[dayIndex]} ${formatTime(Math.floor(slotIndex / 2), (slotIndex % 2) * 30)}`}
                     />
                   );
@@ -235,12 +248,9 @@ function DesktopGrid({
 
       {/* Legend */}
       <div className="flex justify-center gap-6 pt-2 border-t border-zinc-800">
-        {SCHEDULE_VALUES.map(({ value, labelKey, color }) => (
+        {SCHEDULE_VALUES.map(({ value, labelKey, bg }) => (
           <div key={value} className="flex items-center gap-2">
-            <div
-              className="w-4 h-4 rounded"
-              style={{ backgroundColor: color }}
-            />
+            <div className={`w-4 h-4 rounded ${bg}`} />
             <span className="text-sm text-zinc-400">{t(labelKey)}</span>
           </div>
         ))}

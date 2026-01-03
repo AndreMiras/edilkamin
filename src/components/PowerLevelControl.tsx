@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "@/utils/colors";
+
 import {
   MAX_POWER_LEVEL,
   MIN_POWER_LEVEL,
@@ -46,7 +48,7 @@ const PowerLevelControl = ({
 
       <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">
         <button
-          className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-orange-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+          className={`w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all ${COLORS.controls.hover.bg} ${COLORS.controls.hover.text} disabled:opacity-40 disabled:cursor-not-allowed`}
           onClick={() => onLevelChange(level - POWER_LEVEL_STEP)}
           disabled={loading || level <= MIN_POWER_LEVEL}
           aria-label={t("powerLevel.decrease")}
@@ -54,7 +56,7 @@ const PowerLevelControl = ({
           <FontAwesomeIcon icon="minus" />
         </button>
         <button
-          className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-orange-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+          className={`w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all ${COLORS.controls.hover.bg} ${COLORS.controls.hover.text} disabled:opacity-40 disabled:cursor-not-allowed`}
           onClick={() => onLevelChange(level + POWER_LEVEL_STEP)}
           disabled={loading || level >= MAX_POWER_LEVEL}
           aria-label={t("powerLevel.increase")}

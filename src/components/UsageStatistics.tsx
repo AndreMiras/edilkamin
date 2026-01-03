@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { deriveUsageAnalytics, DeviceInfoType } from "edilkamin";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "@/utils/colors";
+
 import PowerDistributionChart from "./PowerDistributionChart";
 
 interface UsageStatisticsProps {
@@ -30,7 +32,7 @@ const UsageStatistics = ({ info, onAlarmClick }: UsageStatisticsProps) => {
         className={`flex items-center gap-2 p-3 rounded-lg ${
           analytics.serviceStatus.isServiceDue
             ? "bg-destructive/10 text-destructive"
-            : "bg-green-500/10 text-green-700 dark:text-green-400"
+            : `${COLORS.status.success.bgSubtle} ${COLORS.status.success.textLight} ${COLORS.status.success.textDark}`
         }`}
       >
         <FontAwesomeIcon

@@ -3,6 +3,7 @@ import { indexToTime } from "edilkamin";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "../../utils/colors";
 import type { ScheduleValue, WeeklyScheduleGridProps } from "./types";
 
 const SLOTS_PER_DAY = 48;
@@ -12,13 +13,29 @@ const ROWS_PER_DAY = 4;
 interface ScheduleValueOption {
   value: ScheduleValue;
   labelKey: string;
-  color: string;
+  bg: string;
+  ring: string;
 }
 
 const SCHEDULE_VALUES: ScheduleValueOption[] = [
-  { value: 0, labelKey: "scheduleValues.off", color: "#374151" },
-  { value: 1, labelKey: "scheduleValues.eco", color: "#059669" },
-  { value: 2, labelKey: "scheduleValues.comfort", color: "#f97316" },
+  {
+    value: 0,
+    labelKey: "scheduleValues.off",
+    bg: COLORS.modes.off.bg,
+    ring: COLORS.modes.off.ring,
+  },
+  {
+    value: 1,
+    labelKey: "scheduleValues.eco",
+    bg: COLORS.modes.economy.bg,
+    ring: COLORS.modes.economy.ring,
+  },
+  {
+    value: 2,
+    labelKey: "scheduleValues.comfort",
+    bg: COLORS.modes.comfort.bg,
+    ring: COLORS.modes.comfort.ring,
+  },
 ];
 
 const ROW_START_HOURS = [0, 6, 12, 18];
@@ -38,7 +55,7 @@ function ScheduleValueSelector({
 
   return (
     <div className="flex gap-1 p-1 bg-zinc-800 rounded-lg">
-      {SCHEDULE_VALUES.map(({ value, labelKey, color }) => (
+      {SCHEDULE_VALUES.map(({ value, labelKey, bg, ring }) => (
         <button
           key={value}
           type="button"
@@ -49,13 +66,7 @@ function ScheduleValueSelector({
           `}
         >
           <div
-            className={`w-2.5 h-2.5 rounded-full ${selectedValue === value ? "ring-2 ring-offset-1 ring-offset-zinc-800" : ""}`}
-            style={{
-              backgroundColor: color,
-              ...(selectedValue === value
-                ? ({ "--tw-ring-color": color } as React.CSSProperties)
-                : {}),
-            }}
+            className={`w-2.5 h-2.5 rounded-full ${bg} ${selectedValue === value ? `ring-2 ring-offset-1 ring-offset-zinc-800 ${ring}` : ""}`}
           />
           <span
             className={`font-medium ${selectedValue === value ? "text-white" : "text-zinc-400"}`}
@@ -81,8 +92,10 @@ function DayPreviewBar({
     return schedule.slice(startIndex, startIndex + SLOTS_PER_DAY);
   }, [schedule, dayIndex]);
 
-  const getSlotColor = (value: ScheduleValue) => {
-    return SCHEDULE_VALUES.find((v) => v.value === value)?.color || "#374151";
+  const getSlotBgClass = (value: ScheduleValue) => {
+    return (
+      SCHEDULE_VALUES.find((v) => v.value === value)?.bg || COLORS.modes.off.bg
+    );
   };
 
   // Group consecutive slots with same value for smoother rendering
@@ -108,11 +121,8 @@ function DayPreviewBar({
       {segments.map((segment, i) => (
         <div
           key={i}
-          className="h-full"
-          style={{
-            backgroundColor: getSlotColor(segment.value),
-            flex: segment.count,
-          }}
+          className={`h-full ${getSlotBgClass(segment.value)}`}
+          style={{ flex: segment.count }}
         />
       ))}
     </div>
@@ -238,8 +248,10 @@ export function MobileGridAccordion({
     };
   }, [handleMouseUp, handleTouchEnd]);
 
-  const getSlotColor = (value: ScheduleValue) => {
-    return SCHEDULE_VALUES.find((v) => v.value === value)?.color || "#374151";
+  const getSlotBgClass = (value: ScheduleValue) => {
+    return (
+      SCHEDULE_VALUES.find((v) => v.value === value)?.bg || COLORS.modes.off.bg
+    );
   };
 
   const tooltipContent = useMemo(() => {
@@ -324,8 +336,8 @@ export function MobileGridAccordion({
                         ${isHourBoundary ? "rounded-l-sm" : "rounded-r-sm"}
                         ${hoveredSlot === index ? "ring-2 ring-white ring-offset-1 ring-offset-zinc-900 z-10" : ""}
                         ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:brightness-110"}
+                        ${getSlotBgClass(value)}
                       `}
-                      style={{ backgroundColor: getSlotColor(value) }}
                       aria-label={`${daysFull[expandedDay]} ${formatTime(ROW_START_HOURS[rowIndex] + Math.floor(slotInRow / 2))}:${(slotInRow % 2) * 30}`}
                     />
                   );
@@ -337,12 +349,9 @@ export function MobileGridAccordion({
 
         {/* Legend */}
         <div className="flex justify-center gap-4 pt-2 border-t border-zinc-800">
-          {SCHEDULE_VALUES.map(({ value, labelKey, color }) => (
+          {SCHEDULE_VALUES.map(({ value, labelKey, bg }) => (
             <div key={value} className="flex items-center gap-1.5">
-              <div
-                className="w-3 h-3 rounded"
-                style={{ backgroundColor: color }}
-              />
+              <div className={`w-3 h-3 rounded ${bg}`} />
               <span className="text-xs text-zinc-400">{t(labelKey)}</span>
             </div>
           ))}
@@ -382,12 +391,9 @@ export function MobileGridAccordion({
 
       {/* Legend */}
       <div className="flex justify-center gap-4 pt-2 border-t border-zinc-800">
-        {SCHEDULE_VALUES.map(({ value, labelKey, color }) => (
+        {SCHEDULE_VALUES.map(({ value, labelKey, bg }) => (
           <div key={value} className="flex items-center gap-1.5">
-            <div
-              className="w-3 h-3 rounded"
-              style={{ backgroundColor: color }}
-            />
+            <div className={`w-3 h-3 rounded ${bg}`} />
             <span className="text-xs text-zinc-400">{t(labelKey)}</span>
           </div>
         ))}

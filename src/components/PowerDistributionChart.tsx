@@ -8,6 +8,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { COLORS } from "@/utils/colors";
+
 interface PowerDistributionChartProps {
   distribution: {
     p1: number;
@@ -18,17 +20,17 @@ interface PowerDistributionChartProps {
   };
 }
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"];
+const CHART_COLORS = COLORS.chart.palette;
 
 const PowerDistributionChart = ({
   distribution,
 }: PowerDistributionChartProps) => {
   const data = [
-    { name: "P1", value: distribution.p1, fill: COLORS[0] },
-    { name: "P2", value: distribution.p2, fill: COLORS[1] },
-    { name: "P3", value: distribution.p3, fill: COLORS[2] },
-    { name: "P4", value: distribution.p4, fill: COLORS[3] },
-    { name: "P5", value: distribution.p5, fill: COLORS[4] },
+    { name: "P1", value: distribution.p1, fill: CHART_COLORS[0] },
+    { name: "P2", value: distribution.p2, fill: CHART_COLORS[1] },
+    { name: "P3", value: distribution.p3, fill: CHART_COLORS[2] },
+    { name: "P4", value: distribution.p4, fill: CHART_COLORS[3] },
+    { name: "P5", value: distribution.p5, fill: CHART_COLORS[4] },
   ];
 
   return (

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { useBluetooth } from "@/context/bluetooth";
 import { useNetwork } from "@/context/network";
+import { COLORS } from "@/utils/colors";
 
 const ConnectionModeToggle = () => {
   const { t } = useTranslation("stove");
@@ -58,7 +59,9 @@ const ConnectionModeToggle = () => {
           {isOnline ? t("connectionMode.cloud") : t("connectionMode.offline")}
         </span>
         {!isOnline && (
-          <span className="ml-1 w-2 h-2 bg-yellow-500 rounded-full" />
+          <span
+            className={`ml-1 w-2 h-2 ${COLORS.status.warning.bg} rounded-full`}
+          />
         )}
       </button>
       <button
@@ -82,10 +85,14 @@ const ConnectionModeToggle = () => {
             : t("connectionMode.bluetooth")}
         </span>
         {connectionMode === "ble" && isConnected && (
-          <span className="ml-1 w-2 h-2 bg-green-500 rounded-full" />
+          <span
+            className={`ml-1 w-2 h-2 ${COLORS.status.success.bg} rounded-full`}
+          />
         )}
         {connectionMode === "ble" && connectionError && (
-          <span className="ml-1 w-2 h-2 bg-red-500 rounded-full" />
+          <span
+            className={`ml-1 w-2 h-2 ${COLORS.status.error.bg} rounded-full`}
+          />
         )}
       </button>
     </div>

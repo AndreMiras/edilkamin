@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "../../utils/colors";
 import type { EasyTimerSectionProps } from "./types";
 
 const TIMER_PRESETS = [30, 60, 90, 120, 180, 240];
@@ -24,7 +25,7 @@ function ToggleSwitch({
         relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full
         border-2 border-transparent transition-colors duration-200 ease-in-out
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2
-        ${enabled ? "bg-orange-500" : "bg-zinc-600"}
+        ${enabled ? COLORS.accent.primary.bg : COLORS.accent.primary.bgInactive}
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
     >
@@ -83,7 +84,9 @@ export function EasyTimerSection({
         <div className="space-y-3 animate-in fade-in duration-200">
           {/* Current timer display */}
           <div className="text-center py-4 bg-zinc-800 rounded-xl">
-            <div className="text-4xl font-mono text-orange-500 font-bold">
+            <div
+              className={`text-4xl font-mono ${COLORS.accent.primary.text} font-bold`}
+            >
               {formatDuration(easyTimer.time, tMinutes, tHours, tHour)}
             </div>
             <div className="text-sm text-zinc-500 mt-1">
@@ -103,7 +106,7 @@ export function EasyTimerSection({
                   py-2 px-3 rounded-lg text-sm font-medium transition-all
                   ${
                     easyTimer.time === minutes
-                      ? "bg-orange-500 text-white"
+                      ? `${COLORS.accent.primary.bg} text-white`
                       : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
                   }
                   disabled:opacity-50 disabled:cursor-not-allowed

@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { BluetoothContextValue, useBluetooth } from "@/context/bluetooth";
 import i18n from "@/i18n";
+import { COLORS } from "@/utils/colors";
 
 import ConnectionModeToggle from "./ConnectionModeToggle";
 
@@ -201,7 +202,7 @@ describe("ConnectionModeToggle", () => {
 
       renderWithI18n(<ConnectionModeToggle />);
 
-      const greenDot = document.querySelector(".bg-green-500");
+      const greenDot = document.querySelector(`.${COLORS.status.success.bg}`);
       expect(greenDot).toBeInTheDocument();
     });
 
@@ -214,7 +215,7 @@ describe("ConnectionModeToggle", () => {
 
       renderWithI18n(<ConnectionModeToggle />);
 
-      const greenDot = document.querySelector(".bg-green-500");
+      const greenDot = document.querySelector(`.${COLORS.status.success.bg}`);
       expect(greenDot).not.toBeInTheDocument();
     });
 
@@ -227,7 +228,7 @@ describe("ConnectionModeToggle", () => {
 
       renderWithI18n(<ConnectionModeToggle />);
 
-      const redDot = document.querySelector(".bg-red-500");
+      const redDot = document.querySelector(`.${COLORS.status.error.bg}`);
       expect(redDot).toBeInTheDocument();
     });
 
@@ -240,7 +241,7 @@ describe("ConnectionModeToggle", () => {
 
       renderWithI18n(<ConnectionModeToggle />);
 
-      const redDot = document.querySelector(".bg-red-500");
+      const redDot = document.querySelector(`.${COLORS.status.error.bg}`);
       expect(redDot).not.toBeInTheDocument();
     });
   });

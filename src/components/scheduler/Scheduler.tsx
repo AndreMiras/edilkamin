@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "../../utils/colors";
 import { EasyTimerSection } from "./EasyTimerSection";
 import { QuickPresets } from "./QuickPresets";
 import { TemperatureCardsSection } from "./TemperatureCardsSection";
@@ -28,7 +29,7 @@ function ToggleSwitch({
         relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full
         border-2 border-transparent transition-colors duration-200 ease-in-out
         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2
-        ${enabled ? "bg-orange-500" : "bg-zinc-600"}
+        ${enabled ? COLORS.accent.primary.bg : COLORS.accent.primary.bgInactive}
         ${disabled ? "opacity-50 cursor-not-allowed" : ""}
       `}
     >
@@ -63,7 +64,7 @@ function TabButton({
         font-medium transition-all
         ${
           active
-            ? "bg-orange-500 text-white shadow-lg shadow-orange-500/20"
+            ? `${COLORS.accent.primary.bg} text-white shadow-lg ${COLORS.accent.primary.shadow}`
             : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
         }
       `}
@@ -113,7 +114,10 @@ export function Scheduler({
       {/* Header */}
       <div className="px-6 py-5 border-b border-zinc-800">
         <h2 className="text-xl font-bold flex items-center gap-2">
-          <FontAwesomeIcon icon="clock" className="text-orange-500" />
+          <FontAwesomeIcon
+            icon="clock"
+            className={COLORS.accent.primary.text}
+          />
           {t("title")}
         </h2>
         <p className="text-zinc-500 text-sm mt-1">{t("description")}</p>
@@ -143,7 +147,9 @@ export function Scheduler({
       <div className="p-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+            <div
+              className={`w-8 h-8 border-2 ${COLORS.accent.primary.border} border-t-transparent rounded-full animate-spin`}
+            />
           </div>
         ) : activeTab === "chrono" ? (
           <div className="space-y-6">
@@ -215,7 +221,9 @@ export function Scheduler({
             <div className="text-sm text-zinc-400">
               {hasUnsavedChanges ? (
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                  <span
+                    className={`w-2 h-2 ${COLORS.accent.primary.bg} rounded-full animate-pulse`}
+                  />
                   {t("actions.unsavedChanges")}
                 </span>
               ) : (
@@ -237,9 +245,9 @@ export function Scheduler({
                 type="button"
                 onClick={onSave}
                 disabled={!hasUnsavedChanges || isSaving}
-                className="px-4 py-2 rounded-lg bg-orange-500 text-white
-                           hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed
-                           transition-colors font-medium flex items-center gap-2"
+                className={`px-4 py-2 rounded-lg ${COLORS.accent.primary.bg} text-white
+                           ${COLORS.accent.primary.bgHover} disabled:opacity-40 disabled:cursor-not-allowed
+                           transition-colors font-medium flex items-center gap-2`}
               >
                 {isSaving ? (
                   <>

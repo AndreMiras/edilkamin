@@ -1,6 +1,8 @@
 import type { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { COLORS, type ScheduleMode } from "../../utils/colors";
+
 interface TemperatureCardProps {
   value: number;
   onChange: (value: number) => void;
@@ -14,19 +16,14 @@ interface TemperatureCardProps {
   unit?: "C" | "F";
 }
 
-const colorConfig = {
-  economy: {
-    bg: "bg-emerald-600",
-    bgHover: "hover:bg-emerald-500",
-    text: "text-emerald-500",
-    bar: "bg-emerald-500",
-  },
-  comfort: {
-    bg: "bg-orange-500",
-    bgHover: "hover:bg-orange-400",
-    text: "text-orange-500",
-    bar: "bg-orange-500",
-  },
+const getColorConfig = (color: ScheduleMode) => {
+  const modeColors = COLORS.modes[color];
+  return {
+    bg: modeColors.bg,
+    bgHover: modeColors.bgHover,
+    text: modeColors.text,
+    bar: modeColors.bg,
+  };
 };
 
 export function TemperatureCard({
@@ -41,7 +38,7 @@ export function TemperatureCard({
   disabled = false,
   unit = "C",
 }: TemperatureCardProps) {
-  const colors = colorConfig[color];
+  const colors = getColorConfig(color);
 
   const decrease = () => {
     if (value > min) onChange(Math.max(min, value - step));

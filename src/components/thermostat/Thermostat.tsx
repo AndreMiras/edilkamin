@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import { COLORS } from "../../utils/colors";
 import PelletWarning from "../PelletWarning";
 import PowerLevelControl from "../PowerLevelControl";
 import { MAX_TEMP, MIN_TEMP, TEMP_STEP } from "./constants";
@@ -67,7 +68,7 @@ const Thermostat = ({
             icon="fire"
             className={`text-2xl ${
               powerState
-                ? "text-orange-500 animate-flicker"
+                ? `${COLORS.accent.primary.text} animate-flicker`
                 : "text-muted-foreground"
             }`}
           />
@@ -107,7 +108,7 @@ const Thermostat = ({
         {isAuto && (
           <div className="flex items-center justify-center gap-4 pt-4 border-t border-border">
             <button
-              className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className={`w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all ${COLORS.controls.hover.bg} ${COLORS.controls.hover.text} disabled:opacity-40 disabled:cursor-not-allowed`}
               onClick={() => onTemperatureChange(temperature - TEMP_STEP)}
               disabled={loading || temperature <= MIN_TEMP}
               aria-label={t("decreaseTemp")}
@@ -115,7 +116,7 @@ const Thermostat = ({
               <FontAwesomeIcon icon="minus" />
             </button>
             <button
-              className="w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all hover:bg-blue-500 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className={`w-12 h-12 rounded-xl border-0 bg-secondary text-secondary-foreground text-xl cursor-pointer transition-all ${COLORS.controls.hover.bg} ${COLORS.controls.hover.text} disabled:opacity-40 disabled:cursor-not-allowed`}
               onClick={() => onTemperatureChange(temperature + TEMP_STEP)}
               disabled={loading || temperature >= MAX_TEMP}
               aria-label={t("increaseTemp")}
