@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getSession } from "edilkamin";
 import { useRouter } from "next/router";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { TokenContext } from "../context/token";
 import { removeTokenLocalStorage, setTokenLocalStorage } from "./helpers";
@@ -83,4 +83,39 @@ const useTokenRefresh = (): TokenRefreshResult => {
   return { refreshToken, withRetry };
 };
 
-export { useIsLoggedIn, useLogout, useTokenRefresh };
+/**
+ * SSR-safe hook for detecting media query matches.
+ * Returns false during SSR and initial client render to avoid hydration mismatch.
+ */
+const useMediaQuery = (query: string): boolean => {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
+
+    const handler = (event: MediaQueryListEvent) => {
+      setMatches(event.matches);
+    };
+
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, [query]);
+
+  return matches;
+};
+
+/**
+ * Hook to detect if the current viewport is mobile-sized (< 640px).
+ */
+const useIsMobile = (): boolean => {
+  return !useMediaQuery("(min-width: 640px)");
+};
+
+export {
+  useIsLoggedIn,
+  useIsMobile,
+  useLogout,
+  useMediaQuery,
+  useTokenRefresh,
+};

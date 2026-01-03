@@ -2,6 +2,8 @@ import { indexToTime } from "edilkamin";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useIsMobile } from "../../utils/hooks";
+import { MobileGridAccordion } from "./MobileGridAccordion";
 import type { ScheduleValue, WeeklyScheduleGridProps } from "./types";
 
 const SLOTS_PER_DAY = 48;
@@ -63,7 +65,8 @@ function ScheduleValueSelector({
   );
 }
 
-export function WeeklyScheduleGrid({
+// Desktop grid component - extracted to avoid conditional hook issues
+function DesktopGrid({
   schedule,
   onChange,
   disabled = false,
@@ -243,6 +246,30 @@ export function WeeklyScheduleGrid({
         ))}
       </div>
     </div>
+  );
+}
+
+export function WeeklyScheduleGrid({
+  schedule,
+  onChange,
+  disabled = false,
+}: WeeklyScheduleGridProps) {
+  const isMobile = useIsMobile();
+
+  // On mobile, render the accordion layout
+  if (isMobile) {
+    return (
+      <MobileGridAccordion
+        schedule={schedule}
+        onChange={onChange}
+        disabled={disabled}
+      />
+    );
+  }
+
+  // On desktop, render the desktop grid
+  return (
+    <DesktopGrid schedule={schedule} onChange={onChange} disabled={disabled} />
   );
 }
 

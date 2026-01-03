@@ -2,6 +2,23 @@ import "@testing-library/jest-dom";
 
 import { vi } from "vitest";
 
+// Mock window.matchMedia for responsive hooks
+// Default to desktop view (min-width: 640px returns true)
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    // Return true for min-width queries (desktop mode)
+    matches: query.includes("min-width"),
+    media: query,
+    onchange: null,
+    addListener: vi.fn(), // Deprecated
+    removeListener: vi.fn(), // Deprecated
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
 // Setup FontAwesome icons for tests (same as _app.tsx)
 
 const { library } = require("@fortawesome/fontawesome-svg-core");

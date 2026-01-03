@@ -16,7 +16,9 @@
     "economy": "Economy",
     "weeklySchedule": "Weekly Schedule",
     "slotDescription": "Click and drag to paint schedule slots. Each slot is 30 minutes.",
-    "paintMode": "Paint mode"
+    "paintMode": "Paint mode",
+    "backToWeek": "Volver a la semana",
+    "tapToEdit": "Toca un día para editar su horario"
   },
   "scheduleValues": {
     "off": "Off",
