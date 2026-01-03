@@ -395,7 +395,7 @@ export const setTemperature = async (
  */
 export const readPowerLevel = async (deviceId: string): Promise<number> => {
   const response = await sendCommand(deviceId, readCommands.powerLevel);
-  return parsers.number(response);
+  return parsers.powerLevel(response);
 };
 
 /**
