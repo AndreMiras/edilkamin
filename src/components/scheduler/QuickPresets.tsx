@@ -1,4 +1,4 @@
-import { createEmptySchedule, createWorkWeekSchedule } from "edilkamin";
+import { createEmptySchedule } from "edilkamin";
 import { useTranslation } from "react-i18next";
 
 import type { QuickPresetsProps, ScheduleValue } from "./types";
@@ -14,32 +14,6 @@ export function QuickPresets({ onApply, disabled = false }: QuickPresetsProps) {
       description: t("presets.clearAllDesc"),
       action: () =>
         onApply(createEmptySchedule() as unknown as ScheduleValue[]),
-    },
-    {
-      name: t("presets.workWeek"),
-      description: t("presets.workWeekDesc"),
-      action: () =>
-        onApply(
-          createWorkWeekSchedule({
-            morningStart: 6,
-            morningEnd: 9,
-            eveningStart: 17,
-            eveningEnd: 22,
-          }) as unknown as ScheduleValue[],
-        ),
-    },
-    {
-      name: t("presets.earlyBird"),
-      description: t("presets.earlyBirdDesc"),
-      action: () =>
-        onApply(
-          createWorkWeekSchedule({
-            morningStart: 5,
-            morningEnd: 8,
-            eveningStart: 16,
-            eveningEnd: 21,
-          }) as unknown as ScheduleValue[],
-        ),
     },
     {
       name: t("presets.allComfort"),
