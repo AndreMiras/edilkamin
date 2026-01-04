@@ -140,3 +140,20 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+  Recharts v3.x shows a focus outline around charts when clicked.
+  This looks visually distracting but we don't want to disable accessibility entirely.
+
+  Solution: Hide the outline only for mouse clicks, but preserve it for keyboard navigation.
+  - :focus - element has focus from any source (mouse, keyboard, etc.)
+  - :focus-visible - browser determines focus indicator should be shown (keyboard navigation)
+  - :focus:not(:focus-visible) - focused via mouse click, not keyboard → hide outline
+
+  This maintains accessibility for keyboard users while improving the visual experience.
+  See: https://github.com/recharts/recharts/issues/4790
+*/
+.recharts-wrapper:focus:not(:focus-visible),
+.recharts-surface:focus:not(:focus-visible) {
+  outline: none;
+}
