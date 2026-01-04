@@ -7,7 +7,6 @@ interface ExtendedNvm {
     enviroment_1_temperature: number;
     enviroment_2_temperature: number;
     enviroment_3_temperature: number;
-    is_auto: boolean;
     is_sound_active: boolean;
   };
   installer_parameters?: {
@@ -78,12 +77,8 @@ const DeviceDetails = ({ info }: { info: DeviceInfoType }) => {
         </h4>
         <div className="space-y-1">
           <DetailRow
-            label="Auto Mode"
-            value={String(info.nvm.user_parameters.is_auto)}
-          />
-          <DetailRow
             label="Sound"
-            value={String(info.nvm.user_parameters.is_sound_active)}
+            value={String(nvm.user_parameters.is_sound_active)}
           />
         </div>
       </div>

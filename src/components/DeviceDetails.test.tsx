@@ -23,7 +23,6 @@ const createMockDevice = (
         enviroment_1_temperature: 20,
         enviroment_2_temperature: 22,
         enviroment_3_temperature: 24,
-        is_auto: true,
         is_sound_active: false,
       } as any,
       installer_parameters: {
@@ -119,7 +118,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 18,
             enviroment_2_temperature: 21,
             enviroment_3_temperature: 24,
-            is_auto: true,
             is_sound_active: true,
           } as any,
           installer_parameters: {
@@ -143,7 +141,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 18,
             enviroment_2_temperature: 21,
             enviroment_3_temperature: 24,
-            is_auto: true,
             is_sound_active: true,
           } as any,
           installer_parameters: {
@@ -171,7 +168,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 18,
             enviroment_2_temperature: 21,
             enviroment_3_temperature: 24,
-            is_auto: true,
             is_sound_active: true,
           } as any,
           installer_parameters: {
@@ -196,7 +192,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 18,
             enviroment_2_temperature: 21,
             enviroment_3_temperature: 24,
-            is_auto: true,
             is_sound_active: true,
           } as any,
         } as any,
@@ -218,30 +213,6 @@ describe("DeviceDetails", () => {
       expect(screen.getByText("Device Settings")).toBeInTheDocument();
     });
 
-    it("should render is_auto boolean value as Auto Mode", () => {
-      const mockDevice = createMockDevice({
-        nvm: {
-          user_parameters: {
-            enviroment_1_temperature: 20,
-            enviroment_2_temperature: 22,
-            enviroment_3_temperature: 24,
-            is_auto: true,
-            is_sound_active: false,
-          } as any,
-          installer_parameters: {
-            enviroment_1_input: 1,
-            enviroment_2_input: 0,
-            enviroment_3_input: 0,
-          },
-        } as any,
-      });
-
-      render(<DeviceDetails info={mockDevice} />);
-
-      expect(screen.getByText(/Auto Mode/i)).toBeInTheDocument();
-      expect(screen.getByText(/true/)).toBeInTheDocument();
-    });
-
     it("should render is_sound_active boolean value as Sound", () => {
       const mockDevice = createMockDevice({
         nvm: {
@@ -249,7 +220,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 20,
             enviroment_2_temperature: 22,
             enviroment_3_temperature: 24,
-            is_auto: false,
             is_sound_active: true,
           } as any,
           installer_parameters: {
@@ -274,7 +244,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 20,
             enviroment_2_temperature: 22,
             enviroment_3_temperature: 24,
-            is_auto: false,
             is_sound_active: false,
           } as any,
           installer_parameters: {
@@ -288,8 +257,6 @@ describe("DeviceDetails", () => {
       const { container } = render(<DeviceDetails info={mockDevice} />);
 
       expect(container.textContent).toContain("false");
-      const matches = container.textContent?.match(/false/g);
-      expect(matches?.length).toBe(2);
     });
   });
 
@@ -329,7 +296,6 @@ describe("DeviceDetails", () => {
             enviroment_1_temperature: 0,
             enviroment_2_temperature: 0,
             enviroment_3_temperature: 0,
-            is_auto: false,
             is_sound_active: false,
           } as any,
           installer_parameters: {
