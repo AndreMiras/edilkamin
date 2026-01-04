@@ -59,7 +59,13 @@
     "format": "yarn format:prettier && yarn format:eslint",
     "cap:sync": "cap sync",
     "cap:android": "cap open android",
-    "android": "yarn build:mobile && yarn cap:sync && yarn cap:android"
+    "android": "yarn build:mobile && yarn cap:sync && yarn cap:android",
+    "e2e": "playwright test",
+    "e2e:headed": "playwright test --headed",
+    "e2e:ui": "playwright test --ui",
+    "e2e:visual": "playwright test --grep @visual",
+    "e2e:visual:update": "playwright test --grep @visual --update-snapshots",
+    "e2e:screenshots": "playwright test --grep @screenshot"
   },
   "engines": {
     "node": "24.x"
@@ -80,6 +86,7 @@
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^8.0.0",
     "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

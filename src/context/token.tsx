@@ -26,6 +26,13 @@ const TokenContextProvider = ({ children }: { children: ReactNode }) => {
         setToken(null);
         return;
       }
+      // E2E testing bypass: skip AWS Cognito token refresh
+      // This allows Playwright tests to run with mocked authentication
+      const isE2EBypass = localStorage.getItem("e2e-bypass-auth") === "true";
+      if (isE2EBypass) {
+        setToken(storedToken);
+        return;
+      }
       try {
         const useLegacy = process.env.NEXT_PUBLIC_USE_LEGACY_API === "true";
         const refreshedToken = await getSession(false, useLegacy);

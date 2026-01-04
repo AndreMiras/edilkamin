@@ -26,6 +26,50 @@ yarn lint
 yarn test
 ```
 
+## E2E Testing
+
+The project uses [Playwright](https://playwright.dev/) for end-to-end testing with real browser automation.
+
+### Screenshots
+
+| Stove Control                                       | Powered Off                                 |
+| --------------------------------------------------- | ------------------------------------------- |
+| ![Stove Control](e2e/screenshots/stove-control.png) | ![Stove Off](e2e/screenshots/stove-off.png) |
+
+### Running E2E Tests
+
+```sh
+# Run all E2E tests (headless)
+yarn e2e
+
+# Run with visible browser (debugging)
+yarn e2e:headed
+
+# Run with interactive UI mode (best for development)
+yarn e2e:ui
+
+# Run visual regression tests only
+yarn e2e:visual
+
+# Update visual regression baselines (after UI changes)
+yarn e2e:visual:update
+
+# Generate documentation screenshots
+yarn e2e:screenshots
+```
+
+### Visual Regression Testing
+
+Visual regression tests capture screenshots and compare them against baselines stored in `e2e/visual-baselines/`. If you intentionally change the UI:
+
+1. Review the changes locally with `yarn e2e:ui`
+2. Update baselines with `yarn e2e:visual:update`
+3. Commit the new baseline screenshots
+
+### CI/CD
+
+E2E tests run automatically on every push and pull request via GitHub Actions. Test reports are uploaded as artifacts.
+
 ## Mobile Development (Android)
 
 The app can be built as a native Android app using [Capacitor](https://capacitorjs.com/).
