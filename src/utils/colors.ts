@@ -17,6 +17,7 @@
 // zinc-600: #52525b
 // green-500: #22c55e
 // red-500: #ef4444
+// amber-400: #fbbf24
 // amber-500: #f59e0b
 
 export const COLORS = {
@@ -112,16 +113,18 @@ export const COLORS = {
   },
 
   /**
-   * Chart colors for data visualization
+   * Chart colors for power distribution visualization
+   * Uses heat-based sequential scheme: yellow → amber → orange → dark orange → red
+   * Communicates increasing power/heat intensity from P1 (lowest) to P5 (highest)
    */
   chart: {
-    palette: ["#f97316", "#059669", "#3b82f6", "#8b5cf6", "#ec4899"] as const,
-    // Named colors for specific use cases
-    p1: "#f97316", // orange - matches accent
-    p2: "#059669", // emerald - matches economy
-    p3: "#3b82f6", // blue
-    p4: "#8b5cf6", // violet
-    p5: "#ec4899", // pink
+    palette: ["#fbbf24", "#f59e0b", "#f97316", "#ea580c", "#ef4444"] as const,
+    // Named colors for power levels (low to high heat)
+    p1: "#fbbf24", // amber-400 - lowest power (warm yellow)
+    p2: "#f59e0b", // amber-500 - low-medium power
+    p3: "#f97316", // orange-500 - medium power
+    p4: "#ea580c", // orange-600 - medium-high power
+    p5: "#ef4444", // red-500 - highest power (hot red)
   },
 } as const;
 
