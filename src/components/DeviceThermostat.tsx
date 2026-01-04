@@ -41,7 +41,7 @@ const DeviceThermostat = ({ mac }: DeviceThermostatProps) => {
     return (
       <div className="flex flex-col">
         <Link href={`/stove/${mac}`} className="block">
-          <div className="w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_50px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
+          <div className="w-full max-w-[340px] bg-card text-card-foreground rounded-3xl p-8 shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_10px_50px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
             <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
               <FontAwesomeIcon
                 icon={["fas", "fire-flame-curved"]}
