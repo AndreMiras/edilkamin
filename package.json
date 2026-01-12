@@ -18,7 +18,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-tooltip": "^1.2.8",
-    "@types/node": "^24.10.4",
+    "@types/node": "^24.10.7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "assert": "^2.0.0",
