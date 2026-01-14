@@ -26,7 +26,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "edilkamin": "1.14.1",
-    "i18next": "^25.7.3",
+    "i18next": "^25.7.4",
     "lucide-react": "^0.562.0",
     "next": "^16",
     "next-i18next": "^15.4.3",
