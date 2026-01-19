@@ -1,0 +1,13 @@
+diff --git a/node_modules/next/dist/client/index.js b/node_modules/next/dist/client/index.js
+index c884776..ba996e4 100644
+--- a/node_modules/next/dist/client/index.js
++++ b/node_modules/next/dist/client/index.js
+@@ -215,7 +215,7 @@ function AppContainer({ children }) {
+                 value: (0, _adapters.adaptForSearchParams)(router),
+                 children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_adapters.PathnameContextProviderAdapter, {
+                     router: router,
+-                    isAutoExport: self.__NEXT_DATA__.autoExport ?? false,
++                    isAutoExport: self.__NEXT_DATA__.autoExport !== undefined && self.__NEXT_DATA__.autoExport !== null ? self.__NEXT_DATA__.autoExport : false,
+                     children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_hooksclientcontextsharedruntime.PathParamsContext.Provider, {
+                         value: (0, _adapters.adaptForPathParams)(router),
+                         children: /*#__PURE__*/ (0, _jsxruntime.jsx)(_routercontextsharedruntime.RouterContext.Provider, {

@@ -42,6 +42,7 @@
     "web-vitals": "^5.1.0"
   },
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "next dev",
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "NEXT_PUBLIC_GIT_DESCRIBE=$(git describe --tags --always) next build",
@@ -95,7 +96,9 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jsdom": "^27.4.0",
+    "patch-package": "^8.0.1",
     "postcss": "^8.4",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.8.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
