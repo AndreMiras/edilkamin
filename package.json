@@ -5,7 +5,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@capacitor-community/bluetooth-le": "^7.3.0",
+    "@capacitor-community/bluetooth-le": "^8.1.0",
     "@capacitor-community/safe-area": "^8.0.1",
     "@capacitor/android": "^8.0.0",
     "@capacitor/core": "^8.0.0",
