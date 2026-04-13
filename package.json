@@ -96,7 +96,7 @@
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/coverage-v8": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16",
     "eslint-config-prettier": "^10.1.8",
@@ -109,6 +109,6 @@
     "prettier": "^3.8.0",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.2"
+    "vitest": "^4.1.4"
   }
 }
