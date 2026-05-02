@@ -4,7 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
+      day: "friday"
       time: "09:00"
       timezone: "UTC"
     open-pull-requests-limit: 5
@@ -52,3 +52,17 @@ updates:
           - "vitest"
           - "@vitest/*"
           - "@testing-library/*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "andremiras"
+    commit-message:
+      prefix: ":arrow_up:"
+      include: "scope"
