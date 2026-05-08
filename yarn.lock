@@ -943,10 +943,10 @@
     tslib "^2.4.0"
     xml2js "^0.5.0"
 
-"@capacitor/cli@^8.3.1":
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-8.3.1.tgz#e3f0d62ff84535f98184dd1fc3129fdeecd2fe44"
-  integrity sha512-1sPGW4THTDfR6YjXwZ0jM7oAfAtciPOHN00qs/3sNAQx1kKrrEYSfDPwCm1/xlAgi0OeL69SiRfw314Ans+1sw==
+"@capacitor/cli@^8.3.2":
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-8.3.2.tgz#ce180a2abac5e285f0a777ec9248fbf0b54f53a0"
+  integrity sha512-9R0wLPnOPTOV36Z4j/+McmAyTA/vqEbOM3lcu3Ix6GJI2BC3Gdaxbqnb0f2DxA2kedZ0NTT+gKCmdY1wbb06Xg==
   dependencies:
     "@ionic/cli-framework-output" "^2.2.8"
     "@ionic/utils-subprocess" "^3.0.1"
