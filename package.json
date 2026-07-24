@@ -90,13 +90,13 @@
     "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.3.0",
     "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
     "@vitejs/plugin-react": "^6.0.1",
-    "@vitest/coverage-v8": "^4.1.6",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16",
     "eslint-config-prettier": "^10.1.8",
@@ -109,7 +109,7 @@
     "prettier": "^3.8.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.10"
   },
   "resolutions": {
     "@isaacs/brace-expansion": "5.0.1",
