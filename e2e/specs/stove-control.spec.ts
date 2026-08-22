@@ -115,6 +115,20 @@ test.describe("Stove Control Page", () => {
     // Pellet warning should be visible
     await expect(stovePage.pelletWarning).toBeVisible();
   });
+
+  test("opens advanced controls and device details", async ({ page }) => {
+    await setupApiMocks(page, {
+      deviceInfo: { power: true, temperature: 22, isAuto: false },
+    });
+
+    const stovePage = new StovePage(page);
+    await stovePage.gotoStove();
+    await stovePage.waitForThermostat();
+    await page.getByRole("button", { name: "Advanced" }).click();
+
+    await expect(page.getByRole("switch")).toBeVisible();
+    await expect(page.getByText("Temperature Readings")).toBeVisible();
+  });
 });
 
 test.describe("Stove Control - Error Handling", () => {

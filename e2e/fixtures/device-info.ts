@@ -15,6 +15,9 @@ export interface MockDeviceInfoOptions {
   fan1Speed?: number;
   fan2Speed?: number;
   fansNumber?: number;
+  chronoEnabled?: boolean;
+  easyTimerActive?: boolean;
+  easyTimerMinutes?: number;
 }
 
 export function createMockDeviceInfo(
@@ -32,6 +35,9 @@ export function createMockDeviceInfo(
     fan1Speed = 3,
     fan2Speed = 2,
     fansNumber = 2,
+    chronoEnabled = true,
+    easyTimerActive = false,
+    easyTimerMinutes = 0,
   } = options;
 
   return {
@@ -45,12 +51,24 @@ export function createMockDeviceInfo(
       },
       flags: {
         is_pellet_in_reserve: pelletInReserve,
+        is_crono_active: chronoEnabled,
+        is_easytimer_active: easyTimerActive,
       },
       pellet: {
         autonomy_time: autonomyMinutes,
       },
+      easytimer: {
+        time: easyTimerMinutes,
+      },
     },
     nvm: {
+      chrono: {
+        comfort_temperature: 22,
+        economy_temperature: 18,
+        temperature_ranges: Array.from({ length: 336 }, (_, index) =>
+          index % 48 >= 12 && index % 48 < 20 ? 2 : 1,
+        ),
+      },
       user_parameters: {
         enviroment_1_temperature: temperature,
         enviroment_2_temperature: 18,

@@ -42,4 +42,31 @@ test.describe("Home Page", () => {
     // Should navigate to stove page
     await expect(page).toHaveURL(new RegExp(`/stove/${TEST_MAC}`));
   });
+
+  test("opens the device management dialog", async ({ page }) => {
+    await setupAuthMocks(page);
+
+    const homePage = new HomePage(page);
+    await homePage.setupAuth();
+    await homePage.gotoHome();
+    await page.getByRole("button", { name: "Manage Devices" }).click();
+
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(
+      dialog.getByRole("heading", { name: "Manage Devices" }),
+    ).toBeVisible();
+    await expect(dialog.getByRole("textbox")).toBeVisible();
+  });
+
+  test("opens the mobile navigation sheet", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    const homePage = new HomePage(page);
+    await homePage.gotoHome();
+    await page.getByRole("button", { name: "Toggle menu" }).click();
+
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByText("Dark mode")).toBeVisible();
+  });
 });
