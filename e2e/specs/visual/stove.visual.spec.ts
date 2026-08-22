@@ -89,6 +89,26 @@ test.describe("Stove Visual Regression @visual", () => {
 
     await expect(page).toHaveScreenshot("stove-low-temp.png");
   });
+
+  test("advanced controls and device details", async ({ page }) => {
+    await setupApiMocks(page, {
+      deviceInfo: { power: true, temperature: 22, isAuto: false },
+    });
+
+    const stovePage = new StovePage(page);
+    await stovePage.gotoStove();
+    await stovePage.waitForThermostat();
+    await page.getByRole("button", { name: "Advanced" }).click();
+
+    await expect(page.getByRole("switch")).toBeVisible();
+    await expect(page.getByText("Temperature Readings")).toBeVisible();
+    const advancedControls = page
+      .locator('div[data-state="open"]')
+      .filter({ has: page.getByRole("button", { name: "Advanced" }) });
+    await expect(advancedControls).toHaveScreenshot(
+      "stove-advanced-controls.png",
+    );
+  });
 });
 
 /**
