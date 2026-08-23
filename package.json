@@ -101,7 +101,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "jsdom": "^29.0.1",
-    "postcss": "^8.5.18",
+    "postcss": "^8.5.23",
     "prettier": "^3.8.2",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
@@ -119,7 +119,6 @@
     "handlebars": "4.7.9",
     "glob/minimatch": "3.1.4",
     "minimatch/brace-expansion": "1.1.13",
-    "postcss": "8.5.18",
     "vite": "8.0.10",
     "yaml": "2.8.4"
   },
