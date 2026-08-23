@@ -14,9 +14,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          cache: "yarn"
-      - run: yarn install --frozen-lockfile
-      - run: npx playwright install chromium --with-deps
+      - name: Enable Corepack
+        run: |
+          npm install --global corepack@0.35.0
+          corepack enable
+      - run: yarn --version
+      - run: yarn install --immutable
+      - run: yarn playwright install chromium --with-deps
       - run: yarn build
       - run: yarn e2e
         env:

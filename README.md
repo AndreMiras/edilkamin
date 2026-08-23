@@ -17,6 +17,12 @@ This is built on top of the [edilkamin.js](https://github.com/AndreMiras/edilkam
 ## Run
 
 ```sh
+nvm use 24
+corepack enable
+yarn install --immutable
+```
+
+```sh
 yarn dev
 ```
 
@@ -107,7 +113,7 @@ yay -S android-studio
 3. Open in Android Studio:
 
    ```sh
-   npx cap open android
+   yarn cap:android
    ```
 
 4. Run on device/emulator from Android Studio (Shift+F10)

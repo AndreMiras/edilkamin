@@ -113,18 +113,15 @@
     "aws-amplify": "6.16.4",
     "@eslint/config-array/minimatch": "3.1.4",
     "eslint/minimatch": "3.1.4",
-    "fast-glob/**/picomatch": "2.3.2",
     "fast-xml-parser": "5.7.2",
     "flatted": "3.4.2",
     "follow-redirects": "1.16.0",
     "handlebars": "4.7.9",
-    "find-yarn-workspace-root/**/picomatch": "2.3.2",
     "glob/minimatch": "3.1.4",
     "minimatch/brace-expansion": "1.1.13",
     "postcss": "8.5.18",
-    "replace/minimatch": "3.1.4",
-    "replace/**/minimatch": "3.1.4",
     "vite": "8.0.10",
     "yaml": "2.8.4"
-  }
+  },
+  "packageManager": "yarn@3.8.7"
 }
