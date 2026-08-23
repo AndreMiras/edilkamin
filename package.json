@@ -27,7 +27,7 @@
     "clsx": "^2.1.1",
     "edilkamin": "1.14.1",
     "i18next": "^25.8.13",
-    "lucide-react": "^1.14.0",
+    "lucide-react": "^1.33.0",
     "next": "^16",
     "next-i18next": "^16.0.10",
     "prism-react-renderer": "^2.4.1",

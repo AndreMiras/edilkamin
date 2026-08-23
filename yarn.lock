@@ -5568,7 +5568,7 @@ __metadata:
     eslint-plugin-simple-import-sort: ^12.1.1
     i18next: ^25.8.13
     jsdom: ^29.0.1
-    lucide-react: ^1.14.0
+    lucide-react: ^1.33.0
     next: ^16
     next-i18next: ^16.0.10
     postcss: ^8.5.23
@@ -7694,12 +7694,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^1.14.0":
-  version: 1.14.0
-  resolution: "lucide-react@npm:1.14.0"
+"lucide-react@npm:^1.33.0":
+  version: 1.33.0
+  resolution: "lucide-react@npm:1.33.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 6db2fcc6d7545fabdec6f82db386f7f872a974aa0a4c508e6e23988055712286dccff2e0ef472ee5dc5f3852f1c3e916e84c92e52f049561b6829b6bc2f6483b
+  checksum: 38f1d587f15d4d68b281f1a94a490b72578b2ae6d8cbacbbb51173f1bba5a7745794d53381c1507553ca53d4ed280972272b5ec91e0714ffe8cfce9766bacbfd
   languageName: node
   linkType: hard
 
