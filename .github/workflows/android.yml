@@ -19,7 +19,7 @@ jobs:
           npm install --global corepack@0.35.0
           corepack enable
       - run: yarn --version
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: "21"
@@ -60,7 +60,7 @@ jobs:
           npm install --global corepack@0.35.0
           corepack enable
       - run: yarn --version
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: "temurin"
           java-version: "21"
