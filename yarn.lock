@@ -1092,12 +1092,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@capacitor/android@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "@capacitor/android@npm:8.0.0"
+"@capacitor/android@npm:^8.5.2":
+  version: 8.5.2
+  resolution: "@capacitor/android@npm:8.5.2"
   peerDependencies:
-    "@capacitor/core": ^8.0.0
-  checksum: 196cee8562f75e0cea61e0f828b89fcfce6a886e7d22a993dc52f2a440947fc2c57da87001b65be388aa0322d1ca2f4b6a5a10138b7da43d261e1bab422563f7
+    "@capacitor/core": ^8.5.0
+  checksum: 04df05f351b1d2d5bcc08826af6457988ccb2f69949d29c48c493df60bb49b4c25cae481b18e6eb84a62184dcd86684d13d14ea059981648f53b3f5c258a8c18
   languageName: node
   linkType: hard
 
@@ -5549,7 +5549,7 @@ __metadata:
   dependencies:
     "@capacitor-community/bluetooth-le": ^8.1.0
     "@capacitor-community/safe-area": ^8.0.1
-    "@capacitor/android": ^8.0.0
+    "@capacitor/android": ^8.5.2
     "@capacitor/cli": ^8.3.2
     "@capacitor/core": ^8.0.0
     "@eslint/js": ^9.39.2
